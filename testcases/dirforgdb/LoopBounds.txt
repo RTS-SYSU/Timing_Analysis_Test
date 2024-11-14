@@ -1,0 +1,22 @@
+We found the following loop bounds automatically:
+# In function Initialize, loop:
+  BB#1:for.cond<header><exiting>_BB#2:for.body_BB#3:for.cond1_BB#4:for.body3_BB#5:for.inc_BB#6:for.end_BB#7:for.inc5<latch> with context :CSITE_Test_BB0_I10:FUNCALL_Initialize
+the loop header is executed at most 20 times.
+# In function Initialize, loop:
+  BB#1:for.cond<header><exiting>_BB#2:for.body_BB#3:for.cond1_BB#4:for.body3_BB#5:for.inc_BB#6:for.end_BB#7:for.inc5<latch> with context :CSITE_Test_BB0_I12:FUNCALL_Initialize
+the loop header is executed at most 20 times.
+# In function Initialize, loop:
+  BB#3:for.cond1<header><exiting>_BB#4:for.body3_BB#5:for.inc<latch> with context :CSITE_Test_BB0_I10:FUNCALL_Initialize
+the loop header is executed at most 20 times.
+# In function Initialize, loop:
+  BB#3:for.cond1<header><exiting>_BB#4:for.body3_BB#5:for.inc<latch> with context :CSITE_Test_BB0_I12:FUNCALL_Initialize
+the loop header is executed at most 20 times.
+# In function Multiply, loop:
+  BB#1:for.cond<header><exiting>_BB#2:for.body_BB#3:for.cond1_BB#4:for.body3_BB#5:for.cond5_BB#6:for.body7_BB#7:for.inc_BB#8:for.end_BB#9:for.inc14_BB#10:for.end16_BB#11:for.inc17<latch> with context :CSITE_Test_BB0_I16:FUNCALL_Multiply
+the loop header is executed at most 20 times.
+# In function Multiply, loop:
+  BB#3:for.cond1<header><exiting>_BB#4:for.body3_BB#5:for.cond5_BB#6:for.body7_BB#7:for.inc_BB#8:for.end_BB#9:for.inc14<latch> with context :CSITE_Test_BB0_I16:FUNCALL_Multiply
+the loop header is executed at most 20 times.
+# In function Multiply, loop:
+  BB#5:for.cond5<header><exiting>_BB#6:for.body7_BB#7:for.inc<latch> with context :CSITE_Test_BB0_I16:FUNCALL_Multiply
+the loop header is executed at most 20 times.

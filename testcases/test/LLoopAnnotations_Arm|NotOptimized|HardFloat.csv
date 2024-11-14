@@ -1,0 +1,4 @@
+# Type: Normal
+Mc_t_pmove||BB#1:while.cond.outer<header>_BB#2:while.cond<exiting>_BB#3:while.body_BB#4:if.then_BB#5:if.end_BB#7:if.else_BB#8:lor.lhs.false_BB#22:if.else126_BB#27:if.else174_BB#35:if.end241.loopexit_BB#29:if.then180_BB#32:if.then187_BB#33:if.else234_BB#34:if.end240_BB#36:if.end241_BB#23:if.then132_BB#24:if.then140_BB#25:if.else156_BB#26:if.end173_BB#37:if.end242_BB#9:if.then24_BB#10:if.then42_BB#12:if.else54_BB#11:if.then51_BB#13:if.end68_BB#14:if.else69_BB#15:if.then77_BB#16:if.else85_BB#17:lor.lhs.false104_BB#18:if.then113_BB#19:if.end121_BB#20:if.end122_BB#21:if.end123_BB#38:if.end243_BB#6:if.then12_BB#39:if.end244<latch>|295022
+Mc_t_pmove||BB#2:while.cond<header><exiting>_BB#3:while.body_BB#4:if.then_BB#5:if.end<exiting>_BB#7:if.else<exiting>_BB#8:lor.lhs.false<exiting>_BB#22:if.else126<exiting>_BB#27:if.else174<exiting>_BB#29:if.then180<exiting>_BB#32:if.then187<latch>|0
+loopf||BB#1:for.cond<header><exiting>_BB#2:for.body_BB#3:for.inc<latch>|10
