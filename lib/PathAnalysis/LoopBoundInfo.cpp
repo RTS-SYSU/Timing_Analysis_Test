@@ -157,6 +157,7 @@ SCEV *LoopBoundInfoPass::copySCEV(const SCEV *N) {
   } break;
   case scUnknown: {
     C = new SCEVUnknown(*dyn_cast<SCEVUnknown>(N));
+    dyn_cast<SCEVUnknown>(C)->is_copied = true;
   } break;
   // Cases that we don't handle
   case scTruncate:
@@ -764,7 +765,7 @@ unsigned LoopBoundInfoPass::getLoopBound(
                << *Loop << "| AutoBound: " << AutoBound << ", Bound: " << Bound
                << "\n";
       } else {
-      Bound = AutoBound;
+        Bound = AutoBound;
       }
     }
   }

@@ -1,7 +1,7 @@
-diff -ur llvm-14.0.6.src/CMakeLists.txt llvm-14.0.6.src.patched/CMakeLists.txt
---- llvm-14.0.6.src/CMakeLists.txt	2022-06-22 16:46:24.000000000 +0000
-+++ llvm-14.0.6.src.patched/CMakeLists.txt	2022-07-27 12:52:52.010987220 +0000
-@@ -1241,22 +1241,6 @@
+diff --color -uprN llvm-14.0.6.src/CMakeLists.txt llvm-14.0.6.src.patched/CMakeLists.txt
+--- llvm-14.0.6.src/CMakeLists.txt	2022-06-23 00:46:24.000000000 +0800
++++ llvm-14.0.6.src.patched/CMakeLists.txt	2024-11-18 12:09:44.870491079 +0800
+@@ -1241,22 +1241,6 @@ if (MSVC AND CMAKE_HOST_SYSTEM_NAME STRE
    include(InstallRequiredSystemLibraries)
  endif()
  
@@ -24,10 +24,10 @@ diff -ur llvm-14.0.6.src/CMakeLists.txt llvm-14.0.6.src.patched/CMakeLists.txt
  
  if (LLVM_INCLUDE_UTILS AND LLVM_INCLUDE_TOOLS)
    add_subdirectory(utils/llvm-locstats)
-diff -ur llvm-14.0.6.src/include/llvm/Analysis/LoopInfo.h llvm-14.0.6.src.patched/include/llvm/Analysis/LoopInfo.h
---- llvm-14.0.6.src/include/llvm/Analysis/LoopInfo.h	2022-06-22 16:46:24.000000000 +0000
-+++ llvm-14.0.6.src.patched/include/llvm/Analysis/LoopInfo.h	2022-07-27 12:59:26.504860750 +0000
-@@ -925,11 +925,11 @@
+diff --color -uprN llvm-14.0.6.src/include/llvm/Analysis/LoopInfo.h llvm-14.0.6.src.patched/include/llvm/Analysis/LoopInfo.h
+--- llvm-14.0.6.src/include/llvm/Analysis/LoopInfo.h	2022-06-23 00:46:24.000000000 +0800
++++ llvm-14.0.6.src.patched/include/llvm/Analysis/LoopInfo.h	2024-11-18 12:09:44.870491079 +0800
+@@ -925,11 +925,11 @@ public:
    void releaseMemory() {
      BBMap.clear();
  
@@ -43,10 +43,38 @@ diff -ur llvm-14.0.6.src/include/llvm/Analysis/LoopInfo.h llvm-14.0.6.src.patche
  
    template <typename... ArgsTy> LoopT *AllocateLoop(ArgsTy &&... Args) {
      LoopT *Storage = LoopAllocator.Allocate<LoopT>();
-diff -ur llvm-14.0.6.src/lib/Analysis/ScalarEvolution.cpp llvm-14.0.6.src.patched/lib/Analysis/ScalarEvolution.cpp
---- llvm-14.0.6.src/lib/Analysis/ScalarEvolution.cpp	2022-06-22 16:46:24.000000000 +0000
-+++ llvm-14.0.6.src.patched/lib/Analysis/ScalarEvolution.cpp	2022-07-27 13:03:35.370547892 +0000
-@@ -13506,6 +13506,7 @@
+diff --color -uprN llvm-14.0.6.src/include/llvm/Analysis/ScalarEvolutionExpressions.h llvm-14.0.6.src.patched/include/llvm/Analysis/ScalarEvolutionExpressions.h
+--- llvm-14.0.6.src/include/llvm/Analysis/ScalarEvolutionExpressions.h	2022-06-23 00:46:24.000000000 +0800
++++ llvm-14.0.6.src.patched/include/llvm/Analysis/ScalarEvolutionExpressions.h	2024-11-18 12:12:43.638176859 +0800
+@@ -589,6 +589,10 @@ class SCEVUnknown final : public SCEV, p
+   void allUsesReplacedWith(Value *New) override;
+ 
+ public:
++  // Modified By Zeng-WCh
++  // for bug fixed when trying to copy a SCEV instant
++  bool IsCopied = false;
++  // End of Modification
+   Value *getValue() const { return getValPtr(); }
+ 
+   /// @{
+diff --color -uprN llvm-14.0.6.src/lib/Analysis/ScalarEvolution.cpp llvm-14.0.6.src.patched/lib/Analysis/ScalarEvolution.cpp
+--- llvm-14.0.6.src/lib/Analysis/ScalarEvolution.cpp	2022-06-23 00:46:24.000000000 +0800
++++ llvm-14.0.6.src.patched/lib/Analysis/ScalarEvolution.cpp	2024-11-18 12:12:23.004933403 +0800
+@@ -508,6 +508,13 @@ SCEVSignExtendExpr::SCEVSignExtendExpr(c
+ }
+ 
+ void SCEVUnknown::deleted() {
++  // Modified By Zeng-WCh
++  // for bug fixed when trying to copy a scev instant
++  if (this->IsCopied) {
++    setValPtr(nullptr);
++    return;
++  }
++  // End of Modification
+   // Clear this SCEVUnknown from various maps.
+   SE->forgetMemoizedResults(this);
+ 
+@@ -13506,6 +13513,7 @@ ScalarEvolutionWrapperPass::ScalarEvolut
  }
  
  bool ScalarEvolutionWrapperPass::runOnFunction(Function &F) {
@@ -54,10 +82,10 @@ diff -ur llvm-14.0.6.src/lib/Analysis/ScalarEvolution.cpp llvm-14.0.6.src.patche
    SE.reset(new ScalarEvolution(
        F, getAnalysis<TargetLibraryInfoWrapperPass>().getTLI(F),
        getAnalysis<AssumptionCacheTracker>().getAssumptionCache(F),
-diff -ur llvm-14.0.6.src/lib/CodeGen/MachineModuleInfo.cpp llvm-14.0.6.src.patched/lib/CodeGen/MachineModuleInfo.cpp
---- llvm-14.0.6.src/lib/CodeGen/MachineModuleInfo.cpp	2022-06-22 16:46:24.000000000 +0000
-+++ llvm-14.0.6.src.patched/lib/CodeGen/MachineModuleInfo.cpp	2022-07-27 13:04:31.934903267 +0000
-@@ -313,7 +313,7 @@
+diff --color -uprN llvm-14.0.6.src/lib/CodeGen/MachineModuleInfo.cpp llvm-14.0.6.src.patched/lib/CodeGen/MachineModuleInfo.cpp
+--- llvm-14.0.6.src/lib/CodeGen/MachineModuleInfo.cpp	2022-06-23 00:46:24.000000000 +0800
++++ llvm-14.0.6.src.patched/lib/CodeGen/MachineModuleInfo.cpp	2024-11-18 12:09:44.870491079 +0800
+@@ -313,7 +313,7 @@ MachineFunction &MachineModuleInfo::getO
  }
  
  void MachineModuleInfo::deleteMachineFunctionFor(Function &F) {
