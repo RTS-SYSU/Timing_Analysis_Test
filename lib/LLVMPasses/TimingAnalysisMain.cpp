@@ -78,6 +78,86 @@ TimingAnalysisMain::TimingAnalysisMain(TargetMachine &TM)
   TargetMachineInstance = &TM;
 }
 
+void TimingAnalysisMain::parseCoreInfo(const std::string &FileName) {
+  // Using llvm::json to parse the core information
+  llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> FileOrErr =
+      llvm::MemoryBuffer::getFile(FileName);
+  if (std::error_code EC = FileOrErr.getError()) {
+    llvm::errs() << "Error happened when trying to open the file: " << FileName
+                 << "\n";
+    llvm::errs() << "Error message: " << EC.message() << "\n";
+    exit(1);
+  }
+
+  llvm::Expected<llvm::json::Value> JsonVal =
+      llvm::json::parse(FileOrErr.get()->getBuffer());
+  // Check if the json file is valid
+  if (!JsonVal) {
+    llvm::errs() << "Error happened when trying to parse the json file: "
+                 << FileName << "\n";
+    llvm::errs() << "Error message: " << llvm::toString(JsonVal.takeError())
+                 << "\n";
+    exit(1);
+  }
+  // Convert the json value to a json object
+  auto *JsonArr = JsonVal->getAsArray();
+  if (!JsonArr) {
+    llvm::errs() << "Error happened when trying to convert the json value to "
+                    "a json array\n";
+    exit(1);
+  }
+
+  // Iterate the json array
+  for (auto it = JsonArr->begin(); it != JsonArr->end(); ++it) {
+    auto *Obj = it->getAsObject();
+    if (!Obj) {
+      llvm::errs() << "Error happened when trying to convert the json value to "
+                      "a json object\n";
+      exit(1);
+    }
+
+    // Get the core number
+    auto CoreNum = Obj->get("core")->getAsInteger();
+    auto *tasks = Obj->get("tasks")->getAsArray();
+
+    if (!CoreNum) {
+      llvm::errs() << "Core number cannot be found\n";
+      exit(1);
+    }
+    if (!tasks) {
+      llvm::errs() << "Tasks cannot be found\n";
+      exit(1);
+    }
+
+    if (this->taskMap.find(CoreNum.getValue()) == this->taskMap.end()) {
+      // Create a new entry
+      this->taskMap[CoreNum.getValue()] = std::vector<std::string>();
+    }
+
+    auto &CurrentCore = this->taskMap[CoreNum.getValue()];
+
+    // llvm::outs() << "Core number: " << CoreNum.getValue() << "\n";
+    // Iterate the tasks
+    for (auto TaskIt = tasks->begin(); TaskIt != tasks->end(); ++TaskIt) {
+      auto *TaskObj = TaskIt->getAsObject();
+      if (!TaskObj) {
+        llvm::errs() << "Error happened when trying to convert the json value "
+                        "to a json object\n";
+        exit(1);
+      }
+
+      auto TaskName = TaskObj->get("function")->getAsString();
+      if (!TaskName) {
+        llvm::errs() << "Function name cannot be found\n";
+        exit(1);
+      }
+
+      // llvm::outs() << "Task name: " << TaskName.getValue() << "\n";
+      CurrentCore.push_back(TaskName.getValue().str());
+    }
+  }
+}
+
 TargetMachine &TimingAnalysisMain::getTargetMachine() {
   return *TargetMachineInstance;
 }

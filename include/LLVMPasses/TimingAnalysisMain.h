@@ -59,6 +59,10 @@ class AddressInformation;
  *
  */
 class TimingAnalysisMain : public MachineFunctionPass {
+  // Modified By Zeng-WCh
+private:
+  std::map<int, std::vector<std::string>> taskMap;
+  // End of Modification
 
 public:
   static char ID;
@@ -95,6 +99,12 @@ public:
   static TargetMachine &getTargetMachine();
 
 private:
+  /***
+   * @brief
+   * Parse the core information from the json file.
+   */
+  void parseCoreInfo(const std::string &CoreInfoFile);
+
   /**
    * @brief
    * Dispatch the value analysis which is specific to the used ISA.
