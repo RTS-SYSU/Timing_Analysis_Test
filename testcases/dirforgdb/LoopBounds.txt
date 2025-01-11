@@ -1,22 +1,10 @@
 We found the following loop bounds automatically:
-# In function Initialize, loop:
-  BB#1:for.cond<header><exiting>_BB#2:for.body_BB#3:for.cond1_BB#4:for.body3_BB#5:for.inc_BB#6:for.end_BB#7:for.inc5<latch> with context :CSITE_Test_BB0_I10:FUNCALL_Initialize
-the loop header is executed at most 20 times.
-# In function Initialize, loop:
-  BB#1:for.cond<header><exiting>_BB#2:for.body_BB#3:for.cond1_BB#4:for.body3_BB#5:for.inc_BB#6:for.end_BB#7:for.inc5<latch> with context :CSITE_Test_BB0_I12:FUNCALL_Initialize
-the loop header is executed at most 20 times.
-# In function Initialize, loop:
-  BB#3:for.cond1<header><exiting>_BB#4:for.body3_BB#5:for.inc<latch> with context :CSITE_Test_BB0_I10:FUNCALL_Initialize
-the loop header is executed at most 20 times.
-# In function Initialize, loop:
-  BB#3:for.cond1<header><exiting>_BB#4:for.body3_BB#5:for.inc<latch> with context :CSITE_Test_BB0_I12:FUNCALL_Initialize
-the loop header is executed at most 20 times.
-# In function Multiply, loop:
-  BB#1:for.cond<header><exiting>_BB#2:for.body_BB#3:for.cond1_BB#4:for.body3_BB#5:for.cond5_BB#6:for.body7_BB#7:for.inc_BB#8:for.end_BB#9:for.inc14_BB#10:for.end16_BB#11:for.inc17<latch> with context :CSITE_Test_BB0_I16:FUNCALL_Multiply
-the loop header is executed at most 20 times.
-# In function Multiply, loop:
-  BB#3:for.cond1<header><exiting>_BB#4:for.body3_BB#5:for.cond5_BB#6:for.body7_BB#7:for.inc_BB#8:for.end_BB#9:for.inc14<latch> with context :CSITE_Test_BB0_I16:FUNCALL_Multiply
-the loop header is executed at most 20 times.
-# In function Multiply, loop:
-  BB#5:for.cond5<header><exiting>_BB#6:for.body7_BB#7:for.inc<latch> with context :CSITE_Test_BB0_I16:FUNCALL_Multiply
-the loop header is executed at most 20 times.
+# In function __udivsi3, loop:
+  BB#9:for.cond<header><exiting>_BB#10:for.body_BB#11:for.inc<latch> with context :CSITE___divsi3_BB0_I16:FUNCALL___udivsi3
+the loop header is executed at most 1 times.
+# In function expint_expint, loop:
+  BB#13:for.cond28<header><exiting>_BB#14:for.body30_BB#15:for.inc33<latch> with context :CSITE_expint_BB0_I8:FUNCALL_expint_expint
+the loop header is executed at most 49 times.
+# In function expint_expint, loop:
+  BB#9:for.cond16<header><exiting>_BB#10:for.body18_BB#11:if.then23_BB#12:if.else27_BB#13:for.cond28_BB#16:for.end35_BB#17:if.end38_BB#18:for.inc40<latch>_BB#14:for.body30_BB#15:for.inc33 with context :CSITE_expint_BB0_I8:FUNCALL_expint_expint
+the loop header is executed at most 100 times.

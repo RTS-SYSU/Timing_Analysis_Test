@@ -4162,1729 +4162,137 @@ Data Access Addresses:
 ----------------------
 
 InitSeed_BB0_I0: renamable $r1 = LDRi12 %const.0, 0, 14, $noreg, debug-location !881 :: (load (s32) from constant-pool); test/matmult.c:73:8
-In context:
-[0: Function call at location matmult_BB0_I6
-    1: Call of function InitSeed]
-Address for #memop 0: 0x801c0c
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 InitSeed_BB0_I2: STRi12 killed renamable $r0, killed renamable $r1, 0, 14, $noreg, debug-location !881 :: (store (s32) into @Seed); test/matmult.c:73:8
-In context:
-[0: Function call at location matmult_BB0_I6
-    1: Call of function InitSeed]
-Address for #memop 0: 0xd1e78
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB0_I0: $sp = frame-setup STMDB_UPD $sp(tied-def 0), 14, $noreg, killed $r11, killed $lr
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize]
-Address for #memop 0: 0x7ffffd8
-Address for #memop 1: 0x7ffffdc
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize]
-Address for #memop 0: 0x7ffffd8
-Address for #memop 1: 0x7ffffdc
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB0_I7: STRi12 killed $r0, $r11, -8, 14, $noreg :: (store (s32) into %stack.1)
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize]
-Address for #memop 0: 0x7ffffd0
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize]
-Address for #memop 0: 0x7ffffd0
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB0_I9: STRi12 killed $r0, $r11, -4, 14, $noreg :: (store (s32) into %stack.0)
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize]
-Address for #memop 0: 0x7ffffd4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize]
-Address for #memop 0: 0x7ffffd4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB1_I0: $r0 = LDRi12 $r11, -4, 14, $noreg, debug-location !890 :: (load (s32) from %stack.0); test/matmult.c:0
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffd4
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffd4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffd4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffd4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB1_I1: STRi12 $r0, $sp, 12, 14, $noreg :: (store (s32) into %stack.2)
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffcc
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB2_I1: STRi12 killed $r0, $sp, 8, 14, $noreg :: (store (s32) into %stack.3)
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB3_I0: $r0 = LDRi12 $sp, 8, 14, $noreg, debug-location !890 :: (load (s32) from %stack.3); test/matmult.c:0
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB3_I1: STRi12 $r0, $sp, 4, 14, $noreg :: (store (s32) into %stack.4)
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB4_I1: $r3 = LDRi12 $sp, 12, 14, $noreg, debug-location !896 :: (load (s32) from %stack.2); test/matmult.c:117:42
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffcc
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB4_I2: $r1 = LDRi12 $r11, -8, 14, $noreg, debug-location !896 :: (load (s32) from %stack.1); test/matmult.c:117:42
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffd0
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffd0
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffd0
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffd0
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffd0
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffd0
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffd0
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffd0
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB4_I3: $r2 = LDRi12 $sp, 4, 14, $noreg, debug-location !896 :: (load (s32) from %stack.4); test/matmult.c:117:42
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB4_I6: STRrs killed renamable $r0, killed renamable $r1, renamable $r2, 16386, 14, $noreg, debug-location !898 :: (store (s32) into %ir.arrayidx4); test/matmult.c:117:40
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0xd0bb8
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0xd11f8
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB5_I0: $r0 = LDRi12 $sp, 4, 14, $noreg, debug-location !899 :: (load (s32) from %stack.4); test/matmult.c:116:63
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB5_I2: STRi12 killed $r0, $sp, 8, 14, $noreg :: (store (s32) into %stack.3)
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times
-    3: Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB7_I0: $r0 = LDRi12 $sp, 12, 14, $noreg, debug-location !902 :: (load (s32) from %stack.2); test/matmult.c:115:60
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffcc
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB7_I2: STRi12 killed $r0, $r11, -4, 14, $noreg :: (store (s32) into %stack.0)
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffd4
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffd4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times]
-Address for #memop 0: 0x7ffffd4
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize
-    2: Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times]
-Address for #memop 0: 0x7ffffd4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Initialize_BB8_I1: $sp = frame-destroy LDMIA_UPD $sp(tied-def 0), 14, $noreg, def $r11, def $lr, debug-location !904; test/matmult.c:118:1
-In context:
-[0: Function call at location Test_BB0_I10
-    1: Call of function Initialize]
-Address for #memop 0: 0x7ffffd8
-Address for #memop 1: 0x7ffffdc
-In context:
-[0: Function call at location Test_BB0_I12
-    1: Call of function Initialize]
-Address for #memop 0: 0x7ffffd8
-Address for #memop 1: 0x7ffffdc
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB0_I0: $sp = frame-setup STMDB_UPD $sp(tied-def 0), 14, $noreg, killed $r11, killed $lr
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply]
-Address for #memop 0: 0x7ffffd8
-Address for #memop 1: 0x7ffffdc
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB0_I7: STRi12 killed $r2, $r11, -16, 14, $noreg :: (store (s32) into %stack.3)
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply]
-Address for #memop 0: 0x7ffffc8
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB0_I8: STRi12 killed $r1, $r11, -12, 14, $noreg :: (store (s32) into %stack.2)
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply]
-Address for #memop 0: 0x7ffffcc
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB0_I9: STRi12 killed $r0, $r11, -8, 14, $noreg :: (store (s32) into %stack.1)
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply]
-Address for #memop 0: 0x7ffffd0
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB0_I11: STRi12 killed $r0, $r11, -4, 14, $noreg :: (store (s32) into %stack.0)
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply]
-Address for #memop 0: 0x7ffffd4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB1_I0: $r0 = LDRi12 $r11, -4, 14, $noreg, debug-location !907 :: (load (s32) from %stack.0); test/matmult.c:0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffd4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffd4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB1_I1: STRi12 $r0, $sp, 16, 14, $noreg :: (store (s32) into %stack.4)
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB2_I1: STRi12 killed $r0, $sp, 12, 14, $noreg :: (store (s32) into %stack.5)
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc0
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB3_I0: $r0 = LDRi12 $sp, 12, 14, $noreg, debug-location !907 :: (load (s32) from %stack.5); test/matmult.c:0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc0
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB3_I1: STRi12 $r0, $sp, 8, 14, $noreg :: (store (s32) into %stack.6)
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffbc
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB4_I0: $r2 = LDRi12 $sp, 8, 14, $noreg, debug-location !913 :: (load (s32) from %stack.6); test/matmult.c:157:10
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffbc
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB4_I1: $r0 = LDRi12 $r11, -16, 14, $noreg, debug-location !913 :: (load (s32) from %stack.3); test/matmult.c:157:10
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB4_I2: $r1 = LDRi12 $sp, 16, 14, $noreg, debug-location !913 :: (load (s32) from %stack.4); test/matmult.c:157:10
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB4_I6: STRrs renamable $r0, killed renamable $r1, renamable $r2, 16386, 14, $noreg, debug-location !914 :: (store (s32) into %ir.arrayidx4); test/matmult.c:157:29
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0xd1838
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB4_I7: STRi12 killed $r0, $sp, 4, 14, $noreg :: (store (s32) into %stack.7)
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb8
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB5_I0: $r0 = LDRi12 $sp, 4, 14, $noreg, debug-location !907 :: (load (s32) from %stack.7); test/matmult.c:0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb8
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB5_I1: STRi12 $r0, $sp, 0, 14, $noreg :: (store (s32) into %stack.8)
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB6_I0: $r2 = LDRi12 $sp, 8, 14, $noreg, debug-location !918 :: (load (s32) from %stack.6); test/matmult.c:160:16
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffbc
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB6_I1: $r0 = LDRi12 $r11, -16, 14, $noreg, debug-location !918 :: (load (s32) from %stack.3); test/matmult.c:160:16
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc8
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB6_I2: $r12 = LDRi12 $r11, -12, 14, $noreg, debug-location !918 :: (load (s32) from %stack.2); test/matmult.c:160:16
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffcc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffcc
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB6_I3: $lr = LDRi12 $sp, 0, 14, $noreg, debug-location !918 :: (load (s32) from %stack.8); test/matmult.c:160:16
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB6_I4: $r3 = LDRi12 $r11, -8, 14, $noreg, debug-location !918 :: (load (s32) from %stack.1); test/matmult.c:160:16
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffd0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffd0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffd0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffd0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffd0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffd0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffd0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffd0
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB6_I5: $r1 = LDRi12 $sp, 16, 14, $noreg, debug-location !918 :: (load (s32) from %stack.4); test/matmult.c:160:16
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB6_I8: renamable $r3 = LDRrs killed renamable $r3, renamable $lr, 16386, 14, $noreg, debug-location !918 :: (load (s32) from %ir.arrayidx9); test/matmult.c:160:16
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0xd0bb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0xd0bb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB6_I11: renamable $r12 = LDRrs killed renamable $r12, renamable $r2, 16386, 14, $noreg, debug-location !919 :: (load (s32) from %ir.arrayidx11); test/matmult.c:160:34
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0xd11f8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0xd11f8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB6_I13: renamable $lr = LDRrs renamable $r1, renamable $r2, 16386, 14, $noreg, debug-location !922 :: (load (s32) from %ir.arrayidx13); test/matmult.c:159:32
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0xd1838
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0xd1838
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB6_I15: STRrs killed renamable $r0, killed renamable $r1, renamable $r2, 16386, 14, $noreg, debug-location !922 :: (store (s32) into %ir.arrayidx13); test/matmult.c:159:32
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0xd1838
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0xd1838
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: [0x00000000, 0xffffffff]
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB7_I0: $r0 = LDRi12 $sp, 0, 14, $noreg, debug-location !923 :: (load (s32) from %stack.8); test/matmult.c:158:51
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB7_I2: STRi12 killed $r0, $sp, 4, 14, $noreg :: (store (s32) into %stack.7)
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffb8
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times
-    4: Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffb8
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB9_I0: $r0 = LDRi12 $sp, 8, 14, $noreg, debug-location !927 :: (load (s32) from %stack.6); test/matmult.c:155:48
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffbc
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffbc
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB9_I2: STRi12 killed $r0, $sp, 12, 14, $noreg :: (store (s32) into %stack.5)
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc0
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times
-    3: Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc0
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB11_I0: $r0 = LDRi12 $sp, 16, 14, $noreg, debug-location !929 :: (load (s32) from %stack.4); test/matmult.c:154:45
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffc4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffc4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB11_I2: STRi12 killed $r0, $r11, -4, 14, $noreg :: (store (s32) into %stack.0)
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times]
-Address for #memop 0: 0x7ffffd4
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply
-    2: Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times]
-Address for #memop 0: 0x7ffffd4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Multiply_BB12_I1: $sp = frame-destroy LDMIA_UPD $sp(tied-def 0), 14, $noreg, def $r11, def $lr, debug-location !931; test/matmult.c:162:1
-In context:
-[0: Function call at location Test_BB0_I16
-    1: Call of function Multiply]
-Address for #memop 0: 0x7ffffd8
-Address for #memop 1: 0x7ffffdc
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 RandomInteger_BB0_I0: renamable $r1 = LDRi12 %const.0, 0, 14, $noreg, debug-location !933 :: (load (s32) from constant-pool); test/matmult.c:126:13
-In context:
-[0: Function call at location Initialize_BB4_I0
-    1: Call of function RandomInteger]
-Address for #memop 0: 0x801e44
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 RandomInteger_BB0_I1: renamable $r2 = LDRi12 renamable $r1, 0, 14, $noreg, debug-location !933 :: (dereferenceable load (s32) from @Seed); test/matmult.c:126:13
-In context:
-[0: Function call at location Initialize_BB4_I0
-    1: Call of function RandomInteger]
-Address for #memop 0: 0xd1e78
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 RandomInteger_BB0_I5: renamable $r12 = LDRcp %const.1, 0, 14, $noreg :: (load (s32) from constant-pool)
-In context:
-[0: Function call at location Initialize_BB4_I0
-    1: Call of function RandomInteger]
-Address for #memop 0: 0x801e48
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 RandomInteger_BB0_I13: STRi12 renamable $r0, killed renamable $r1, 0, 14, $noreg, debug-location !937 :: (store (s32) into @Seed); test/matmult.c:126:9
-In context:
-[0: Function call at location Initialize_BB4_I0
-    1: Call of function RandomInteger]
-Address for #memop 0: 0xd1e78
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Test_BB0_I0: $sp = frame-setup STMDB_UPD $sp(tied-def 0), 14, $noreg, killed $r11, killed $lr
-In context:
-[0: Function call at location matmult_BB0_I10
-    1: Call of function Test]
-Address for #memop 0: 0x7fffff0
-Address for #memop 1: 0x7fffff4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Test_BB0_I7: STRi12 $r2, $r11, -4, 14, $noreg :: (store (s32) into %stack.0)
-In context:
-[0: Function call at location matmult_BB0_I10
-    1: Call of function Test]
-Address for #memop 0: 0x7ffffec
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Test_BB0_I8: STRi12 $r1, $sp, 8, 14, $noreg :: (store (s32) into %stack.1)
-In context:
-[0: Function call at location matmult_BB0_I10
-    1: Call of function Test]
-Address for #memop 0: 0x7ffffe8
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Test_BB0_I9: STRi12 $r0, $sp, 4, 14, $noreg :: (store (s32) into %stack.2)
-In context:
-[0: Function call at location matmult_BB0_I10
-    1: Call of function Test]
-Address for #memop 0: 0x7ffffe4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Test_BB0_I11: $r0 = LDRi12 $sp, 8, 14, $noreg, debug-location !884 :: (load (s32) from %stack.1); test/matmult.c:88:4
-In context:
-[0: Function call at location matmult_BB0_I10
-    1: Call of function Test]
-Address for #memop 0: 0x7ffffe8
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Test_BB0_I13: $r0 = LDRi12 $sp, 4, 14, $noreg, debug-location !885 :: (load (s32) from %stack.2); test/matmult.c:89:4
-In context:
-[0: Function call at location matmult_BB0_I10
-    1: Call of function Test]
-Address for #memop 0: 0x7ffffe4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Test_BB0_I14: $r1 = LDRi12 $sp, 8, 14, $noreg, debug-location !885 :: (load (s32) from %stack.1); test/matmult.c:89:4
-In context:
-[0: Function call at location matmult_BB0_I10
-    1: Call of function Test]
-Address for #memop 0: 0x7ffffe8
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Test_BB0_I15: $r2 = LDRi12 $r11, -4, 14, $noreg, debug-location !885 :: (load (s32) from %stack.0); test/matmult.c:89:4
-In context:
-[0: Function call at location matmult_BB0_I10
-    1: Call of function Test]
-Address for #memop 0: 0x7ffffec
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 Test_BB0_I18: $sp = frame-destroy LDMIA_UPD $sp(tied-def 0), 14, $noreg, def $r11, def $lr, debug-location !887; test/matmult.c:105:1
-In context:
-[0: Function call at location matmult_BB0_I10
-    1: Call of function Test]
-Address for #memop 0: 0x7fffff0
-Address for #memop 1: 0x7fffff4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 __absvdi2_BB0_I0: $sp = frame-setup STMDB_UPD $sp(tied-def 0), 14, $noreg, killed $r11, killed $lr
 NO CONTEXT-SENSITIVE INFO AVAILABLE!
 __absvdi2_BB0_I8: STRi12 killed $r2, $sp, 0, 14, $noreg :: (store (s32) into %stack.1)
@@ -6118,9 +4526,27 @@ NO CONTEXT-SENSITIVE INFO AVAILABLE!
 __clzdi2_BB0_I27: renamable $r1 = LDRcp %const.3, 0, 14, $noreg :: (load (s32) from constant-pool)
 NO CONTEXT-SENSITIVE INFO AVAILABLE!
 __clzsi2_BB0_I0: $sp = frame-setup STMDB_UPD $sp(tied-def 0), 14, $noreg, killed $r11, killed $lr
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __udivsi3_BB4_I1
+    1: Call of function __clzsi2]
+Address for #memop 0: 0x7ffff08
+Address for #memop 1: 0x7ffff0c
+In context:
+[0: Function call at location __udivsi3_BB4_I5
+    1: Call of function __clzsi2]
+Address for #memop 0: 0x7ffff08
+Address for #memop 1: 0x7ffff0c
 __clzsi2_BB0_I44: $sp = frame-destroy LDMIA_UPD $sp(tied-def 0), 14, $noreg, def $r11, def $lr, debug-location !1123; ../clzsi2.c:52:5
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __udivsi3_BB4_I1
+    1: Call of function __clzsi2]
+Address for #memop 0: 0x7ffff08
+Address for #memop 1: 0x7ffff0c
+In context:
+[0: Function call at location __udivsi3_BB4_I5
+    1: Call of function __clzsi2]
+Address for #memop 0: 0x7ffff08
+Address for #memop 1: 0x7ffff0c
 __cmpdi2_BB0_I6: STRi12 killed renamable $r1, $sp, 20, 14, $noreg, debug-location !1126 :: (store (s32) into %ir.all + 4, basealign 8); ../cmpdi2.c:26:11
 NO CONTEXT-SENSITIVE INFO AVAILABLE!
 __cmpdi2_BB0_I7: STRi12 killed renamable $r0, $sp, 16, 14, $noreg, debug-location !1126 :: (store (s32) into %ir.all, align 8); ../cmpdi2.c:26:11
@@ -6228,13 +4654,63 @@ NO CONTEXT-SENSITIVE INFO AVAILABLE!
 __divmodsi4_BB0_I18: $sp = frame-destroy LDMIA_UPD $sp(tied-def 0), 14, $noreg, def $r11, def $lr, debug-location !1584; ../divmodsi4.c:24:3
 NO CONTEXT-SENSITIVE INFO AVAILABLE!
 __divsi3_BB0_I0: $sp = frame-setup STMDB_UPD $sp(tied-def 0), 14, $noreg, killed $r11, killed $lr
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_expint_BB3_I14
+    1: Call of function __divsi3]
+Address for #memop 0: 0x7ffff60
+Address for #memop 1: 0x7ffff64
+In context:
+[0: Function call at location expint_expint_BB10_I2
+    1: Call of function __divsi3]
+Address for #memop 0: 0x7ffff60
+Address for #memop 1: 0x7ffff64
+In context:
+[0: Function call at location expint_expint_BB11_I4
+    1: Call of function __divsi3]
+Address for #memop 0: 0x7ffff60
+Address for #memop 1: 0x7ffff64
 __divsi3_BB0_I15: STRi12 $r2, $sp, 4, 14, $noreg :: (store (s32) into %stack.0)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_expint_BB3_I14
+    1: Call of function __divsi3]
+Address for #memop 0: 0x7ffff5c
+In context:
+[0: Function call at location expint_expint_BB10_I2
+    1: Call of function __divsi3]
+Address for #memop 0: 0x7ffff5c
+In context:
+[0: Function call at location expint_expint_BB11_I4
+    1: Call of function __divsi3]
+Address for #memop 0: 0x7ffff5c
 __divsi3_BB0_I17: $r1 = LDRi12 $sp, 4, 14, $noreg, debug-location !1593 :: (load (s32) from %stack.0); ../divsi3.c:36:22
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_expint_BB3_I14
+    1: Call of function __divsi3]
+Address for #memop 0: 0x7ffff5c
+In context:
+[0: Function call at location expint_expint_BB10_I2
+    1: Call of function __divsi3]
+Address for #memop 0: 0x7ffff5c
+In context:
+[0: Function call at location expint_expint_BB11_I4
+    1: Call of function __divsi3]
+Address for #memop 0: 0x7ffff5c
 __divsi3_BB0_I21: $sp = frame-destroy LDMIA_UPD $sp(tied-def 0), 14, $noreg, def $r11, def $lr, debug-location !1596; ../divsi3.c:36:5
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_expint_BB3_I14
+    1: Call of function __divsi3]
+Address for #memop 0: 0x7ffff60
+Address for #memop 1: 0x7ffff64
+In context:
+[0: Function call at location expint_expint_BB10_I2
+    1: Call of function __divsi3]
+Address for #memop 0: 0x7ffff60
+Address for #memop 1: 0x7ffff64
+In context:
+[0: Function call at location expint_expint_BB11_I4
+    1: Call of function __divsi3]
+Address for #memop 0: 0x7ffff60
+Address for #memop 1: 0x7ffff64
 __ffsdi2_BB0_I4: STRi12 killed renamable $r1, $sp, 12, 14, $noreg, debug-location !1599 :: (store (s32) into %ir.all + 4, basealign 8); ../ffsdi2.c:25:11
 NO CONTEXT-SENSITIVE INFO AVAILABLE!
 __ffsdi2_BB0_I5: STRi12 killed renamable $r0, $sp, 8, 14, $noreg, debug-location !1599 :: (store (s32) into %ir.all, align 8); ../ffsdi2.c:25:11
@@ -7172,103 +5648,390 @@ NO CONTEXT-SENSITIVE INFO AVAILABLE!
 __udivmodsi4_BB0_I18: $sp = frame-destroy LDMIA_UPD $sp(tied-def 0), 14, $noreg, def $r11, def $lr, debug-location !1891; ../udivmodsi4.c:24:3
 NO CONTEXT-SENSITIVE INFO AVAILABLE!
 __udivsi3_BB0_I0: $sp = frame-setup STMDB_UPD $sp(tied-def 0), 14, $noreg, killed $r11, killed $lr
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff50
+Address for #memop 1: 0x7ffff54
 __udivsi3_BB0_I7: STRi12 $r1, $r11, -8, 14, $noreg :: (store (s32) into %stack.1)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff48
 __udivsi3_BB0_I8: STRi12 killed $r0, $r11, -4, 14, $noreg :: (store (s32) into %stack.0)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff4c
 __udivsi3_BB1_I1: STRi12 killed $r0, $r11, -12, 14, $noreg :: (store (s32) into %stack.2)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff44
 __udivsi3_BB2_I0: $r0 = LDRi12 $r11, -4, 14, $noreg, debug-location !1897 :: (load (s32) from %stack.0); ../udivsi3.c:34:9
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff4c
 __udivsi3_BB3_I1: STRi12 killed $r0, $r11, -12, 14, $noreg :: (store (s32) into %stack.2)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff44
 __udivsi3_BB4_I0: $r0 = LDRi12 $r11, -8, 14, $noreg, debug-location !1899 :: (load (s32) from %stack.1); ../udivsi3.c:36:10
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff48
 __udivsi3_BB4_I3: $r0 = LDRi12 $r11, -4, 14, $noreg :: (load (s32) from %stack.0)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff4c
 __udivsi3_BB4_I4: STRi12 $r1, $r11, -20, 14, $noreg :: (store (s32) into %stack.4)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff3c
 __udivsi3_BB4_I7: $r0 = LDRi12 $r11, -20, 14, $noreg, debug-location !1901 :: (load (s32) from %stack.4); ../udivsi3.c:36:27
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff3c
 __udivsi3_BB4_I9: STRi12 $r0, $r11, -16, 14, $noreg :: (store (s32) into %stack.3)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff40
 __udivsi3_BB5_I1: STRi12 killed $r0, $r11, -12, 14, $noreg :: (store (s32) into %stack.2)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff44
 __udivsi3_BB6_I0: $r0 = LDRi12 $r11, -16, 14, $noreg, debug-location !1906 :: (load (s32) from %stack.3); ../udivsi3.c:40:9
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff40
 __udivsi3_BB7_I0: $r0 = LDRi12 $r11, -4, 14, $noreg :: (load (s32) from %stack.0)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff4c
 __udivsi3_BB7_I1: STRi12 killed $r0, $r11, -12, 14, $noreg :: (store (s32) into %stack.2)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff44
 __udivsi3_BB8_I0: $r0 = LDRi12 $r11, -4, 14, $noreg, debug-location !1908 :: (load (s32) from %stack.0); ../udivsi3.c:42:5
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff4c
 __udivsi3_BB8_I1: $r2 = LDRi12 $r11, -16, 14, $noreg, debug-location !1908 :: (load (s32) from %stack.3); ../udivsi3.c:42:5
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff40
 __udivsi3_BB8_I7: STRi12 killed $r3, $sp, 28, 14, $noreg :: (store (s32) into %stack.8)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff2c
 __udivsi3_BB8_I8: STRi12 killed $r2, $sp, 32, 14, $noreg :: (store (s32) into %stack.7)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff30
 __udivsi3_BB8_I9: STRi12 killed $r1, $r11, -28, 14, $noreg :: (store (s32) into %stack.6)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff34
 __udivsi3_BB8_I10: STRi12 killed $r0, $r11, -24, 14, $noreg :: (store (s32) into %stack.5)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff38
 __udivsi3_BB9_I0: $r1 = LDRi12 $sp, 28, 14, $noreg, debug-location !1913 :: (load (s32) from %stack.8); ../udivsi3.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff2c
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff2c
 __udivsi3_BB9_I1: $r2 = LDRi12 $sp, 32, 14, $noreg, debug-location !1913 :: (load (s32) from %stack.7); ../udivsi3.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff30
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff30
 __udivsi3_BB9_I2: $r0 = LDRi12 $r11, -28, 14, $noreg, debug-location !1913 :: (load (s32) from %stack.6); ../udivsi3.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff34
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff34
 __udivsi3_BB9_I3: $r3 = LDRi12 $r11, -24, 14, $noreg, debug-location !1913 :: (load (s32) from %stack.5); ../udivsi3.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff38
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff38
 __udivsi3_BB9_I4: STRi12 killed $r3, $sp, 12, 14, $noreg :: (store (s32) into %stack.12)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff1c
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff1c
 __udivsi3_BB9_I5: STRi12 $r0, $sp, 16, 14, $noreg :: (store (s32) into %stack.11)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff20
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff20
 __udivsi3_BB9_I6: STRi12 killed $r2, $sp, 20, 14, $noreg :: (store (s32) into %stack.10)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff24
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff24
 __udivsi3_BB9_I7: STRi12 killed $r1, $sp, 24, 14, $noreg :: (store (s32) into %stack.9)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff28
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff28
 __udivsi3_BB10_I0: $r1 = LDRi12 $r11, -8, 14, $noreg, debug-location !1915 :: (load (s32) from %stack.1); ../udivsi3.c:51:22
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff48
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff48
 __udivsi3_BB10_I1: $r2 = LDRi12 $sp, 24, 14, $noreg, debug-location !1915 :: (load (s32) from %stack.9); ../udivsi3.c:51:22
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff28
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff28
 __udivsi3_BB10_I2: $r0 = LDRi12 $sp, 20, 14, $noreg, debug-location !1915 :: (load (s32) from %stack.10); ../udivsi3.c:51:22
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff24
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff24
 __udivsi3_BB10_I5: STRi12 $r0, $sp, 4, 14, $noreg :: (store (s32) into %stack.14)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff14
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff14
 __udivsi3_BB10_I8: STRi12 killed $r0, $sp, 8, 14, $noreg :: (store (s32) into %stack.13)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff18
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff18
 __udivsi3_BB11_I0: $r1 = LDRi12 $sp, 16, 14, $noreg, debug-location !1919 :: (load (s32) from %stack.11); ../udivsi3.c:62:11
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff20
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff20
 __udivsi3_BB11_I1: $r3 = LDRi12 $sp, 12, 14, $noreg, debug-location !1919 :: (load (s32) from %stack.12); ../udivsi3.c:62:11
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff1c
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff1c
 __udivsi3_BB11_I2: $r12 = LDRi12 $sp, 24, 14, $noreg, debug-location !1919 :: (load (s32) from %stack.9); ../udivsi3.c:62:11
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff28
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff28
 __udivsi3_BB11_I3: $r0 = LDRi12 $sp, 8, 14, $noreg, debug-location !1919 :: (load (s32) from %stack.13); ../udivsi3.c:62:11
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff18
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff18
 __udivsi3_BB11_I4: $r2 = LDRi12 $sp, 4, 14, $noreg, debug-location !1919 :: (load (s32) from %stack.14); ../udivsi3.c:62:11
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff14
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff14
 __udivsi3_BB11_I5: $lr = LDRi12 $r11, -8, 14, $noreg, debug-location !1919 :: (load (s32) from %stack.1); ../udivsi3.c:62:11
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff48
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff48
 __udivsi3_BB11_I12: STRi12 killed $r3, $sp, 28, 14, $noreg :: (store (s32) into %stack.8)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff2c
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff2c
 __udivsi3_BB11_I13: STRi12 killed $r2, $sp, 32, 14, $noreg :: (store (s32) into %stack.7)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff30
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff30
 __udivsi3_BB11_I14: STRi12 killed $r1, $r11, -28, 14, $noreg :: (store (s32) into %stack.6)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff34
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff34
 __udivsi3_BB11_I15: STRi12 killed $r0, $r11, -24, 14, $noreg :: (store (s32) into %stack.5)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times]
+Address for #memop 0: 0x7ffff38
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3
+    2: Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times]
+Address for #memop 0: 0x7ffff38
 __udivsi3_BB12_I0: $r0 = LDRi12 $sp, 12, 14, $noreg, debug-location !1926 :: (load (s32) from %stack.12); ../udivsi3.c:64:18
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff1c
 __udivsi3_BB12_I1: $r1 = LDRi12 $sp, 24, 14, $noreg, debug-location !1926 :: (load (s32) from %stack.9); ../udivsi3.c:64:18
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff28
 __udivsi3_BB12_I3: STRi12 killed $r0, $r11, -12, 14, $noreg :: (store (s32) into %stack.2)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff44
 __udivsi3_BB13_I0: $r0 = LDRi12 $r11, -12, 14, $noreg, debug-location !1913 :: (load (s32) from %stack.2); ../udivsi3.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff44
 __udivsi3_BB13_I2: $sp = frame-destroy LDMIA_UPD $sp(tied-def 0), 14, $noreg, def $r11, def $lr, debug-location !1928; ../udivsi3.c:66:1
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location __divsi3_BB0_I16
+    1: Call of function __udivsi3]
+Address for #memop 0: 0x7ffff50
+Address for #memop 1: 0x7ffff54
 __umoddi3_BB0_I0: $sp = frame-setup STMDB_UPD $sp(tied-def 0), 14, $noreg, killed $r11, killed $lr
 NO CONTEXT-SENSITIVE INFO AVAILABLE!
 __umoddi3_BB0_I13: STRi12 killed renamable $r12, killed renamable $lr, 0, 14, $noreg, debug-location !1930 :: (store (s32) into stack); ../umoddi3.c:23:5
@@ -8612,199 +7375,898 @@ NO CONTEXT-SENSITIVE INFO AVAILABLE!
 bs_BB0_I9: $sp = frame-destroy LDMIA_UPD $sp(tied-def 0), 14, $noreg, def $r11, def $lr, debug-location !636; test/bs.c:74:1
 NO CONTEXT-SENSITIVE INFO AVAILABLE!
 expint_BB0_I0: $sp = frame-setup STMDB_UPD $sp(tied-def 0), 14, $noreg, killed $r11, killed $lr
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Call of function expint]
+Address for #memop 0: 0x7fffff8
+Address for #memop 1: 0x7fffffc
 expint_BB0_I9: $sp = frame-destroy LDMIA_UPD $sp(tied-def 0), 14, $noreg, def $r11, def $lr, debug-location !662; test/expint.c:38:1
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Call of function expint]
+Address for #memop 0: 0x7fffff8
+Address for #memop 1: 0x7fffffc
 expint_expint_BB0_I0: $sp = frame-setup STMDB_UPD $sp(tied-def 0), 14, $noreg, killed $r4, killed $r10, killed $r11, killed $lr
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffe8
+Address for #memop 1: 0x7ffffec
+Address for #memop 2: 0x7fffff0
+Address for #memop 3: 0x7fffff4
 expint_expint_BB0_I9: STRi12 $r1, $r11, -20, 14, $noreg :: (store (s32) into %stack.2)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffdc
 expint_expint_BB0_I10: STRi12 $r0, $r11, -16, 14, $noreg :: (store (s32) into %stack.1)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffe0
 expint_expint_BB0_I12: STRi12 killed $r0, $r11, -12, 14, $noreg :: (store (s32) into %stack.0)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffe4
 expint_expint_BB1_I0: $r0 = LDRi12 $r11, -20, 14, $noreg, debug-location !667 :: (load (s32) from %stack.2); test/expint.c:74:10
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffdc
 expint_expint_BB1_I1: $r1 = LDRi12 $r11, -16, 14, $noreg, debug-location !667 :: (load (s32) from %stack.1); test/expint.c:74:10
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffe0
 expint_expint_BB1_I6: renamable $r1 = LDRcp %const.0, 0, 14, $noreg :: (load (s32) from constant-pool)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x8015bc
 expint_expint_BB1_I8: STRi12 killed $r12, $r11, -40, 14, $noreg :: (store (s32) into %stack.7)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffc8
 expint_expint_BB1_I9: STRi12 killed $r3, $r11, -36, 14, $noreg :: (store (s32) into %stack.6)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffcc
 expint_expint_BB1_I10: STRi12 killed $r2, $r11, -32, 14, $noreg :: (store (s32) into %stack.5)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffd0
 expint_expint_BB1_I11: STRi12 killed $r1, $r11, -28, 14, $noreg :: (store (s32) into %stack.4)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffd4
 expint_expint_BB1_I12: STRi12 killed $r0, $r11, -24, 14, $noreg :: (store (s32) into %stack.3)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffd8
 expint_expint_BB2_I0: $r1 = LDRi12 $r11, -40, 14, $noreg, debug-location !669 :: (load (s32) from %stack.7); test/expint.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffc8
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffc8
 expint_expint_BB2_I1: $r2 = LDRi12 $r11, -36, 14, $noreg, debug-location !669 :: (load (s32) from %stack.6); test/expint.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffcc
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffcc
 expint_expint_BB2_I2: $r3 = LDRi12 $r11, -32, 14, $noreg, debug-location !669 :: (load (s32) from %stack.5); test/expint.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffd0
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffd0
 expint_expint_BB2_I3: $r12 = LDRi12 $r11, -28, 14, $noreg, debug-location !669 :: (load (s32) from %stack.4); test/expint.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffd4
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffd4
 expint_expint_BB2_I4: $r0 = LDRi12 $r11, -24, 14, $noreg, debug-location !669 :: (load (s32) from %stack.3); test/expint.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffd8
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffd8
 expint_expint_BB2_I5: STRi12 $r0, $r11, -60, 14, $noreg :: (store (s32) into %stack.12)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffb4
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffb4
 expint_expint_BB2_I6: STRi12 killed $r12, $r11, -56, 14, $noreg :: (store (s32) into %stack.11)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffb8
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffb8
 expint_expint_BB2_I7: STRi12 killed $r3, $r11, -52, 14, $noreg :: (store (s32) into %stack.10)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffbc
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffbc
 expint_expint_BB2_I8: STRi12 killed $r2, $r11, -48, 14, $noreg :: (store (s32) into %stack.9)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffc0
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffc0
 expint_expint_BB2_I9: STRi12 killed $r1, $r11, -44, 14, $noreg :: (store (s32) into %stack.8)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffc4
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffc4
 expint_expint_BB3_I0: $r1 = LDRi12 $r11, -48, 14, $noreg, debug-location !672 :: (load (s32) from %stack.9); test/expint.c:88:22
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffc0
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffc0
 expint_expint_BB3_I1: $r3 = LDRi12 $r11, -44, 14, $noreg, debug-location !672 :: (load (s32) from %stack.8); test/expint.c:88:22
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffc4
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffc4
 expint_expint_BB3_I2: $r2 = LDRi12 $r11, -52, 14, $noreg, debug-location !672 :: (load (s32) from %stack.10); test/expint.c:88:22
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffbc
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffbc
 expint_expint_BB3_I3: $r12 = LDRi12 $r11, -60, 14, $noreg, debug-location !672 :: (load (s32) from %stack.12); test/expint.c:88:22
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffb4
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffb4
 expint_expint_BB3_I4: $r0 = LDRi12 $r11, -12, 14, $noreg, debug-location !672 :: (load (s32) from %stack.0); test/expint.c:88:22
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffe4
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffe4
 expint_expint_BB3_I9: STRi12 $r12, $sp, 64, 14, $noreg :: (store (s32) into %stack.15)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffa8
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffa8
 expint_expint_BB3_I13: STRi12 $r2, $sp, 60, 14, $noreg :: (store (s32) into %stack.16)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffa4
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffa4
 expint_expint_BB3_I15: $r3 = LDRi12 $sp, 60, 14, $noreg, debug-location !678 :: (load (s32) from %stack.16); test/expint.c:94:16
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffa4
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffa4
 expint_expint_BB3_I16: $r2 = LDRi12 $r11, -56, 14, $noreg, debug-location !678 :: (load (s32) from %stack.11); test/expint.c:94:16
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffb8
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffb8
 expint_expint_BB3_I18: $r0 = LDRi12 $sp, 64, 14, $noreg, debug-location !679 :: (load (s32) from %stack.15); test/expint.c:94:14
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffa8
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffa8
 expint_expint_BB3_I20: STRi12 $r1, $sp, 68, 14, $noreg :: (store (s32) into %stack.14)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffac
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffac
 expint_expint_BB3_I23: STRi12 killed $r1, $r11, -64, 14, $noreg :: (store (s32) into %stack.13)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffb0
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffb0
 expint_expint_BB4_I0: $r1 = LDRi12 $r11, -64, 14, $noreg, debug-location !684 :: (load (s32) from %stack.13); test/expint.c:104:20
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffb0
 expint_expint_BB4_I1: $r2 = LDRi12 $r11, -20, 14, $noreg, debug-location !684 :: (load (s32) from %stack.2); test/expint.c:104:20
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffdc
 expint_expint_BB4_I4: STRi12 killed $r0, $sp, 56, 14, $noreg :: (store (s32) into %stack.17)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffa0
 expint_expint_BB6_I0: $r1 = LDRi12 $r11, -64, 14, $noreg, debug-location !687 :: (load (s32) from %stack.13); test/expint.c:84:24
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffb0
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffb0
 expint_expint_BB6_I1: $r2 = LDRi12 $sp, 64, 14, $noreg, debug-location !687 :: (load (s32) from %stack.15); test/expint.c:84:24
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffa8
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffa8
 expint_expint_BB6_I2: $r3 = LDRi12 $sp, 68, 14, $noreg, debug-location !687 :: (load (s32) from %stack.14); test/expint.c:84:24
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffac
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffac
 expint_expint_BB6_I3: $r12 = LDRi12 $sp, 60, 14, $noreg, debug-location !687 :: (load (s32) from %stack.16); test/expint.c:84:24
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffa4
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffa4
 expint_expint_BB6_I4: $r0 = LDRi12 $r11, -60, 14, $noreg, debug-location !687 :: (load (s32) from %stack.12); test/expint.c:84:24
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffb4
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffb4
 expint_expint_BB6_I6: STRi12 killed $r12, $r11, -40, 14, $noreg :: (store (s32) into %stack.7)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffc8
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffc8
 expint_expint_BB6_I7: STRi12 killed $r3, $r11, -36, 14, $noreg :: (store (s32) into %stack.6)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffcc
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffcc
 expint_expint_BB6_I8: STRi12 killed $r2, $r11, -32, 14, $noreg :: (store (s32) into %stack.5)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffd0
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffd0
 expint_expint_BB6_I9: STRi12 killed $r1, $r11, -28, 14, $noreg :: (store (s32) into %stack.4)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffd4
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffd4
 expint_expint_BB6_I10: STRi12 killed $r0, $r11, -24, 14, $noreg :: (store (s32) into %stack.3)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffd8
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffd8
 expint_expint_BB8_I0: $r12 = LDRi12 $r11, -16, 14, $noreg :: (load (s32) from %stack.1)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffe0
 expint_expint_BB8_I1: $r1 = LDRi12 $r11, -12, 14, $noreg :: (load (s32) from %stack.0)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffe4
 expint_expint_BB8_I17: STRi12 killed $r2, $sp, 36, 14, $noreg :: (store (s32) into %stack.22)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffff8c
 expint_expint_BB8_I19: STRi12 killed $r2, $sp, 40, 14, $noreg :: (store (s32) into %stack.21)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffff90
 expint_expint_BB8_I21: STRi12 killed $r2, $sp, 44, 14, $noreg :: (store (s32) into %stack.20)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffff94
 expint_expint_BB8_I22: STRi12 killed $r1, $sp, 48, 14, $noreg :: (store (s32) into %stack.19)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffff98
 expint_expint_BB8_I23: STRi12 killed $r0, $sp, 52, 14, $noreg :: (store (s32) into %stack.18)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffff9c
 expint_expint_BB9_I0: $r1 = LDRi12 $sp, 40, 14, $noreg, debug-location !669 :: (load (s32) from %stack.21); test/expint.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff90
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff90
 expint_expint_BB9_I1: $r2 = LDRi12 $sp, 44, 14, $noreg, debug-location !669 :: (load (s32) from %stack.20); test/expint.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff94
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff94
 expint_expint_BB9_I2: $r0 = LDRi12 $sp, 48, 14, $noreg, debug-location !669 :: (load (s32) from %stack.19); test/expint.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff98
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff98
 expint_expint_BB9_I3: $r3 = LDRi12 $sp, 52, 14, $noreg, debug-location !669 :: (load (s32) from %stack.18); test/expint.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff9c
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff9c
 expint_expint_BB9_I4: STRi12 killed $r3, $sp, 20, 14, $noreg :: (store (s32) into %stack.26)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff7c
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff7c
 expint_expint_BB9_I5: STRi12 $r0, $sp, 24, 14, $noreg :: (store (s32) into %stack.25)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff80
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff80
 expint_expint_BB9_I6: STRi12 killed $r2, $sp, 28, 14, $noreg :: (store (s32) into %stack.24)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff84
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff84
 expint_expint_BB9_I7: STRi12 killed $r1, $sp, 32, 14, $noreg :: (store (s32) into %stack.23)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff88
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff88
 expint_expint_BB10_I0: $r1 = LDRi12 $sp, 24, 14, $noreg, debug-location !695 :: (load (s32) from %stack.25); test/expint.c:130:21
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff80
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff80
 expint_expint_BB10_I1: $r0 = LDRi12 $r11, -20, 14, $noreg, debug-location !695 :: (load (s32) from %stack.2); test/expint.c:130:21
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffdc
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffdc
 expint_expint_BB10_I3: $r12 = LDRi12 $sp, 28, 14, $noreg, debug-location !695 :: (load (s32) from %stack.24); test/expint.c:130:21
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff84
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff84
 expint_expint_BB10_I4: $r1 = LDRi12 $r11, -12, 14, $noreg, debug-location !695 :: (load (s32) from %stack.0); test/expint.c:130:21
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffe4
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffe4
 expint_expint_BB10_I5: $lr = LDRi12 $sp, 32, 14, $noreg, debug-location !695 :: (load (s32) from %stack.23); test/expint.c:130:21
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff88
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff88
 expint_expint_BB10_I7: $r0 = LDRi12 $sp, 24, 14, $noreg, debug-location !696 :: (load (s32) from %stack.25); test/expint.c:130:16
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff80
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff80
 expint_expint_BB10_I9: STRi12 killed $r2, $sp, 12, 14, $noreg :: (store (s32) into %stack.28)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff74
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff74
 expint_expint_BB10_I11: STRi12 killed $r2, $sp, 16, 14, $noreg :: (store (s32) into %stack.27)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff78
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff78
 expint_expint_BB11_I0: $r0 = LDRi12 $sp, 12, 14, $noreg, debug-location !699 :: (load (s32) from %stack.28); test/expint.c:134:27
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff74
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff74
 expint_expint_BB11_I1: $r1 = LDRi12 $sp, 24, 14, $noreg, debug-location !699 :: (load (s32) from %stack.25); test/expint.c:134:27
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff80
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff80
 expint_expint_BB11_I2: $r2 = LDRi12 $r11, -12, 14, $noreg, debug-location !699 :: (load (s32) from %stack.0); test/expint.c:134:27
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffe4
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffe4
 expint_expint_BB11_I6: STRi12 killed $r0, $sp, 8, 14, $noreg :: (store (s32) into %stack.29)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff70
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff70
 expint_expint_BB16_I0: $r0 = LDRi12 $r11, -20, 14, $noreg, debug-location !707 :: (load (s32) from %stack.2); test/expint.c:146:28
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffffdc
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffffdc
 expint_expint_BB16_I2: $r3 = LDRi12 $sp, 36, 14, $noreg, debug-location !707 :: (load (s32) from %stack.22); test/expint.c:146:28
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff8c
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff8c
 expint_expint_BB16_I3: $r1 = LDRi12 $sp, 12, 14, $noreg, debug-location !707 :: (load (s32) from %stack.28); test/expint.c:146:28
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff74
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff74
 expint_expint_BB16_I6: STRi12 killed $r0, $sp, 8, 14, $noreg :: (store (s32) into %stack.29)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff70
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff70
 expint_expint_BB17_I0: $r0 = LDRi12 $sp, 8, 14, $noreg, debug-location !669 :: (load (s32) from %stack.29); test/expint.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff70
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff70
 expint_expint_BB17_I1: STRi12 killed $r0, $sp, 4, 14, $noreg :: (store (s32) into %stack.30)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff6c
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff6c
 expint_expint_BB18_I0: $r2 = LDRi12 $sp, 12, 14, $noreg, debug-location !711 :: (load (s32) from %stack.28); test/expint.c:150:15
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff74
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff74
 expint_expint_BB18_I1: $r3 = LDRi12 $sp, 16, 14, $noreg, debug-location !711 :: (load (s32) from %stack.27); test/expint.c:150:15
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff78
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff78
 expint_expint_BB18_I2: $r1 = LDRi12 $sp, 24, 14, $noreg, debug-location !711 :: (load (s32) from %stack.25); test/expint.c:150:15
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff80
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff80
 expint_expint_BB18_I3: $r0 = LDRi12 $sp, 20, 14, $noreg, debug-location !711 :: (load (s32) from %stack.26); test/expint.c:150:15
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff7c
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff7c
 expint_expint_BB18_I4: $r12 = LDRi12 $sp, 4, 14, $noreg, debug-location !711 :: (load (s32) from %stack.30); test/expint.c:150:15
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff6c
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff6c
 expint_expint_BB18_I7: STRi12 killed $r3, $sp, 40, 14, $noreg :: (store (s32) into %stack.21)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff90
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff90
 expint_expint_BB18_I8: STRi12 killed $r2, $sp, 44, 14, $noreg :: (store (s32) into %stack.20)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff94
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff94
 expint_expint_BB18_I9: STRi12 killed $r1, $sp, 48, 14, $noreg :: (store (s32) into %stack.19)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff98
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff98
 expint_expint_BB18_I10: STRi12 killed $r0, $sp, 52, 14, $noreg :: (store (s32) into %stack.18)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times]
+Address for #memop 0: 0x7ffff9c
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint
+    2: Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times]
+Address for #memop 0: 0x7ffff9c
 expint_expint_BB19_I0: $r0 = LDRi12 $sp, 20, 14, $noreg :: (load (s32) from %stack.26)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffff7c
 expint_expint_BB19_I1: STRi12 killed $r0, $sp, 0, 14, $noreg :: (store (s32) into %stack.31)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffff68
 expint_expint_BB20_I0: $r0 = LDRi12 $sp, 0, 14, $noreg :: (load (s32) from %stack.31)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffff68
 expint_expint_BB20_I1: STRi12 killed $r0, $sp, 56, 14, $noreg :: (store (s32) into %stack.17)
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffa0
 expint_expint_BB21_I0: $r0 = LDRi12 $sp, 56, 14, $noreg, debug-location !669 :: (load (s32) from %stack.17); test/expint.c:0
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffa0
 expint_expint_BB21_I2: $sp = frame-destroy LDMIA_UPD $sp(tied-def 0), 14, $noreg, def $r4, def $r10, def $r11, def $lr, debug-location !715; test/expint.c:162:1
-NO CONTEXT-SENSITIVE INFO AVAILABLE!
+In context:
+[0: Function call at location expint_BB0_I8
+    1: Call of function expint_expint]
+Address for #memop 0: 0x7ffffe8
+Address for #memop 1: 0x7ffffec
+Address for #memop 2: 0x7fffff0
+Address for #memop 3: 0x7fffff4
 lms_BB0_I0: $sp = frame-setup STMDB_UPD $sp(tied-def 0), 14, $noreg, killed $r11, killed $lr
 NO CONTEXT-SENSITIVE INFO AVAILABLE!
 lms_BB0_I9: $sp = frame-destroy LDMIA_UPD $sp(tied-def 0), 14, $noreg, def $r11, def $lr, debug-location !874; test/lms.c:167:1
@@ -9156,27 +8618,15 @@ NO CONTEXT-SENSITIVE INFO AVAILABLE!
 lms_sinus_BB9_I0: $d0 = VLDRD $sp, 2, 14, $noreg, debug-location !738 :: (load (s64) from %stack.2); test/lms.c:0
 NO CONTEXT-SENSITIVE INFO AVAILABLE!
 matmult_BB0_I0: $sp = frame-setup STMDB_UPD $sp(tied-def 0), 14, $noreg, killed $r11, killed $lr
-In context:
-[0: Call of function matmult]
-Address for #memop 0: 0x7fffff8
-Address for #memop 1: 0x7fffffc
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 matmult_BB0_I7: renamable $r0 = LDRi12 %const.0, 0, 14, $noreg, debug-location !878 :: (load (s32) from constant-pool); test/matmult.c:61:4
-In context:
-[0: Call of function matmult]
-Address for #memop 0: 0x801bf0
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 matmult_BB0_I8: renamable $r1 = LDRi12 %const.1, 0, 14, $noreg, debug-location !878 :: (load (s32) from constant-pool); test/matmult.c:61:4
-In context:
-[0: Call of function matmult]
-Address for #memop 0: 0x801bf4
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 matmult_BB0_I9: renamable $r2 = LDRi12 %const.2, 0, 14, $noreg, debug-location !878 :: (load (s32) from constant-pool); test/matmult.c:61:4
-In context:
-[0: Call of function matmult]
-Address for #memop 0: 0x801bf8
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 matmult_BB0_I11: $sp = frame-destroy LDMIA_UPD $sp(tied-def 0), 14, $noreg, def $r11, def $lr, debug-location !879; test/matmult.c:62:1
-In context:
-[0: Call of function matmult]
-Address for #memop 0: 0x7fffff8
-Address for #memop 1: 0x7fffffc
+NO CONTEXT-SENSITIVE INFO AVAILABLE!
 memcpy_BB0_I2: STRi12 killed $r2, $sp, 4, 14, $noreg :: (store (s32) into %stack.3)
 NO CONTEXT-SENSITIVE INFO AVAILABLE!
 memcpy_BB0_I3: STRi12 killed $r1, $sp, 8, 14, $noreg :: (store (s32) into %stack.2)

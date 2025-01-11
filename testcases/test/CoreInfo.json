@@ -3,8 +3,17 @@
         "core": 0,
         "tasks": [
             {
-                "function": "loopf"
+                "function": "rad2deg"
             }
         ]
+    },
+    {
+        "core": 1,
+        "tasks": [
+            {
+                "function": "expint"
+            }
+        ]
+
     }
 ]
