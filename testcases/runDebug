@@ -3,7 +3,7 @@
 if [ $# -le 0 ];
 then
     echo "Test case is not set, using default: \"loopexamples/nested\""
-    testcases=loopexamples/nested
+    testcases=test
 else
     testcases=$1
 fi

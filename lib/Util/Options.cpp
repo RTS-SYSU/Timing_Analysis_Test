@@ -46,7 +46,7 @@ cl::OptionCategory
 cl::OptionCategory MultiCoreCat("7. TODO");
 //jjy
 cl::opt<std::string>
-    coreInfo("core-info", cl::init("CoreInfo.json"),
+    CoreInfo("core-info", cl::init("CoreInfo.json"),
              cl::desc("Used to descripe which core runs which function"),
              cl::cat(MultiCoreCat));
              
