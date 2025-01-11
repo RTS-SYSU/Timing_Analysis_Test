@@ -111,9 +111,19 @@ LruMaxAgeAbstractCache<T>::classify(const AbstractAddress addr) const {
   unsigned CNN = 0;
   TagType tag = getTag<T>(addr);
   unsigned index = getindex<T>(addr);
+  // if (T->LEVEL > 1) {
+  //   for (std::string &funtion : conflicFunctions) {
+  //     for (unsigned address : mcif.addressinfo[funtion]) {
+  //       if (getindex<T>(address) == index && getTag<T>(address) != tag) {
+  //         CNN++;
+  //       }
+  //     }
+  //   }
+  // }
+  
   if (T->LEVEL > 1) {
-    for (std::string &funtion : conflicFunctions) {
-      for (unsigned address : mcif.addressinfo[funtion]) {
+    for (auto list: Addressinfo) {
+      for (unsigned address : list.second) {
         if (getindex<T>(address) == index && getTag<T>(address) != tag) {
           CNN++;
         }

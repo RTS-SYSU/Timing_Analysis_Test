@@ -249,7 +249,7 @@ extern llvm::cl::opt<bool> SPersistenceA;
 /**
  * File that record the running info.
  */
-extern llvm::cl::opt<std::string> coreInfo;
+extern llvm::cl::opt<std::string> CoreInfo;
 extern llvm::cl::opt<bool> ParallelPrograms;
 
 /**

@@ -31,11 +31,13 @@
 #include <set>
 
 #include "Memory/Classification.h"
+#include "Memory/UpdateReports.h"
 #include "Memory/progana/Lattice.h"
 #include "Memory/util/CacheUtils.h"
 #include "Memory/util/ImplicitSet.h"
 #include "Util/GlobalVars.h"
 #include "Util/Options.h"
+#include "Util/PersistenceScope.h"
 
 namespace TimingAnalysisPass {
 
@@ -306,8 +308,8 @@ SetWiseCountingPersistence<T>::isPersistent(const TagType tag) const {
       return false;
     }
     unsigned CNN = 0;
-    for (std::string &funtion : conflicFunctions) {
-      for (unsigned address : mcif.addressinfo[funtion]) {
+    for (auto list : Addressinfo) {
+      for (unsigned address : list.second) {
         if (getindex<T>(address) == index && getTag<T>(address) != tag) {
           unsigned i = 1;
           for (const Block &B : accessedBlocks) {
@@ -320,6 +322,7 @@ SetWiseCountingPersistence<T>::isPersistent(const TagType tag) const {
         }
       }
     }
+
     if (accessedBlocks.size() + accessedArrays.size() + CNN <=
         T->ASSOCIATIVITY) {
       return true;

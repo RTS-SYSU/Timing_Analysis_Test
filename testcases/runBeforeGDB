@@ -40,6 +40,8 @@ opt -S unoptimized.ll \
     -mem2reg -indvars -loop-simplify -instcombine -globaldce -dce \
     -o optimized.ll
 
+
+
 # gdb -tui --args llvmta -disable-tail-calls -float-abi=hard -mattr=-neon,+vfp2 -O0 \
 # --ta-analysis-entry-point=main --ta-muarch-type=inorder \
 # --ta-memory-type=separatecaches --ta-strict=false \
