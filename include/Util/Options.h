@@ -41,6 +41,11 @@ enum class GetEdges_method : char;
 }
 using TimingAnalysisPass::GetEdges_method;
 
+#include "Memory/CacheTraits.h"
+extern TimingAnalysisPass::dom::cache::CacheTraits icacheConf;
+extern TimingAnalysisPass::dom::cache::CacheTraits dcacheConf;
+extern TimingAnalysisPass::dom::cache::CacheTraits l2cacheConf;
+
 /**
  * The available analysis types
  */
@@ -115,7 +120,7 @@ enum class CompositionalAnalysisType {
           /// cache. This Cache is not analysed.
   DCACHE, /// Timing Analysis uses an always hit cache for the data cache. This
           /// Cache is not analysed.
-// jjy: 层2cache
+          // jjy: 层2cache
   L2CACHE,
   DRAMREFRESH,      /// Timing Analysis should analyse DRAM refreshes in a
                     /// compositional way.
@@ -242,15 +247,19 @@ enum class ArrivalCurveIlpObjectiveType { VARIANT1, VARIANT2, COMBINED };
 
 // Global options
 
-//jjy:多核策略改动标记
+// jjy:多核策略改动标记
+// No longer needs this, as we have a better way to handle this.
 extern llvm::cl::opt<unsigned> CoreNums;
-extern llvm::cl::opt<unsigned> Core;
+//  extern llvm::cl::opt<unsigned> Core;
 extern llvm::cl::opt<bool> SPersistenceA;
 /**
  * File that record the running info.
  */
-extern llvm::cl::opt<std::string> CoreInfo;
+extern llvm::cl::opt<std::string> SystemInfo;
 extern llvm::cl::opt<bool> ParallelPrograms;
+
+extern llvm::cl::opt<bool> L2DataCacheWriteBack;
+extern llvm::cl::opt<bool> L2DataCacheWriteAllocate;
 
 /**
  * Quiet mode: No output on console and no file output, except for the

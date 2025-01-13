@@ -62,6 +62,7 @@ class TimingAnalysisMain : public MachineFunctionPass {
   // Modified By Zeng-WCh
 private:
   std::map<int, std::vector<std::string>> taskMap;
+  std::map<AnalysisType, boost::optional<BoundItv>> result;
   // End of Modification
 
 public:
@@ -97,7 +98,6 @@ public:
    * @return TargetMachine&
    */
   static TargetMachine &getTargetMachine();
-  void parseCoreInfo(const std::string &FileName);
 
 private:
   /***
@@ -113,8 +113,6 @@ private:
    * @tparam ISA
    */
   template <Triple::ArchType ISA> void dispatchValueAnalysis();
-  typedef uint32_t Core;
-  std::map<Core, std::vector<std::string>> taskMap;
 
   /**
    * @brief  Select the overall analysis type, so timing, memory access, and

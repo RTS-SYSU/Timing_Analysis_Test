@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-Multicoreinfo mcif(0);
+Multicoreinfo mcif;
 std::vector<std::string> conflicFunctions;
 bool isBCET = false;
 int IMISS = 0;
