@@ -87,7 +87,7 @@ cl::opt<MicroArchitecturalType> MuArchType(
     "ta-muarch-type",
     cl::desc(
         "Choose the microarchitecture to analyse (default 'fixedlatency')"),
-    cl::init(MicroArchitecturalType::OUTOFORDER),
+    cl::init(MicroArchitecturalType::INORDER),
     cl::values(
         clEnumValN(MicroArchitecturalType::FIXEDLATENCY, "fixedlatency",
                    "Pipeline with fixed latency per instruction"),
@@ -100,7 +100,8 @@ cl::opt<MicroArchitecturalType> MuArchType(
                    "Strictly in-order 5-stage pipeline"),
         clEnumValN(MicroArchitecturalType::OUTOFORDER, "outoforder",
                    "Out-of-order pipeline")),
-    cl::Required, cl::cat(HardwareDescrCat));
+    // cl::Required,
+    cl::cat(HardwareDescrCat));
 
 cl::opt<MemoryTopologyType> MemTopType(
     "ta-memory-type",
@@ -118,7 +119,8 @@ cl::opt<MemoryTopologyType> MemTopType(
         clEnumValN(MemoryTopologyType::PRIVINSTRSPMDATASHARED,
                    "priv-instr-spm-data-shared",
                    "Private instruction SPM, potentially shared data memory.")),
-    cl::Required, cl::cat(HardwareDescrCat));
+    // cl::Required,
+    cl::cat(HardwareDescrCat));
 
 cl::opt<SharedBusType> SharedBus(
     "ta-shared-bus", cl::desc("Select which type of shared bus is assumed."),

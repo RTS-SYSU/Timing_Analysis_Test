@@ -40,6 +40,7 @@
 #include "PreprocessingAnalysis/AddressInformation.h"
 #include "PreprocessingAnalysis/ConstantValueDomain.h"
 
+#include "Util/GlobalVars.h"
 #include "Util/Options.h"
 #include "Util/Stat.h"
 #include "Util/Statistics.h"
@@ -419,11 +420,12 @@ bool TimingAnalysisMain::runOnMachineFunction(MachineFunction &MF) {
 }
 
 bool TimingAnalysisMain::doFinalization(Module &M) {
-  if (!machineFunctionCollector->hasFunctionByName(AnalysisEntryPoint)) {
-    outs() << "No Timing Analysis Run. There is no entry point: "
-           << AnalysisEntryPoint << "\n";
-    exit(1);
-  }
+  // 好像用不到？因为后面都会修改这个 AnalysisEntryPoint
+  // if (!machineFunctionCollector->hasFunctionByName(AnalysisEntryPoint)) {
+  //   outs() << "No Timing Analysis Run. There is no entry point: "
+  //          << AnalysisEntryPoint << "\n";
+  //   exit(1);
+  // }
 
   // First Change command line arguments
   parseSystemInfo(SystemInfo);
@@ -540,11 +542,19 @@ void TimingAnalysisMain::dispatchValueAnalysis() {
 
   if (OutputLoopAnnotationFile) {
     ofstream Myfile2;
-    Myfile.open("CtxSensLoopAnnotations.csv", ios_base::trunc);
-    Myfile2.open("LoopAnnotations.csv", ios_base::trunc);
+    if (FirstPrintLoop) {
+      Myfile.open("CtxSensLoopAnnotations.csv", ios_base::trunc);
+      Myfile2.open("LoopAnnotations.csv", ios_base::trunc);
+    } else {
+      Myfile.open("CtxSensLoopAnnotations.csv", ios_base::app);
+      Myfile2.open("LoopAnnotations.csv", ios_base::app);
+    }
     LoopBoundInfo->dumpNonUpperBoundLoops(Myfile, Myfile2);
     Myfile2.close();
     Myfile.close();
+    if (FirstPrintLoop) {
+      FirstPrintLoop = false;
+    }
     return;
   }
 

@@ -29,6 +29,7 @@
 #include "AnalysisFramework/CallGraph.h"
 #include "LLVMPasses/MachineFunctionCollector.h"
 #include "LLVMPasses/TimingAnalysisMain.h"
+#include "Util/GlobalVars.h"
 #include "Util/Options.h"
 #include "Util/Util.h"
 
@@ -855,8 +856,10 @@ void LoopBoundInfoPass::dumpNonBoundLoops(
   CallGraph &Cg = CallGraph::getGraph();
   raw_os_ostream Llvmstream(Mystream);
   raw_os_ostream Llvmstream2(Mystream2);
-  Llvmstream << "# Type: ContextSensitive\n";
-  Llvmstream2 << "# Type: Normal\n";
+  if (FirstPrintLoop) {
+    Llvmstream << "# Type: ContextSensitive\n";
+    Llvmstream2 << "# Type: Normal\n";
+  }
   for (auto LoopMap : LoopMapping) {
     std::string LoopInfoString;
     raw_string_ostream LoopInfo(LoopInfoString);
