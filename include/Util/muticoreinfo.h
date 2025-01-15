@@ -12,36 +12,54 @@
 
 class Multicoreinfo {
 private:
+  typedef unsigned Core;
   // CoreNum -> <Earlest Start, Latest Stop>list
-  std::vector<std::vector<std::pair<unsigned, unsigned>>> schedule;
+  std::map<Core, std::vector<std::pair<unsigned, unsigned>>> schedule;
   // CoreNum -> <BCET, WCET>list
-  std::vector<std::vector<std::pair<unsigned, unsigned>>> BWtime;
+  std::map<Core, std::vector<std::pair<unsigned, unsigned>>> BWtime;
 
   // CoreNum -> map<function, index>
   // BTW, this is actually core order (orz)
-  std::vector<std::map<std::string, unsigned>> coreOrz;
+  std::map<Core, std::map<std::string, unsigned>> coreOrz;
+
+protected:
+  void extendCore(unsigned core) {
+    if (schedule.find(core) == schedule.end()) {
+      schedule.insert(
+          std::make_pair(core, std::vector<std::pair<unsigned, unsigned>>{}));
+    }
+    if (BWtime.find(core) == BWtime.end()) {
+      BWtime.insert(
+          std::make_pair(core, std::vector<std::pair<unsigned, unsigned>>{}));
+    }
+    if (coreOrz.find(core) == coreOrz.end()) {
+      coreOrz.insert(std::make_pair(core, std::map<std::string, unsigned>{}));
+    }
+    if (coreinfo.find(core) == coreinfo.end()) {
+      coreinfo.insert(std::make_pair(core, std::vector<std::string>{}));
+    }
+    CoreNums = core > CoreNums ? core : CoreNums;
+  }
 
 public:
   // // function->address of Instruction->地址的执行次数   //不用地址，用block
   std::map<std::string, std::map<unsigned, unsigned>> addressinfowithtime;
   std::map<std::string, std::set<unsigned>> addressinfo;
   // CoreNum -> vector of function
-  std::vector<std::vector<std::string>> coreinfo;
-  Multicoreinfo();
+  std::map<Core, std::vector<std::string>> coreinfo;
+  Multicoreinfo() = default;
   // Make all constructor and destructor to be default
-  Multicoreinfo(unsigned coreNum)
-      : schedule(coreNum), BWtime(coreNum), coreinfo(coreNum),
-        coreOrz(coreNum){};
+  // Multicoreinfo(unsigned coreNum) = default;
   ~Multicoreinfo() = default;
   Multicoreinfo(const Multicoreinfo &) = default;
 
-  void setSize(unsigned core) {
-    schedule.resize(core);
-    BWtime.resize(core);
-    coreinfo.resize(core);
-    // addressinfo.resize(core);
-    coreOrz.resize(core);
-  }
+  // void setSize(unsigned core) {
+  //   schedule.resize(core);
+  //   BWtime.resize(core);
+  //   coreinfo.resize(core);
+  //   // addressinfo.resize(core);
+  //   coreOrz.resize(core);
+  // }
 
   void addaddress(std::string function, unsigned addressLINE) {
     addressinfo.at(function).insert(addressLINE);
@@ -71,6 +89,9 @@ public:
   // }
 
   void addTask(unsigned num, const std::string &function) {
+    // coreinfo[num].emplace_back(function);
+    // First check
+    extendCore(num);
     coreinfo[num].emplace_back(function);
     //对没有分析过的函数进行访存信息收集
     if (addressinfo.find(function) == addressinfo.end()) {
@@ -110,7 +131,7 @@ public:
       changed = true;
       //更新 执行时间
       BWtime[core][taskNum].first = early;
-      BWtime[core][taskNum].second =latest;
+      BWtime[core][taskNum].second = latest;
     }
     //更新生命周期
     if (taskNum == 0) {

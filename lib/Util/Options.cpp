@@ -44,27 +44,28 @@ cl::OptionCategory ArrayCat("5. Array-aware Cache Analysis");
 cl::OptionCategory
     CoRunnerSensitiveCat("6. Multi-Core Corunner-sensitive Analysis");
 cl::OptionCategory MultiCoreCat("7. TODO");
-//jjy
+// jjy
 cl::opt<std::string>
-    CoreInfo("core-info", cl::init("CoreInfo.json"),
-             cl::desc("Used to descripe which core runs which function"),
-             cl::cat(MultiCoreCat));
-             
+    SystemInfo("system-info", cl::init("system.json"),
+               cl::desc("Used to descripe the system(default 'system.json')"),
+               cl::cat(MultiCoreCat));
+
 cl::opt<bool> ParallelPrograms("parallel-programs", cl::init(false),
                                cl::desc("Parallel Program Analysis"),
                                cl::cat(MultiCoreCat));
 
+cl::opt<bool> SPersistenceA("shared-cache-Persistence-Analysis",
+                            cl::init(false), cl::desc("(default 'F')"),
+                            cl::cat(MultiCoreCat));
+
+// No longer this, but some where keey this, so remains
 cl::opt<unsigned>
     CoreNums("core-numbers", cl::init(1),
              cl::desc("The number of core for the analysis (default '1')"),
              cl::cat(MultiCoreCat));
-
-cl::opt<bool> SPersistenceA("shared-cache-Persistence-Analysis", cl::init(false),
-                            cl::desc("(default 'F')"), cl::cat(MultiCoreCat));
-
-cl::opt<unsigned> Core("core", cl::init(0),
-                       cl::desc("The core for the analysis (default '0')"),
-                       cl::cat(MultiCoreCat));
+// cl::opt<unsigned> Core("core", cl::init(0),
+//                        cl::desc("The core for the analysis (default '0')"),
+//                        cl::cat(MultiCoreCat));
 cl::opt<bool>
     QuietMode("ta-quiet", cl::init(false),
               cl::desc("Quiet mode: do not report on progress and do not dump "
@@ -86,7 +87,7 @@ cl::opt<MicroArchitecturalType> MuArchType(
     "ta-muarch-type",
     cl::desc(
         "Choose the microarchitecture to analyse (default 'fixedlatency')"),
-    cl::init(MicroArchitecturalType::OUTOFORDER),
+    cl::init(MicroArchitecturalType::INORDER),
     cl::values(
         clEnumValN(MicroArchitecturalType::FIXEDLATENCY, "fixedlatency",
                    "Pipeline with fixed latency per instruction"),
@@ -99,13 +100,14 @@ cl::opt<MicroArchitecturalType> MuArchType(
                    "Strictly in-order 5-stage pipeline"),
         clEnumValN(MicroArchitecturalType::OUTOFORDER, "outoforder",
                    "Out-of-order pipeline")),
-    cl::Required, cl::cat(HardwareDescrCat));
+    // cl::Required,
+    cl::cat(HardwareDescrCat));
 
 cl::opt<MemoryTopologyType> MemTopType(
     "ta-memory-type",
     cl::desc("Choose the memory topology used in microarchitectural analysis "
              "(default 'single')"),
-    cl::init(MemoryTopologyType::SINGLEMEM),
+    cl::init(MemoryTopologyType::SEPARATECACHES),
     cl::values(
         clEnumValN(MemoryTopologyType::NONE, "none",
                    "No external memory (only valid for fixed-latency pipeline"),
@@ -117,7 +119,8 @@ cl::opt<MemoryTopologyType> MemTopType(
         clEnumValN(MemoryTopologyType::PRIVINSTRSPMDATASHARED,
                    "priv-instr-spm-data-shared",
                    "Private instruction SPM, potentially shared data memory.")),
-    cl::Required, cl::cat(HardwareDescrCat));
+    // cl::Required,
+    cl::cat(HardwareDescrCat));
 
 cl::opt<SharedBusType> SharedBus(
     "ta-shared-bus", cl::desc("Select which type of shared bus is assumed."),
@@ -174,7 +177,7 @@ cl::bits<LocalWorstCaseType> StallOnLocalWorstType(
     cl::values(
         //			clEnumValN(LocalWorstCaseType::ICMISS, "icmiss",
         //"Instruction cache miss"),
-        //clEnumValN(LocalWorstCaseType::DCMISS, "dcmiss", "Data cache miss"),
+        // clEnumValN(LocalWorstCaseType::DCMISS, "dcmiss", "Data cache miss"),
         //			clEnumValN(LocalWorstCaseType::WRITEBACK,
         //"writeback", "Writeback upon eviction of dirty line"),
         clEnumValN(LocalWorstCaseType::DRAMREFRESH, "dramrefresh",
@@ -232,7 +235,7 @@ cl::opt<unsigned> Iassoc(
     cl::cat(CacheConfigCat));
 
 cl::opt<unsigned> Insets(
-    "ta-icache-nsets", cl::init(16), 
+    "ta-icache-nsets", cl::init(16),
     cl::desc(
         "The number of cache sets of the instruction cache. The default is 32"),
     cl::cat(CacheConfigCat));
@@ -278,7 +281,7 @@ cl::opt<unsigned>
             cl::cat(CacheConfigCat));
 
 cl::opt<unsigned>
-    NN_SET("ta-l2cache-nsets", cl::init(64), 
+    NN_SET("ta-l2cache-nsets", cl::init(64),
            cl::desc("The number of cache sets of L2 cache. The default is 128"),
            cl::cat(MultiCoreCat));
 
@@ -323,7 +326,7 @@ cl::opt<unsigned>
            cl::cat(CacheConfigCat));
 
 cl::opt<unsigned> Dnsets(
-    "ta-dcache-nsets", cl::init(16), 
+    "ta-dcache-nsets", cl::init(16),
     cl::desc("The number of cache sets of the data cache. The default is 32"),
     cl::cat(CacheConfigCat));
 //写回
@@ -335,8 +338,18 @@ cl::opt<bool>
 
 cl::opt<bool> DataCacheWriteAllocate(
     "ta-dcache-write-allocate", cl::init(true),
-    cl::desc("Enables write-allocate mode of the cache. The default is =false "
-             "to use write-non-allocate mode"),
+    cl::desc("Enables write-allocate mode of the cache. The default is =true "
+             "to use write-allocate mode"),
+    cl::cat(CacheConfigCat));
+cl::opt<bool>
+    L2DataCacheWriteBack("ta-l2cache-write-back", cl::init(true),
+                         cl::desc("Enables write-back mode of the cache. The "
+                                  "default is write-through (false)"),
+                         cl::cat(CacheConfigCat));
+cl::opt<bool> L2DataCacheWriteAllocate(
+    "ta-l2cache-write-allocate", cl::init(true),
+    cl::desc("Enables write-allocate mode of the cache. The default is =true "
+             "to use write-allocate mode"),
     cl::cat(CacheConfigCat));
 
 cl::opt<bool> UnblockStores(
@@ -460,9 +473,9 @@ llvm::cl::bits<MetricType> MetricsToMax(
                    "Writebacks (only makes sense on write-back caches)")),
     cl::cat(LLVMTACat));
 
-cl::opt<bool> StrictMode("ta-strict", cl::init(true),
+cl::opt<bool> StrictMode("ta-strict", cl::init(false),
                          cl::desc("Enables the strict mode: assert when "
-                                  "unknown situation arises (default true)"),
+                                  "unknown situation arises (default false)"),
                          cl::cat(LLVMTACat));
 
 cl::opt<AnaInfoPolicy> AnaInfoPol(

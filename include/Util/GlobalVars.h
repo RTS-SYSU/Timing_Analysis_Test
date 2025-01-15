@@ -14,6 +14,9 @@ extern int STBUS;
 extern int L2MISS;
 extern int BOUND;
 extern std::map<std::string, std::set<unsigned>> Addressinfo;
+extern unsigned L1ILAT;
+extern unsigned L1DLAT;
+extern bool FirstPrintLoop;
 // 记录已经分析过执行次数的块
 extern std::set<const MachineBasicBlock *> mylist;
 

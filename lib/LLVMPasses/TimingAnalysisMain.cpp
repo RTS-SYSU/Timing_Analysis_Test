@@ -40,7 +40,9 @@
 #include "PreprocessingAnalysis/AddressInformation.h"
 #include "PreprocessingAnalysis/ConstantValueDomain.h"
 
+#include "Util/GlobalVars.h"
 #include "Util/Options.h"
+#include "Util/Stat.h"
 #include "Util/Statistics.h"
 
 #include "llvm/CodeGen/MachineFunctionPass.h"
@@ -75,8 +77,229 @@ MachineFunction *getAnalysisEntryPoint() {
   return Res;
 }
 
+void parseSystemInfo(const std::string &ConfigFile) {
+  llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> FileOrErr =
+      llvm::MemoryBuffer::getFile(ConfigFile);
+  if (std::error_code EC = FileOrErr.getError()) {
+    llvm::errs() << "Error happened when trying to open the file: "
+                 << ConfigFile << "\n";
+    llvm::errs() << "Error message: " << EC.message() << "\n";
+    exit(1);
+  }
+
+  llvm::Expected<llvm::json::Value> JsonVal =
+      llvm::json::parse(FileOrErr.get()->getBuffer());
+  // Check if Error happened
+  if (auto Err = JsonVal.takeError()) {
+    llvm::errs() << "Error happened when trying to parse the json file: "
+                 << ConfigFile << "\n";
+    llvm::errs() << "Error message: " << llvm::toString(std::move(Err)) << "\n";
+    exit(1);
+  }
+  // Check if the json file is valid
+  if (!JsonVal) {
+    llvm::errs() << "Error happened when trying to parse the json file: "
+                 << ConfigFile << "\n";
+    llvm::errs() << "Error message: " << llvm::toString(JsonVal.takeError())
+                 << "\n";
+    exit(1);
+  }
+
+  auto *ConfigObj = JsonVal->getAsObject();
+  if (!ConfigObj) {
+    llvm::errs() << "Error happened when trying to parse the json file: "
+                 << ConfigFile << "\n";
+    exit(1);
+  }
+
+  auto *System = ConfigObj->get("system");
+  if (System) {
+    auto *SystemObj = System->getAsObject();
+    auto *cpu = SystemObj->get("cpu");
+    if (cpu) {
+      auto CPUType = cpu->getAsString();
+      if (!CPUType) {
+        llvm::errs() << "Not valid 'cpu' arguments\n";
+        exit(1);
+      }
+
+      if (CPUType->equals("inorder")) {
+        MuArchType = MicroArchitecturalType::INORDER;
+      }
+      // else if (CPUType->equals("strictlyinorder")) {
+      //   MuArchType = MicroArchitecturalType::STRICTINORDER;}
+      else if (CPUType->equals("outoforder")) {
+        MuArchType = MicroArchitecturalType::OUTOFORDER;
+      } else {
+        llvm::errs() << "No support for " << CPUType << " for now.";
+        exit(1);
+      }
+    }
+    auto *memory = SystemObj->get("memory");
+    if (memory) {
+      auto *Memory = memory->getAsObject();
+      if (!Memory) {
+        llvm::errs() << "Invalid Config for 'memory', Check file: "
+                     << ConfigFile << '\n';
+        exit(1);
+      }
+      auto *L1I = Memory->get("L1I$")->getAsObject();
+      if (L1I) {
+        if (auto LineSize = L1I->get("LineSize")->getAsInteger()) {
+          if (LineSize.getValue() < 0) {
+            llvm::errs() << "L1I$ LineSize < 0, which is illegal.\n";
+            exit(1);
+          }
+          Ilinesize = LineSize.getValue();
+        }
+        if (auto Associativity = L1I->get("Associativity")->getAsInteger()) {
+          if (Associativity.getValue() < 0) {
+            llvm::errs() << "L1I$ Associativity < 0, which is illegal.\n";
+            exit(1);
+          }
+          Iassoc = Associativity.getValue();
+        }
+        if (auto Lat = L1I->get("Latency")->getAsInteger()) {
+          if (Lat.getValue() < 0) {
+            llvm::errs() << "L1I$ Latency < 0, which is illegal.\n";
+            exit(1);
+          }
+          icacheConf.LATENCY = Lat.getValue();
+        }
+        if (auto Set = L1I->get("Set")->getAsInteger()) {
+          if (Set.getValue() < 0) {
+            llvm::errs() << "L1I$ Set < 0, which is illegal.\n";
+            exit(1);
+          }
+          Insets = Set.getValue();
+        }
+      }
+      auto *L1D = Memory->get("L1D$")->getAsObject();
+      if (L1D) {
+        if (auto LineSize = L1D->get("LineSize")->getAsInteger()) {
+          if (LineSize.getValue() < 0) {
+            llvm::errs() << "L1D$ LineSize < 0, which is illegal.\n";
+            exit(1);
+          }
+          Dlinesize = LineSize.getValue();
+        }
+        if (auto Associativity = L1D->get("Associativity")->getAsInteger()) {
+          if (Associativity.getValue() < 0) {
+            llvm::errs() << "L1D$ Associativity < 0, which is illegal.\n";
+            exit(1);
+          }
+          Dassoc = Associativity.getValue();
+        }
+        if (auto Lat = L1D->get("Latency")->getAsInteger()) {
+          if (Lat.getValue() < 0) {
+            llvm::errs() << "L1D$ Latency < 0, which is illegal.\n";
+            exit(1);
+          }
+          dcacheConf.LATENCY = Lat.getValue();
+        }
+        if (auto Set = L1D->get("Set")->getAsInteger()) {
+          if (Set.getValue() < 0) {
+            llvm::errs() << "L1D$ Set < 0, which is illegal.\n";
+            exit(1);
+          }
+          Dnsets = Set.getValue();
+        }
+        if (auto *WriteBack = L1D->get("WriteBack")) {
+          if (auto WB = WriteBack->getAsBoolean()) {
+            DataCacheWriteBack = WB.getValue();
+          }
+        }
+        if (auto *WriteAlloc = L1D->get("WriteAlloc")) {
+          if (auto WA = WriteAlloc->getAsBoolean()) {
+            DataCacheWriteAllocate = WA.getValue();
+          }
+        }
+      }
+      auto *L2 = Memory->get("L2$")->getAsObject();
+      if (L2) {
+        if (auto LineSize = L2->get("LineSize")->getAsInteger()) {
+          if (LineSize.getValue() < 0) {
+            llvm::errs() << "L2$ LineSize < 0, which is illegal.\n";
+            exit(1);
+          }
+          L2linesize = LineSize.getValue();
+        }
+        if (auto Associativity = L2->get("Associativity")->getAsInteger()) {
+          if (Associativity.getValue() < 0) {
+            llvm::errs() << "L2$ Associativity < 0, which is illegal.\n";
+            exit(1);
+          }
+          L2assoc = Associativity.getValue();
+        }
+        if (auto Lat = L2->get("Latency")->getAsInteger()) {
+          if (Lat.getValue() < 0) {
+            llvm::errs() << "L2$ Latency < 0, which is illegal.\n";
+            exit(1);
+          }
+          L2Latency = Lat.getValue();
+        }
+        if (auto Set = L2->get("Set")->getAsInteger()) {
+          if (Set.getValue() < 0) {
+            llvm::errs() << "L2$ Set < 0, which is illegal.\n";
+            exit(1);
+          }
+          NN_SET = Set.getValue();
+        }
+        if (auto *WriteBack = L2->get("WriteBack")) {
+          if (auto WB = WriteBack->getAsBoolean()) {
+            L2DataCacheWriteBack = WB.getValue();
+          }
+        }
+        if (auto *WriteAlloc = L2->get("WriteAlloc")) {
+          if (auto WA = WriteAlloc->getAsBoolean()) {
+            L2DataCacheWriteAllocate = WA.getValue();
+          }
+        }
+      }
+      auto *mem = Memory->get("mem")->getAsObject();
+      if (mem) {
+        if (auto Lat = mem->get("Latency")->getAsInteger()) {
+          if (Lat.getValue() < 0) {
+            llvm::errs() << "Memory Latency < 0, which is illegal.\n";
+            exit(0);
+          }
+          Latency = Lat.getValue();
+        }
+        if (auto PerWordLat = mem->get("PerWordLatency")->getAsInteger()) {
+          if (PerWordLat.getValue() < 0) {
+            llvm::errs() << "Memory PerWord Latency < 0, which is illegal.\n";
+            exit(0);
+          }
+          PerWordLatency = PerWordLat.getValue();
+        }
+      }
+      auto *analysis = Memory->get("analysis")->getAsObject();
+      if (analysis) {
+        if (auto *PersisAnaly = analysis->get("PersistenceAnalysis")) {
+          if (auto PA = PersisAnaly->getAsBoolean()) {
+            if (PA) {
+              InstrCachePersType = PersistenceType::NONE;
+              DataCachePersType = PersistenceType::NONE;
+              L2CachePersType = PersistenceType::NONE;
+            } else {
+              InstrCachePersType = PersistenceType::ELEWISE;
+              DataCachePersType = PersistenceType::ELEWISE;
+              L2CachePersType = PersistenceType::ELEWISE;
+            }
+          }
+        }
+        if (auto *SPA = analysis->get("SharePersistenceAnalysis")) {
+          if (auto SPAF = SPA->getAsBoolean()) {
+            SPersistenceA = SPAF.getValue();
+          }
+        }
+      }
+    }
+  }
+}
+
 void TimingAnalysisMain::parseCoreInfo(const std::string &FileName) {
-  mcif.setSize(CoreNums);
+  // mcif.setSize(CoreNums);
   // Using llvm::json to parse the core information
   llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> FileOrErr =
       llvm::MemoryBuffer::getFile(FileName);
@@ -105,7 +328,22 @@ void TimingAnalysisMain::parseCoreInfo(const std::string &FileName) {
     exit(1);
   }
   // Convert the json value to a json object
-  auto *JsonArr = JsonVal->getAsArray();
+  auto *JsonObj = JsonVal->getAsObject();
+  if (!JsonObj) {
+    llvm::errs() << "Error happened when trying to convert the json value to "
+                    "a json array\n";
+    exit(1);
+  }
+
+  llvm::json::Array *JsonArr = nullptr;
+
+  if (!JsonObj->get("entries")) {
+    llvm::errs() << "Error happened when trying to convert the json value to "
+                    "a json array\n";
+    exit(1);
+  }
+
+  JsonArr = JsonObj->get("entries")->getAsArray();
   if (!JsonArr) {
     llvm::errs() << "Error happened when trying to convert the json value to "
                     "a json array\n";
@@ -182,11 +420,15 @@ bool TimingAnalysisMain::runOnMachineFunction(MachineFunction &MF) {
 }
 
 bool TimingAnalysisMain::doFinalization(Module &M) {
-  if (!machineFunctionCollector->hasFunctionByName(AnalysisEntryPoint)) {
-    outs() << "No Timing Analysis Run. There is no entry point: "
-           << AnalysisEntryPoint << "\n";
-    exit(1);
-  }
+  // 好像用不到？因为后面都会修改这个 AnalysisEntryPoint
+  // if (!machineFunctionCollector->hasFunctionByName(AnalysisEntryPoint)) {
+  //   outs() << "No Timing Analysis Run. There is no entry point: "
+  //          << AnalysisEntryPoint << "\n";
+  //   exit(1);
+  // }
+
+  // First Change command line arguments
+  parseSystemInfo(SystemInfo);
 
   ofstream Myfile;
 
@@ -226,12 +468,26 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     Myfile.close();
   }
 
-  parseCoreInfo(CoreInfo);
+  parseCoreInfo(SystemInfo);
   VERBOSE_PRINT(" -> Finished Preprocessing Phase\n");
+
+  // Register output file
+  auto &StatManager = StatisticOutputManager::getInstance();
+  StatManager.set_dump_file("WCETResults.txt");
+  auto &WCETStat = StatManager.insert("WCET Results");
+
+  // A Json Format for dump
+  llvm::json::Array WCETArr{};
 
   for (auto Clist : taskMap) {
     outs() << "Timing Analysis for Core: " << Clist.first << "\n";
+    auto CurrentCore = llvm::json::Object{
+        {"core", Clist.first},
+        {"tasks", llvm::json::Array{}},
+    };
+    auto *Arr = CurrentCore["tasks"].getAsArray();
     for (string entry : Clist.second) {
+      auto CurrentTask = llvm::json::Object{{"function", entry}};
       AnalysisEntryPoint = entry;
       outs() << "Timing Analysis for entry point: " << AnalysisEntryPoint
              << "\n";
@@ -243,10 +499,32 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
       } else if (Arch == Triple::ArchType::riscv32) {
         dispatchValueAnalysis<Triple::ArchType::riscv32>();
       } else {
-        assert(0 && "Unsupported ISA for LLVMTA");
+        assert(0 && "Unsupported ISA for LLVM-TA");
       }
+
+      // Get the results
+      auto WCET = result[AnalysisType::TIMING];
+      uint64_t WCETVal = 0;
+      if (!WCET) {
+        WCETStat.update(entry, "infinite");
+        CurrentTask["WCET"] = "infinite";
+      } else {
+        WCETVal = WCET.get().ub;
+        WCETStat.update(entry, "WCET", std::to_string(WCETVal));
+        CurrentTask["WCET"] = WCETVal;
+      }
+      Arr->push_back(std::move(CurrentTask));
     }
+    WCETArr.push_back(std::move(CurrentCore));
   }
+
+  // Dump the WCET results in json format, using llvm
+  std::error_code EC;
+  llvm::raw_fd_ostream OS("WCET.json", EC);
+  llvm::json::Value val(std::move(WCETArr));
+  OS << llvm::formatv("{0:4}", val) << '\n';
+  OS.flush();
+  OS.close();
 
   return false;
 }
@@ -264,11 +542,19 @@ void TimingAnalysisMain::dispatchValueAnalysis() {
 
   if (OutputLoopAnnotationFile) {
     ofstream Myfile2;
-    Myfile.open("CtxSensLoopAnnotations.csv", ios_base::trunc);
-    Myfile2.open("LoopAnnotations.csv", ios_base::trunc);
+    if (FirstPrintLoop) {
+      Myfile.open("CtxSensLoopAnnotations.csv", ios_base::trunc);
+      Myfile2.open("LoopAnnotations.csv", ios_base::trunc);
+    } else {
+      Myfile.open("CtxSensLoopAnnotations.csv", ios_base::app);
+      Myfile2.open("LoopAnnotations.csv", ios_base::app);
+    }
     LoopBoundInfo->dumpNonUpperBoundLoops(Myfile, Myfile2);
     Myfile2.close();
     Myfile.close();
+    if (FirstPrintLoop) {
+      FirstPrintLoop = false;
+    }
     return;
   }
 
@@ -300,7 +586,7 @@ void TimingAnalysisMain::dispatchValueAnalysis() {
         Addressinfo.emplace(entry, std::set<unsigned>());
       }
     }
-    for (auto currFunc : machineFunctionCollector->getAllMachineFunctions()) {
+    for (auto *currFunc : machineFunctionCollector->getAllMachineFunctions()) {
       string funcName = currFunc->getName().str();
       if (Addressinfo.count(funcName) == 0) {
         break;
@@ -341,12 +627,13 @@ void TimingAnalysisMain::dispatchValueAnalysis() {
   dcacheConf.LEVEL = 1;
   dcacheConf.checkParams();
 
-  dcacheConf.LINE_SIZE = L2linesize;
-  l2cacheConf.LINE_SIZE = Dlinesize;
+  l2cacheConf.LINE_SIZE = L2linesize;
   l2cacheConf.N_SETS = NN_SET;
   l2cacheConf.ASSOCIATIVITY = L2assoc;
   l2cacheConf.LATENCY = L2Latency;
   l2cacheConf.LEVEL = 2;
+  l2cacheConf.WRITEBACK = L2DataCacheWriteBack;
+  l2cacheConf.WRITEALLOCATE = L2DataCacheWriteAllocate;
   l2cacheConf.checkParams();
 
   // WCET
@@ -387,26 +674,34 @@ void TimingAnalysisMain::dispatchAnalysisType(AddressInformation &AddressInfo) {
     } else {
       outs() << "Calculated Timing Bound: infinite\n";
     }
+    this->result[AnalysisType::TIMING] = Bound;
+    this->result[AnalysisType::CRPD] = Bound;
   }
   if (AnaType.isSet(AnalysisType::L1ICACHE)) {
     auto Bound = dispatchCacheAnalysis(AnalysisType::L1ICACHE, AddressInfo);
     // Ar.registerResult("icache", Bound);
     if (Bound) {
-      outs() << "Calculated " << "Instruction Cache Miss Bound: "
+      outs() << "Calculated "
+             << "Instruction Cache Miss Bound: "
              << llvm::format("%-20.0f", Bound.get().ub) << "\n";
     } else {
-      outs() << "Calculated " << "Instruction Cache Miss Bound: infinite\n";
+      outs() << "Calculated "
+             << "Instruction Cache Miss Bound: infinite\n";
     }
+    this->result[AnalysisType::L1ICACHE] = Bound;
   }
   if (AnaType.isSet(AnalysisType::L1DCACHE)) {
     auto Bound = dispatchCacheAnalysis(AnalysisType::L1DCACHE, AddressInfo);
     // Ar.registerResult("dcache", Bound);
     if (Bound) {
-      outs() << "Calculated " << "Data Cache Miss Bound: "
+      outs() << "Calculated "
+             << "Data Cache Miss Bound: "
              << llvm::format("%-20.0f", Bound.get().ub) << "\n";
     } else {
-      outs() << "Calculated " << "Data Cache Miss Bound: infinite\n";
+      outs() << "Calculated "
+             << "Data Cache Miss Bound: infinite\n";
     }
+    this->result[AnalysisType::L1DCACHE] = Bound;
   }
 }
 
