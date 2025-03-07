@@ -76,6 +76,7 @@ public:
 
   explicit CompositionalAbstractCache(bool assumeAnEmptyCache = false);
   Classification classify(const AbstractAddress addr) const;
+  int getAge(const AbstractAddress addr) const;
   UpdateReport *update(const AbstractAddress addr, AccessType load_store,
                        AnaDeps *, bool wantReport = false,
                        const Classification assumption = CL_UNKNOWN);
@@ -104,7 +105,7 @@ public:
 };
 
 ///\see dom::cache::CacheSetAnalysis<T>::CacheSetAnalysis(bool
-///assumeAnEmptyCache)
+/// assumeAnEmptyCache)
 template <class A1, class A2>
 inline CompositionalAbstractCache<A1, A2>::CompositionalAbstractCache(
     bool assumeAnEmptyCache)
@@ -119,9 +120,15 @@ CompositionalAbstractCache<A1, A2>::classify(const AbstractAddress addr) const {
     return cl;
   return analysis2.classify(addr);
 }
-
+template <class A1, class A2>
+int CompositionalAbstractCache<A1, A2>::getAge(
+    const AbstractAddress addr) const {
+  int age1 = analysis1.getAge(addr);
+  int age2 = analysis2.getAge(addr);
+  return age1;
+}
 ///\see dom::cache::CacheSetAnalysis<T>::update(const TagType tag, const
-///Classification assumption)
+/// Classification assumption)
 template <class A1, class A2>
 UpdateReport *CompositionalAbstractCache<A1, A2>::update(
     const AbstractAddress addr, AccessType load_store, AnaDeps *Deps,

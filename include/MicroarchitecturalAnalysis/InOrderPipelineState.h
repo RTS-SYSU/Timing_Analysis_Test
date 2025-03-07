@@ -31,7 +31,9 @@
 #include "MicroarchitecturalAnalysis/ConvergenceDetection.h"
 #include "MicroarchitecturalAnalysis/ConvergenceType.h"
 #include "MicroarchitecturalAnalysis/MicroArchitecturalState.h"
+#include "PartitionUtil/Context.h"
 #include "PreprocessingAnalysis/AddressInformation.h"
+#include "Util/GlobalVars.h"
 #include "Util/Util.h"
 
 #include "ARM.h"
@@ -115,6 +117,7 @@ public:
    * Virtual destructor
    */
   virtual ~InOrderPipelineState();
+  void getACL(Context ctx) const;
 
   /**
    * Container used to make the local metrics of this class
@@ -286,8 +289,10 @@ private:
   /**
    * Some attached memory which is accessed for data.
    */
+public:
   MemoryTopology memory;
 
+private:
   /**
    * Temporary storage of the accessId for the instruction access
    * There can only be one instruction access at a time.
@@ -441,9 +446,7 @@ InOrderPipelineState<MemoryTopology>::cycle(
     }
   }
 
-  DEBUG_WITH_TYPE(
-      "driverSED", for (auto &succ
-                        : res) { std::cerr << succ; });
+  DEBUG_WITH_TYPE("driverSED", for (auto &succ : res) { std::cerr << succ; });
   return res;
 }
 
@@ -604,6 +607,38 @@ ConvergenceType InOrderPipelineState<MemoryTopology>::isConvergedAfterCycleFrom(
   return POTENTIALLY_NOT_CONVERGED;
 }
 #endif
+template <class MemoryTopology>
+void InOrderPipelineState<MemoryTopology>::getACL(Context ctx) const {
+  auto result = this->memory.getIaccAdress();
+  if (result) {
+    auto [addr, CL, age] = *result;
+    AddrCL acl(addr, ctx, CL, age);
+    if (AddrCList.find(acl) != AddrCList.end()) {
+      auto it = AddrCList.find(acl);
+      auto aclo = *it;
+      AddrCList.erase(it); // 删除旧元素
+      acl.join(aclo);
+      AddrCList.insert(acl); // 重新插入
+    } else {
+      AddrCList.insert(acl); // 重新插入
+    }
+  }
+
+  result = this->memory.getDaccAdress();
+  if (result) {
+    auto [addr, CL, age] = *result;
+    AddrCL acl(addr, ctx, CL, age);
+    if (AddrCList.find(acl) != AddrCList.end()) {
+      auto it = AddrCList.find(acl);
+      auto aclo = *it;
+      AddrCList.erase(it);    // 删除旧元素
+      acl.join(aclo);         // 修改值
+      AddrCList.insert(acl); // 重新插入
+    }else{
+      AddrCList.insert(acl); 
+    }
+  }
+}
 
 template <class Mem>
 std::ostream &operator<<(std::ostream &stream,
@@ -611,7 +646,7 @@ std::ostream &operator<<(std::ostream &stream,
   auto &base = (const MicroArchitecturalState<
                 InOrderPipelineState<Mem>,
                 typename InOrderPipelineState<Mem>::StateDep> &)iops;
-  stream << base << "\n";
+  stream << base << "\n"; // 打印pc base.pc
   stream << "Fetching instruction: "
          << (iops.instructionAccessFinished ? "No" : "Yes") << "\n";
   if (iops.flushedFetchStage) {

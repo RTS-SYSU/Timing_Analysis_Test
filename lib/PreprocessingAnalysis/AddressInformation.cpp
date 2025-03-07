@@ -177,7 +177,7 @@ AddressInformation::getvalueaddr(const MachineInstr *currMI) const {
     auto ctxs = getAddressContexts(&*currMI);
     raw_os_ostream llvmstream(std::cout);
     if (ctxs.empty()) {
-      llvmstream << "NO CONTEXT-SENSITIVE INFO AVAILABLE!\n";
+      // llvmstream << "NO CONTEXT-SENSITIVE INFO AVAILABLE!\n";
     } else {
       std::set<Context, ctxcomp> ctx_sorted;
       for (Context c : ctxs) {
@@ -186,10 +186,10 @@ AddressInformation::getvalueaddr(const MachineInstr *currMI) const {
       for (Context ctx : ctx_sorted) {
         std::stringstream ss;
         ss << ctx;
-        llvmstream << "In context:\n" << ss.str() << "\n";
+        // llvmstream << "In context:\n" << ss.str() << "\n";
         for (unsigned o = 0; o < getNumOfDataAccesses(&*currMI); ++o) {
           const auto &addr = getDataAccessAddress(&*currMI, &ctx, o);
-          llvmstream << "Address for #memop " << o << ": " << addr << "\n";
+          // llvmstream << "Address for #memop " << o << ": " << addr << "\n";
 
           if (addr.isPrecise() ||
               (addr.getAsInterval().lower() & ~(Dlinesize - 1)) ==

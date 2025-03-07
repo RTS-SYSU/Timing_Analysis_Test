@@ -27,12 +27,14 @@
 #define MULTISCOPEPERSISTENCE_H
 
 #include <algorithm>
+#include <climits>
 #include <ostream>
 #include <set>
 
 #include "Memory/Classification.h"
 #include "Memory/progana/Lattice.h"
 #include "Memory/util/ImplicitSet.h"
+#include "Util/Options.h"
 
 /**
  * Using this macro you can enable strict scope consistency, i.e.
@@ -49,7 +51,7 @@
  * we count how often we entered, and upon leaving we first decrement this
  * number before actually closing the scope.
  */
-//#define STRICT_SCOPE_CONSISTENCY
+// #define STRICT_SCOPE_CONSISTENCY
 
 namespace TimingAnalysisPass {
 
@@ -81,6 +83,28 @@ public:
   UpdateReport *update(const AbstractAddress addr, AccessType load_store,
                        AnaDeps *, bool wantReport = false,
                        const Classification assumption = CL_UNKNOWN);
+  int getAge(const AbstractAddress addr) const {
+
+    TagType tag = (addr.getAsInterval().lower() / Ilinesize) / Insets;
+    int age = INT_MAX;
+    for (auto &scope2pers : this->scopes2info) {
+      if (scope2pers.second.isPersistent(tag)) {
+        int a = scope2pers.second.getAge(tag);
+        age = age > a ? age : a;
+      }
+    }
+    if (age == INT_MAX) {
+      TagType tag = (addr.getAsInterval().lower() / L2linesize) / NN_SET;
+      int age = INT_MAX;
+      for (auto &scope2pers : this->scopes2info) {
+        if (scope2pers.second.isPersistent(tag)) {
+          int a = scope2pers.second.getAge(tag);
+          age = age > a ? age : a;
+        }
+      }
+    }
+    return age;
+  }
   UpdateReport *potentialUpdate(AbstractAddress addr, AccessType load_store,
                                 bool wantReport = false);
   void join(const Self &y);
@@ -96,7 +120,7 @@ public:
 };
 
 ///\see dom::cache::CacheSetAnalysis<P>::CacheSetAnalysis(bool
-///assumeAnEmptyCache)
+/// assumeAnEmptyCache)
 template <class P>
 inline MultiScopePersistence<P>::MultiScopePersistence(bool assumeAnEmptyCache
                                                        __attribute__((unused)))
@@ -131,7 +155,7 @@ UpdateReport *MultiScopePersistence<P>::potentialUpdate(AbstractAddress addr,
 }
 
 ///\see dom::cache::CacheSetAnalysis<P>::update(const TagType tag, const
-///Classification assumption)
+/// Classification assumption)
 template <class P>
 UpdateReport *MultiScopePersistence<P>::update(
     const AbstractAddress addr, AccessType load_store, AnaDeps *Deps,

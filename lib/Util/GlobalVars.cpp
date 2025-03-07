@@ -7,6 +7,7 @@
 #include "PathAnalysis/LoopBoundInfo.h"
 #include "PreprocessingAnalysis/AddressInformation.h"
 #include "Util/muticoreinfo.h"
+#include "llvm/IR/Function.h"
 #include <string>
 #include <vector>
 
@@ -18,7 +19,11 @@ int DMISS = 0;
 int L2MISS = 0;
 int STBUS = 0;
 int BOUND = 0;
-std::map<std::string, std::set<unsigned>> Addressinfo;
+
+
+std::map<std::string, std::set<functionaddr*>> functiontofs;
+std::map<std::string, functionaddr *> getfunctionaddr;
+std::set<AddrCL> AddrCList;
 
 TimingAnalysisPass::AddressInformation *glAddrInfo = NULL;
 std::set<const MachineBasicBlock *> mylist;

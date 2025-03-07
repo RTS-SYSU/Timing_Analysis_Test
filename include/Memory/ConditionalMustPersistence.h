@@ -27,6 +27,7 @@
 #define CONDITIONALMUSTPERSISTENCE_H
 
 #include <algorithm>
+#include <climits>
 #include <limits>
 #include <map>
 #include <ostream>
@@ -78,6 +79,11 @@ public:
   void enterScope(const PersistenceScope &scope) {}
   void leaveScope(const PersistenceScope &scope) {}
   bool isPersistent(const TagType tag) const;
+  int getAge(const TagType tag) const {
+    if (conflicts.count(tag))
+      return conflicts.at(tag);
+    return INT_MAX;
+  }
   bool isPersistent(const GlobalVariable *var) const;
   bool operator==(const Self &y) const;
   bool operator<(const Self &y) const;
@@ -85,7 +91,7 @@ public:
 };
 
 ///\see dom::cache::CacheSetAnalysis<T>::CacheSetAnalysis(bool
-///assumeAnEmptyCache)
+/// assumeAnEmptyCache)
 template <CacheTraits *T>
 inline ConditionalMustPersistence<T>::ConditionalMustPersistence(
     bool assumeAnEmptyCache __attribute__((unused)))
@@ -113,7 +119,7 @@ UpdateReport *ConditionalMustPersistence<T>::potentialUpdate(
 }
 
 ///\see dom::cache::CacheSetAnalysis<T>::update(const TagType tag, const
-///Classification assumption)
+/// Classification assumption)
 template <CacheTraits *T>
 UpdateReport *ConditionalMustPersistence<T>::update(
     const AbstractAddress addr, AccessType load_store, AnaDeps *,

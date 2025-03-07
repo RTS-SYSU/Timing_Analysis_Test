@@ -67,7 +67,7 @@ public:
   explicit OutOfOrderPipelineState(const OutOfOrderPipelineState &ooops);
 
   virtual ~OutOfOrderPipelineState();
-
+  void getACL(Context ctx) const {};
   /**
    * Container used to make the local metrics of this class
    * available to the world outside.

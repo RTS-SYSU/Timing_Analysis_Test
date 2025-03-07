@@ -172,6 +172,9 @@ public:
   void enterScope(const PersistenceScope &scope) {}
   void leaveScope(const PersistenceScope &scope) {}
   bool isPersistent(const TagType tag) const;
+  int getAge(const TagType tag) const {
+    return accessedBlocks.size() + accessedArrays.size();
+  }
   bool isPersistent(const GlobalVariable *var) const;
   bool operator==(const Self &y) const;
   bool operator<(const Self &y) const;
@@ -206,7 +209,7 @@ UpdateReport *SetWiseCountingPersistence<T>::potentialUpdate(
   if (ArrayPersistenceAnalysis == ArrayPersistenceAnaType::NONE ||
       !addr.isArray()) {
     /* give up */
-    // this->gotoTop();
+    this->gotoTop();
     // std::cerr << "(" << T->ASSOCIATIVITY << ")";
     return wantReport ? new UpdateReport : nullptr;
   }
@@ -216,7 +219,7 @@ UpdateReport *SetWiseCountingPersistence<T>::potentialUpdate(
   if (accessedArrays.count(array) < getPerArrayBound(array)) {
     if (accessedBlocks.size() + accessedArrays.size() >= T->ASSOCIATIVITY) {
       this->gotoTop();
-      std::cerr << "(" << T->ASSOCIATIVITY << ")";
+      // std::cerr << "(" << T->ASSOCIATIVITY << ")";
     } else {
       accessedArrays.insert(array);
     }
@@ -245,7 +248,7 @@ UpdateReport *SetWiseCountingPersistence<T>::update(
   if (inserted) {
     if (accessedBlocks.size() + accessedArrays.size() > T->ASSOCIATIVITY) {
       this->gotoTop();
-      std::cerr << "(" << T->ASSOCIATIVITY << ")";
+      // std::cerr << "(" << T->ASSOCIATIVITY << ")";
     }
   }
   return wantReport ? new UpdateReport : nullptr;
@@ -286,7 +289,7 @@ void SetWiseCountingPersistence<T>::join(const Self &y) {
   }
 
   if (accessedBlocks.size() + accessedArrays.size() > T->ASSOCIATIVITY) {
-    std::cerr << "(" << T->ASSOCIATIVITY << ")";
+    // std::cerr << "(" << T->ASSOCIATIVITY << ")";
     this->gotoTop();
   }
 }
@@ -308,19 +311,24 @@ SetWiseCountingPersistence<T>::isPersistent(const TagType tag) const {
       return false;
     }
     unsigned CNN = 0;
-    for (auto list : Addressinfo) {
-      for (unsigned address : list.second) {
-        if (getindex<T>(address) == index && getTag<T>(address) != tag) {
-          unsigned i = 1;
-          for (const Block &B : accessedBlocks) {
-            if (getTag<T>(address) == B.tag) {
-              i = 0;
-              break;
+    // 计算CNN
+    if (MulCType == MultiCoreType::LiangY) {
+      for (int i = 0; i < mcif.coreinfo.size(); i++) {
+        if (i == CurrentCore) {
+          continue;
+        }
+        for (std::string entry : mcif.coreinfo[i]) {
+          for (functionaddr *f : functiontofs[entry]) {
+            for (unsigned address : f->addrlist) {
+              if (getindex<T>(address) == index && getTag<T>(address) != tag) {
+                CNN++;
+              }
             }
           }
-          CNN += i;
         }
       }
+    } else {
+      // 张伟的方法不管持久性的块
     }
 
     if (accessedBlocks.size() + accessedArrays.size() + CNN <=

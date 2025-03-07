@@ -34,12 +34,14 @@
 #include "LLVMPasses/DispatchOutOfOrderPipeline.h"
 #include "LLVMPasses/DispatchPretPipeline.h"
 #include "LLVMPasses/MachineFunctionCollector.h"
+#include "LLVMPasses/StaticAddressProvider.h"
 #include "Memory/PersistenceScopeInfo.h"
 #include "PartitionUtil/DirectiveHeuristics.h"
 #include "PathAnalysis/LoopBoundInfo.h"
 #include "PreprocessingAnalysis/AddressInformation.h"
 #include "PreprocessingAnalysis/ConstantValueDomain.h"
 
+#include "Util/GlobalVars.h"
 #include "Util/Options.h"
 #include "Util/Statistics.h"
 
@@ -182,60 +184,136 @@ bool TimingAnalysisMain::runOnMachineFunction(MachineFunction &MF) {
 }
 
 bool TimingAnalysisMain::doFinalization(Module &M) {
-  if (!machineFunctionCollector->hasFunctionByName(AnalysisEntryPoint)) {
-    outs() << "No Timing Analysis Run. There is no entry point: "
-           << AnalysisEntryPoint << "\n";
-    exit(1);
-  }
+  parseCoreInfo(CoreInfo);
 
-  ofstream Myfile;
-
-  // Default analysis type: timing
   if (AnaType.getBits() == 0) {
     AnaType.addValue(AnalysisType::TIMING);
   }
+  if (MulCType == MultiCoreType::LiangY) {
+    for (auto Clist : taskMap) {
+      CurrentCore = Clist.first;
+      for (string entry : Clist.second) {
+        AnalysisEntryPoint = entry;
+        outs() << "Address Analysis for entry point: " << entry << "\n";
+        auto Arch = getTargetMachine().getTargetTriple().getArch();
+        std::tuple<> NoDep;
+        if (Arch == Triple::ArchType::arm) {
+          AnalysisDriverInstr<ConstantValueDomain<Triple::ArchType::arm>>
+              ConstValAna(entry, NoDep);
+          auto CvAnaInfo = ConstValAna.runAnalysis();
+          AddressInformationImpl<ConstantValueDomain<Triple::ArchType::arm>>
+              AddrInfo(*CvAnaInfo);
+          ofstream Myfile;
+          if (!QuietMode) {
+            Myfile.open("AddressInformation.txt", ios_base::trunc);
+            AddrInfo.dump(Myfile);
+            Myfile.close();
+          }
 
-  Statistics &Stats = Statistics::getInstance();
-  Stats.startMeasurement("Complete Analysis");
+          functiontofs.emplace(entry, std::set<functionaddr *>());
 
-  if (CoRunnerSensitive) {
-    for (int I = 0; I <= UntilIterationMeasurement; ++I) {
-      std::string MeasurementId = "Until Iteration ";
-      MeasurementId += std::to_string(I);
-      Stats.startMeasurement(MeasurementId);
+          CallGraph &cg = CallGraph::getGraph();
+          for (auto *currFunc :
+               machineFunctionCollector->getAllMachineFunctions()) {
+            string funcName = currFunc->getName().str();
+            if (!cg.reachableFromEntryPoint(currFunc)) {
+              continue;
+            }
+            if (getfunctionaddr.find(funcName) == getfunctionaddr.end()) {
+              functionaddr *f = new functionaddr(funcName);
+              getfunctionaddr[funcName] = f;
+            }
+            functiontofs[entry].emplace(getfunctionaddr[funcName]);
+
+            for (auto currBB = currFunc->begin(); currBB != currFunc->end();
+                 ++currBB) {
+              for (auto currMI = currBB->begin(); currMI != currBB->end();
+                   ++currMI) {
+                // 指令地址
+                if (StaticAddrProvider->Ins2addr.find(&*currMI) !=
+                    StaticAddrProvider->Ins2addr.end()) {
+                  getfunctionaddr[funcName]->addrlist.emplace(
+                      StaticAddrProvider->Ins2addr[&*currMI] &
+                      ~(L2linesize - 1));
+                }
+                // 数据地址
+                if (currMI->mayLoad() || currMI->mayStore()) {
+                  auto list = AddrInfo.getvalueaddr(&*currMI);
+                  for (unsigned addr : list) {
+                    getfunctionaddr[funcName]->addrlist.emplace(
+                        addr & ~(L2linesize - 1));
+                  }
+                }
+              }
+            }
+          }
+
+        } else if (Arch == Triple::ArchType::riscv32) {
+          AnalysisDriverInstr<ConstantValueDomain<Triple::ArchType::riscv32>>
+              ConstValAna(entry, NoDep);
+          auto CvAnaInfo = ConstValAna.runAnalysis();
+          AddressInformationImpl<ConstantValueDomain<Triple::ArchType::riscv32>>
+              AddrInfo(*CvAnaInfo);
+
+        } else {
+          assert(0 && "Unsupported ISA for LLVMTA");
+        }
+      }
     }
   }
-
-  if (OutputExtFuncAnnotationFile) {
-    Myfile.open("ExtFuncAnnotations.csv", ios_base::trunc);
-    CallGraph::getGraph().dumpUnknownExternalFunctions(Myfile);
-    Myfile.close();
-    return false;
+  // 打印 map 内容
+  for (const auto &entry : getfunctionaddr) {
+    std::cout << "Key: " << entry.first << "\n";
+    entry.second->print(); // 调用 functionaddr 类的 print 函数
   }
-  if (!QuietMode) {
-    Myfile.open("AnnotatedHeuristics.txt", ios_base::trunc);
-    DirectiveHeuristicsPassInstance->dump(Myfile);
-    Myfile.close();
-
-    Myfile.open("PersistenceScopes.txt", ios_base::trunc);
-    PersistenceScopeInfo::getInfo().dump(Myfile);
-    Myfile.close();
-
-    Myfile.open("CallGraph.txt", ios_base::trunc);
-    CallGraph::getGraph().dump(Myfile);
-    Myfile.close();
-  }
-
-  parseCoreInfo(CoreInfo);
-  VERBOSE_PRINT(" -> Finished Preprocessing Phase\n");
 
   for (auto Clist : taskMap) {
     outs() << "Timing Analysis for Core: " << Clist.first << "\n";
+    CurrentCore = Clist.first;
     for (string entry : Clist.second) {
       AnalysisEntryPoint = entry;
+      if (!machineFunctionCollector->hasFunctionByName(AnalysisEntryPoint)) {
+        outs() << "No Timing Analysis Run. There is no entry point: "
+               << AnalysisEntryPoint << "\n";
+        // exit(1);
+      }
+
+      ofstream Myfile;
+
+      // Statistics &Stats = Statistics::getInstance();
+      // Stats.startMeasurement("Complete Analysis");
+
+      if (CoRunnerSensitive) {
+        for (int I = 0; I <= UntilIterationMeasurement; ++I) {
+          std::string MeasurementId = "Until Iteration ";
+          MeasurementId += std::to_string(I);
+          // Stats.startMeasurement(MeasurementId);
+        }
+      }
+
+      if (OutputExtFuncAnnotationFile) {
+        Myfile.open("ExtFuncAnnotations.csv", ios_base::trunc);
+        CallGraph::getGraph().dumpUnknownExternalFunctions(Myfile);
+        Myfile.close();
+        return false;
+      }
+      if (!QuietMode) {
+        Myfile.open("AnnotatedHeuristics.txt", ios_base::trunc);
+        DirectiveHeuristicsPassInstance->dump(Myfile);
+        Myfile.close();
+
+        Myfile.open("PersistenceScopes.txt", ios_base::trunc);
+        PersistenceScopeInfo::getInfo().dump(Myfile);
+        Myfile.close();
+
+        Myfile.open("CallGraph.txt", ios_base::trunc);
+        CallGraph::getGraph().dump(Myfile);
+        Myfile.close();
+      }
+      VERBOSE_PRINT(" -> Finished Preprocessing Phase\n");
+
       outs() << "Timing Analysis for entry point: " << AnalysisEntryPoint
              << "\n";
-
       // Dispatch the value analysis
       auto Arch = getTargetMachine().getTargetTriple().getArch();
       if (Arch == Triple::ArchType::arm) {
@@ -247,6 +325,79 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
       }
     }
   }
+  // 打印 set 内容
+  for (const auto &entry : AddrCList) {
+    entry.print();
+  }
+
+  // if (!machineFunctionCollector->hasFunctionByName(AnalysisEntryPoint)) {
+  //   outs() << "No Timing Analysis Run. There is no entry point: "
+  //          << AnalysisEntryPoint << "\n";
+  //   exit(1);
+  // }
+
+  // ofstream Myfile;
+
+  // // Default analysis type: timing
+  // if (AnaType.getBits() == 0) {
+  //   AnaType.addValue(AnalysisType::TIMING);
+  // }
+
+  // // Statistics &Stats = Statistics::getInstance();
+  // // Stats.startMeasurement("Complete Analysis");
+
+  // if (CoRunnerSensitive) {
+  //   for (int I = 0; I <= UntilIterationMeasurement; ++I) {
+  //     std::string MeasurementId = "Until Iteration ";
+  //     MeasurementId += std::to_string(I);
+  //     // Stats.startMeasurement(MeasurementId);
+  //   }
+  // }
+
+  // if (OutputExtFuncAnnotationFile) {
+  //   Myfile.open("ExtFuncAnnotations.csv", ios_base::trunc);
+  //   CallGraph::getGraph().dumpUnknownExternalFunctions(Myfile);
+  //   Myfile.close();
+  //   return false;
+  // }
+  // if (!QuietMode) {
+  //   Myfile.open("AnnotatedHeuristics.txt", ios_base::trunc);
+  //   DirectiveHeuristicsPassInstance->dump(Myfile);
+  //   Myfile.close();
+
+  //   // Myfile.open("PersistenceScopes.txt", ios_base::trunc);
+  //   // PersistenceScopeInfo::getInfo().dump(Myfile);
+  //   // Myfile.close();
+
+  //   Myfile.open("CallGraph.txt", ios_base::trunc);
+  //   CallGraph::getGraph().dump(Myfile);
+  //   Myfile.close();
+  // }
+  // VERBOSE_PRINT(" -> Finished Preprocessing Phase\n");
+
+  // for (auto Clist : taskMap) {
+  //   outs() << "Timing Analysis for Core: " << Clist.first << "\n";
+  //   CurrentCore = Clist.first;
+  //   for (string entry : Clist.second) {
+  //     AnalysisEntryPoint = entry;
+  //     outs() << "Timing Analysis for entry point: " << AnalysisEntryPoint
+  //            << "\n";
+
+  //     Myfile.open("PersistenceScopes.txt", ios_base::trunc);
+  //     PersistenceScopeInfo::getInfo().dump(Myfile);
+  //     Myfile.close();
+
+  //     // Dispatch the value analysis
+  //     auto Arch = getTargetMachine().getTargetTriple().getArch();
+  //     if (Arch == Triple::ArchType::arm) {
+  //       dispatchValueAnalysis<Triple::ArchType::arm>();
+  //     } else if (Arch == Triple::ArchType::riscv32) {
+  //       dispatchValueAnalysis<Triple::ArchType::riscv32>();
+  //     } else {
+  //       assert(0 && "Unsupported ISA for LLVMTA");
+  //     }
+  //   }
+  // }
 
   return false;
 }
@@ -293,30 +444,6 @@ void TimingAnalysisMain::dispatchValueAnalysis() {
   }
 
   AddressInformationImpl<ConstantValueDomain<ISA>> AddrInfo(*CvAnaInfo);
-  // 收集地址信息
-  if (Addressinfo.empty()) {
-    for (auto Clist : taskMap) {
-      for (string entry : Clist.second) {
-        Addressinfo.emplace(entry, std::set<unsigned>());
-      }
-    }
-    for (auto currFunc : machineFunctionCollector->getAllMachineFunctions()) {
-      string funcName = currFunc->getName().str();
-      if (Addressinfo.count(funcName) == 0) {
-        break;
-      }
-      for (auto currBB = currFunc->begin(); currBB != currFunc->end();
-           ++currBB) {
-        for (auto currMI = currBB->begin(); currMI != currBB->end(); ++currMI) {
-          if (StaticAddrProvider->Ins2addr.find(&*currMI) !=
-              StaticAddrProvider->Ins2addr.end()) {
-            Addressinfo[funcName].emplace(
-                StaticAddrProvider->Ins2addr[&*currMI]);
-          }
-        }
-      }
-    }
-  }
 
   if (!QuietMode) {
     Myfile.open("AddressInformation.txt", ios_base::trunc);

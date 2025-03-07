@@ -27,6 +27,8 @@
 #ifndef STATESENSITIVEGRAPH_H
 #define STATESENSITIVEGRAPH_H
 
+#include "Util/AbstractAddress.h"
+#include "Util/GlobalVars.h"
 #include "Util/Graph.h"
 #include "Util/Util.h"
 
@@ -140,6 +142,7 @@ public:
 
   void dump(std::ostream &mystream,
             const std::map<std::string, double> *optTimesTaken) const;
+  void getACL(const State &state, unsigned succId) const;
 
   void dumpfunction(std::ostream &mystream,
                     const std::map<std::string, double> *optTimesTaken) const {
@@ -150,8 +153,8 @@ public:
 
     const std::function<void(unsigned, const std::set<unsigned> &)>
         dumpPersistSuccessors =
-            [this, &persistStatesAlreadyDumped, &funcName,
-             &functiontoid, &dumpPersistSuccessors](
+            [this, &persistStatesAlreadyDumped, &funcName, &functiontoid,
+             &dumpPersistSuccessors](
                 unsigned currId, const std::set<unsigned> &statesLeavingBB) {
               for (unsigned succId : graph.getSuccessors(currId)) {
                 if (persistStates.count(succId) > 0 &&
@@ -1810,7 +1813,35 @@ bool StateSensitiveGraph<MicroArchDom>::isDirectSuccessor(
   // Either x == y (no-join) or x join y == y (join). Otherwise no successor.
   return state1Copy == state2;
 }
+template <class MicroArchDom>
+void StateSensitiveGraph<MicroArchDom>::getACL(const State &state,
+                                               unsigned succId) const {
+  auto result = state.memory.getIaccAdress();
+  if (result) {
+    auto [addr, CL, age] = *result;
+    AddrCL acl(addr, id2context.at(succId), CL, age);
+    if (AddrCList.insert(acl).second) {
+      auto it = AddrCList.find(acl);
+      auto aclo = *it;
+      AddrCList.erase(it);    // 删除旧元素
+      aclo.join(acl);         // 修改值
+      AddrCList.insert(aclo); // 重新插入
+    }
+  }
 
+  result = state.memory.getDaccAdress();
+  if (result) {
+    auto [addr, CL, age] = *result;
+    AddrCL acl(addr, id2context.at(succId), CL, age);
+    if (AddrCList.insert(acl).second) {
+      auto it = AddrCList.find(acl);
+      auto aclo = *it;
+      AddrCList.erase(it);    // 删除旧元素
+      aclo.join(acl);         // 修改值
+      AddrCList.insert(aclo); // 重新插入
+    }
+  }
+}
 template <class MicroArchDom>
 void StateSensitiveGraph<MicroArchDom>::dump(
     std::ostream &mystream,
@@ -1833,6 +1864,9 @@ void StateSensitiveGraph<MicroArchDom>::dump(
                 persistStatesAlreadyDumped.count(succId) == 0) {
               mystream << succId << " [ label = \"Mid-" << succId
                        << "\", tooltip = <" << id2state.at(succId) << ">];\n";
+              // 标记
+              id2state.at(succId).getACL(id2context.at(succId));
+
               persistStatesAlreadyDumped.insert(succId);
               if (statesLeavingBB.count(succId) == 0) {
                 // if succId is a leaving state of the current BB,
@@ -1869,6 +1903,7 @@ void StateSensitiveGraph<MicroArchDom>::dump(
             for (auto cSt : currentCallStates) {
               mystream << cSt << " [ label = \"Call-" << cSt
                        << "\", tooltip = <" << id2state.at(cSt) << ">];\n";
+              id2state.at(cSt).getACL(id2context.at(cSt));
             }
           }
         }
@@ -1880,6 +1915,7 @@ void StateSensitiveGraph<MicroArchDom>::dump(
           for (auto outSts : currentStates) {
             mystream << outSts << " [ label = \"Out-" << outSts
                      << "\" , tooltip = <" << id2state.at(outSts) << ">];\n";
+            id2state.at(outSts).getACL(id2context.at(outSts));
           }
         }
         // dump in states of the basic block
@@ -1887,6 +1923,8 @@ void StateSensitiveGraph<MicroArchDom>::dump(
           for (auto inSts : ctxStMap.second) {
             mystream << inSts << " [ label = \"In-" << inSts
                      << "\" , tooltip = <" << id2state.at(inSts) << ">];\n";
+            id2state.at(inSts).getACL(id2context.at(inSts));
+
             dumpPersistSuccessors(inSts, statesLeavingBB);
           }
         }
@@ -1895,6 +1933,7 @@ void StateSensitiveGraph<MicroArchDom>::dump(
           for (auto addSt : additionalStates.at(&currMBB)) {
             mystream << addSt << " [ label = \"Mid-" << addSt
                      << "\" , tooltip = <" << id2state.at(addSt) << ">];\n";
+            id2state.at(addSt).getACL(id2context.at(addSt));
             dumpPersistSuccessors(addSt, statesLeavingBB);
           }
         }
@@ -1905,6 +1944,7 @@ void StateSensitiveGraph<MicroArchDom>::dump(
               for (auto cSt : ctx2cSts.second) {
                 mystream << cSt << " [ label = \"Return-" << cSt
                          << "\" , tooltip = <" << id2state.at(cSt) << ">];\n";
+                id2state.at(cSt).getACL(id2context.at(cSt));
                 dumpPersistSuccessors(cSt, statesLeavingBB);
               }
             }
@@ -2004,8 +2044,8 @@ void StateSensitiveGraph<MicroArchDom>::dump(
     for (MachineFunction *currFunc :
          machineFunctionCollector->getAllMachineFunctions()) {
       std::string funcName = currFunc->getName().str();
-      mystream << "graph : {\n	title : \"" << funcName << "\"\n	label : \""
-               << funcName << "\"\n";
+      mystream << "graph : {\n	title : \"" << funcName
+               << "\"\n	label : \"" << funcName << "\"\n";
       for (auto &currMBB : *currFunc) {
         std::string mbbName = currMBB.getFullName();
         mystream << "graph : {\n	title : \"" << mbbName
@@ -2037,7 +2077,7 @@ void StateSensitiveGraph<MicroArchDom>::dump(
           for (auto outSts : currentStates) {
             mystream << "node : {\n	title : \"" << outSts
                      << "\"\n	label : \"Out-" << outSts << "\"\n";
-            mystream << "info1 : \"" << id2state.at(outSts) << "\"\n}\n";
+            // mystream << "info1 : \"" << id2state.at(outSts) << "\"\n}\n";
           }
         }
         // dump in states of the basic block

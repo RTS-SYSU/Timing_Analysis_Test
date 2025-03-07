@@ -75,6 +75,7 @@ public:
   using AnaDeps = std::tuple<>;
 
   auto classify(const AbstractAddress addr) const -> Classification;
+  int getAge(const AbstractAddress addr) const { return -1; }
   UpdateReport *update(const AbstractAddress addr, AccessType load_store,
                        AnaDeps *deps = nullptr, bool wantReport = false,
                        const Classification assumption = CL_UNKNOWN);

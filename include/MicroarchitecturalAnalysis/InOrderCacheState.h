@@ -62,7 +62,7 @@ public:
       SuperClass;
 
   typedef typename SuperClass::StateSet StateSet;
-
+  void getACL(Context ctx) const {};
   template <typename T>
   using MapFromStates = typename SuperClass::template MapFromStates<T>;
 
@@ -408,9 +408,7 @@ InOrderCacheState<makeCache, dataCache>::cycle(
       res.insert(state);
     }
 
-    DEBUG_WITH_TYPE(
-        "driverSED", for (auto &succ
-                          : res) { std::cerr << succ; });
+    DEBUG_WITH_TYPE("driverSED", for (auto &succ : res) { std::cerr << succ; });
     return res;
   }
 }

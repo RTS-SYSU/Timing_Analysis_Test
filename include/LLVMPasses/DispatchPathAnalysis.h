@@ -613,6 +613,7 @@ boost::optional<BoundItv> dispatchTimingPathAnalysisWeightProvider(
     sg->dump(myfile, &longestPath);
     myfile.close();
   }
+  
 
   AnalysisResults &ar = AnalysisResults::getInstance();
   // ar.registerResult("time", res);

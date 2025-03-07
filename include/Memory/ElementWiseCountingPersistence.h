@@ -78,6 +78,12 @@ public:
   void enterScope(const PersistenceScope &scope) {}
   void leaveScope(const PersistenceScope &scope) {}
   bool isPersistent(const TagType tag) const;
+  int getAge(const TagType tag) const {
+    if(ele2conflicts.count(tag) != 0){
+      return ele2conflicts.at(tag).getAge(tag);
+    }
+    return INT_MAX;
+  }
   bool isPersistent(const GlobalVariable *var) const;
   bool operator==(const Self &y) const;
   bool operator<(const Self &y) const;
@@ -85,7 +91,7 @@ public:
 };
 
 ///\see dom::cache::CacheSetAnalysis<T>::CacheSetAnalysis(bool
-///assumeAnEmptyCache)
+/// assumeAnEmptyCache)
 template <CacheTraits *T>
 inline ElementWiseCountingPersistence<T>::ElementWiseCountingPersistence(
     bool assumeAnEmptyCache __attribute__((unused)))
@@ -112,7 +118,7 @@ UpdateReport *ElementWiseCountingPersistence<T>::potentialUpdate(
 }
 
 ///\see dom::cache::CacheSetAnalysis<T>::update(const TagType tag, const
-///Classification assumption)
+/// Classification assumption)
 template <CacheTraits *T>
 UpdateReport *ElementWiseCountingPersistence<T>::update(
     const AbstractAddress addr, AccessType load_store, AnaDeps *Deps,
