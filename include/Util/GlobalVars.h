@@ -61,15 +61,19 @@ public:
     return this->address == other.address && this->ctx == other.ctx;
   }
   bool operator<(const AddrCL &other) const {
-    if (this->address < other.address) {
-      return true;
-    }
     if (this->CL < other.CL) {
       return true;
     }
     if (this->age < other.age) {
       return true;
     }
+    if (this->address < other.address) {
+      return true;
+    }
+    if(this->ctx<other.ctx){
+      return true;
+    }
+
     return false;
   }
   // 打印函数
