@@ -36,7 +36,8 @@ namespace cache {
 class Classification;
 
 extern const char *ClassificationNames[13];
-extern const Classification CL_BOT, CL_HIT, CL_MISS, CL_UNKNOWN, CL2_HIT, CL2_MISS, CL2_UNKNOWN;
+extern const Classification CL_BOT, CL_HIT, CL_MISS, CL_UNKNOWN, CL2_HIT,
+    CL2_MISS, CL2_UNKNOWN;
 
 /**
  * \brief Implements the lattice {\c hit, \c miss, \c unknown, \c bottom }.
@@ -51,6 +52,12 @@ public:
 
   friend std::ostream &operator<<(std::ostream &os, const Self &x) {
     return os << ClassificationNames[x.value];
+  }
+  bool operator<(const Self &x) const {
+    if (this->value < x.value) {
+      return true;
+    }
+    return false;
   }
 };
 

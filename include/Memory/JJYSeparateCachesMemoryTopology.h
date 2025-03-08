@@ -1746,9 +1746,9 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
     AbstractAddress addr = instructionComponent.ongoingAccess.get().access.addr;
     Classification CL = instructionComponent.ongoingAccess.get().cl;
     int age;
-    if (CL == L2MISS) {
+    if (CL == CL2_MISS) {
       age = INT_MAX;
-    } else if (CL == IMISS) {
+    } else if (CL == CL2_HIT) {
       age = instructionComponent.ongoingAccess.get().age2;
     } else {
       age = instructionComponent.ongoingAccess.get().age1;
@@ -1769,9 +1769,9 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
     AbstractAddress addr = dataComponent.ongoingAccess.get().access.addr;
     Classification CL = dataComponent.ongoingAccess.get().cl;
     int age;
-    if (CL == L2MISS || CL == DMISS) {
+    if (CL == CL2_MISS) {
       age = INT_MAX;
-    } else if (CL == DMISS) {
+    } else if (CL == CL2_HIT) {
       age = dataComponent.ongoingAccess.get().age2;
     } else {
       age = dataComponent.ongoingAccess.get().age1;

@@ -44,11 +44,11 @@ class AddrCL {
 public:
   AddrCL(TimingAnalysisPass::AbstractAddress addr,
          TimingAnalysisPass::Context ctxa,
-         TimingAnalysisPass::dom::cache::Classification cl, unsigned a) {
+         TimingAnalysisPass::dom::cache::Classification cl, int a) {
     this->address = addr;
     this->ctx = ctxa;
     this->CL = cl;
-    this->age;
+    this->age=a;
   }
 
   TimingAnalysisPass::AbstractAddress address =
@@ -57,14 +57,17 @@ public:
   TimingAnalysisPass::dom::cache::Classification CL;
   TimingAnalysisPass::Context ctx;
   // CL不一样就join
-  bool operator==(const AddrCL &other) const{
+  bool operator==(const AddrCL &other) const {
     return this->address == other.address && this->ctx == other.ctx;
   }
-  bool operator<(const AddrCL &other) const{
-    if (this->address < other.address){
+  bool operator<(const AddrCL &other) const {
+    if (this->address < other.address) {
       return true;
     }
-    if(this->age<other.age){
+    if (this->CL < other.CL) {
+      return true;
+    }
+    if (this->age < other.age) {
       return true;
     }
     return false;
@@ -72,7 +75,7 @@ public:
   // 打印函数
   void print() const {
     std::cout << "Address: " << std::hex << this->address << " : [" << this->CL
-              << " age : " << std::dec << this->age << "contex: " << ctx
+              << "  | age : " << std::dec << this->age << "\nContex: " << ctx
               << "]\n";
   }
   bool join(AddrCL other) {
