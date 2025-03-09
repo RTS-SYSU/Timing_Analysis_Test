@@ -27,6 +27,8 @@
 #define CLASSIFICATION_H_
 
 #include "Memory/util/BitstringDomain.h"
+#include "llvm/Support/FileSystem.h" // 输出ur-cfg图片
+#include "llvm/Support/raw_ostream.h"
 
 namespace TimingAnalysisPass {
 
@@ -53,6 +55,11 @@ public:
   friend std::ostream &operator<<(std::ostream &os, const Self &x) {
     return os << ClassificationNames[x.value];
   }
+  // for ur-cfg debug
+  friend llvm::raw_ostream &operator<<(llvm::raw_ostream &os, const Self &x){
+    return os << ClassificationNames[x.value];
+  }
+
   bool operator<(const Self &x) const {
     if (this->value < x.value) {
       return true;

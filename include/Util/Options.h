@@ -271,6 +271,8 @@ extern llvm::cl::opt<MultiCoreType> MulCType;
  */
 extern llvm::cl::opt<bool> QuietMode;
 
+extern llvm::cl::opt<bool> ZWDebug;
+
 /**
  * Dumps the state graph in .vcg instead of .dot
  */

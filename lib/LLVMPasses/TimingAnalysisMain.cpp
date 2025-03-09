@@ -272,6 +272,7 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     CurrentCore = Clist.first;
     for (string entry : Clist.second) {
       AnalysisEntryPoint = entry;
+      func2corenum[entry] = CurrentCore;
       if (!machineFunctionCollector->hasFunctionByName(AnalysisEntryPoint)) {
         outs() << "No Timing Analysis Run. There is no entry point: "
                << AnalysisEntryPoint << "\n";
@@ -326,8 +327,96 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     }
   }
   // 打印 set 内容
-  for (const auto &entry : AddrCList) {
-    entry.print();
+  ofstream Myfile;
+  Myfile.open("ACL.txt", ios_base::trunc);
+  Myfile << "###Instruction ACL###\n";
+  for (const auto &entry : IAddrCList) {
+    Myfile << entry;
+  }
+  Myfile << "###Data ACL###\n";
+  for (const auto &entry : DAddrCList) {
+    Myfile << entry;
+  }
+  outs() << "Above is the collected CL & age of MI\n";
+
+  if(MulCType==MultiCoreType::ZhangW){
+    assert((MuArchType==MicroArchitecturalType::INORDER
+      || MuArchType==MicroArchitecturalType::STRICTINORDER)
+      && "Currently do not support other arch, because of timing anomaly");
+    // 前面单核分析完成了XClass、ACL收集，此处转化到mcif中
+    writeAclToMcif();
+    // 进行UR和CEOP的获取
+    for (unsigned i = 0; i < CoreNums; ++i) {
+      outs() << " -> UR Analysis for core: " << i; 
+
+      for (std::string &functionName : mcif.coreinfo[i]) {
+        outs() << " entry point: " << functionName << '\n';
+        mcif.URCalculation(i, functionName);
+        outs() << "Core-" << i << " Func: " << functionName <<
+          " have " << mcif.CEOPs[i][functionName].size() << " CEOP(s)"
+          << '\n';
+      }
+    }
+
+    // 现在先不实现生命周期迭代
+    outs() << " -> WCET Inter Analysis start\n";
+    for (unsigned local = 0; local < CoreNums; ++local) {
+      for (std::string &localFunc : mcif.coreinfo[local]){
+        // 选出本地task
+        unsigned wceetOfTSum = 0;
+        for (unsigned inter = 0; inter < CoreNums; ++inter) { // interference
+          if (local==inter) continue;
+          for (std::string &interFunc : mcif.getInitConflictFunction(local, localFunc)){
+            // 这个Init的就是返回几乎全部，反正是第一轮
+            // 要考虑函数可能执行多次，这里默认getInitConflictFunction会多次返回
+            // 选出冲突task
+            unsigned wceetOf2T = 0; // 两个Task之间的WCEET
+            for (const CEOP &localP : mcif.CEOPs[local][localFunc]){
+              for (const CEOP &interP : mcif.CEOPs[inter][interFunc]){
+                // 选出两条Path, 开始dp，横干扰、竖本地
+                unsigned localPLen = localP.URs.size();
+                unsigned interPLen = interP.URs.size();
+                unsigned ArvVal[localPLen][interPLen] = {0};
+
+                for(unsigned i=1;i<localPLen;i++){
+                  ArvVal[i][0] = mcif.getFValue(local, localP, i, inter, interP, 0) 
+                    + ArvVal[i-1][0]; // 感觉paper公式有问题，改成累加
+                }
+                for(unsigned i=1;i<interPLen;i++){
+                  ArvVal[0][i] = mcif.getFValue(local, localP, 0, inter, interP, i)
+                    + ArvVal[0][i-1];
+                }
+                for(unsigned i=1;i<localPLen;i++){
+                  for(unsigned j=1;j<interPLen;j++){
+                    ArvVal[i][j] = max(ArvVal[i-1][j], ArvVal[i][j-1]) 
+                      + mcif.getFValue(local, localP, i, inter, interP, j);
+                  }
+                }
+                wceetOf2T = max(wceetOf2T, ArvVal[localPLen-1][interPLen-1]);
+              }
+            }
+            wceetOf2T *= Latency; // BG Mem的延迟值 from Command Line, 但感觉很容易重名
+            wceetOfTSum += wceetOf2T; // 不同核所有冲突的函数都加上
+          }
+        }
+        mcif.currWcetInter[local][localFunc] = wceetOfTSum;
+        outs()<<"Core-"<<local<<" Func:"<<localFunc<<
+          " 's WCEET is "<<wceetOfTSum<<"\n";
+      }
+    }
+
+    // WCET_{sum} = WCET_{intra} + WCEET
+    std::ofstream myfile;
+    std::string fileName = "ZW_Output.txt";
+    myfile.open(fileName, std::ios_base::trunc); // 表示若文件存在则清空内容，若不存在则创建文件
+    for (unsigned local = 0; local < CoreNums; ++local) {
+      for (std::string &localFunc : mcif.coreinfo[local]){
+        unsigned wcet_intra = mcif.currWcetIntra[local][localFunc];
+        unsigned wceet = mcif.currWcetInter[local][localFunc];
+        myfile << "Core-"<<local<<" F-"<<localFunc<<
+          " intra:"<<wcet_intra<<" wceet:"<<wceet<<std::endl;
+      }
+    }
   }
 
   // if (!machineFunctionCollector->hasFunctionByName(AnalysisEntryPoint)) {

@@ -93,6 +93,10 @@ cl::opt<bool>
                        "detailed analysis information to files; should be used "
                        "for performance measurements (default 'false')"),
               cl::cat(LLVMTACat));
+cl::opt<bool>
+    ZWDebug("ta-zw-debug", cl::init(true),
+              cl::desc("Get some debug infomation about Zhangwei's DAC2022 "),
+              cl::cat(MultiCoreCat));
 
 cl::opt<bool>
     DumpVcgGraph("ta-dumpb-vcg-graph",

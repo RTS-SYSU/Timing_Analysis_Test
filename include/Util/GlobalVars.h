@@ -82,6 +82,13 @@ public:
               << "  | age : " << std::dec << this->age << "\nContex: " << ctx
               << "]\n";
   }
+  friend std::ostream& operator<<(std::ostream& os, AddrCL obj){
+    os << "Address: " << std::hex << obj.address << " : [" << obj.CL
+              << "  | age : " << std::dec << obj.age << "\nContex: " << obj.ctx
+              << "]\n";
+    return os;
+  }
+
   bool join(AddrCL other) {
     if (*this == other) {
       this->CL.join(other.CL);
@@ -92,10 +99,12 @@ public:
     }
   }
 };
-extern std::set<AddrCL> AddrCList;
+extern std::set<AddrCL> IAddrCList;
+extern std::set<AddrCL> DAddrCList;
 
 extern std::map<std::string, std::set<functionaddr *>> functiontofs;
 extern std::map<std::string, functionaddr *> getfunctionaddr;
+extern std::map<std::string, unsigned> func2corenum;
 // 记录已经分析过执行次数的块
 extern std::set<const MachineBasicBlock *> mylist;
 
@@ -106,4 +115,6 @@ unsigned getbound(const MachineBasicBlock *MBB,
 
 void celectaddr(const MachineBasicBlock *MBB,
                 const TimingAnalysisPass::Context &ctx);
+
+void writeAclToMcif();
 #endif
