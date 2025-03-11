@@ -65,7 +65,10 @@ void celectaddr(const MachineBasicBlock *MBB,
   }
 }
 
+// TODO DAddrCList
 void writeAclToMcif(){
+  std::map<std::string, std::map<TimingAnalysisPass::dom::cache::Classification,
+   unsigned>> cl_cnt;
   for(const auto& tmp_acl: IAddrCList){
     auto itv = tmp_acl.address.getAsInterval();
     const TimingAnalysisPass::Address tmp_upper_cache_line
@@ -102,8 +105,22 @@ void writeAclToMcif(){
       tmpCM.MI = miptr;
       tmpCM.CallSites = CallSites;
       mcif.addClass(tmp_entry_corenum, tmp_entry, tmpCM, tmp_acl.CL, 1);
+      cl_cnt[tmp_entry][tmp_acl.CL] += 1;
     }else{
       assert(itv.lower()==0 && "why we have an addr without mi?");
     }
+  }
+  if(ZWDebug){
+    std::ofstream Myfile;
+    Myfile.open("ZW_ACL_Summary.txt", std::ios_base::app);
+    Myfile << "###CL Information###\n";
+    for(const auto& clmap:cl_cnt){
+      Myfile << "##EntryPoint: " << clmap.first << "\n";
+      for(const auto& cl_pair:clmap.second){
+        Myfile << "#CL: " << cl_pair.first << " cnt is " << cl_pair.second << "\n";
+      }
+    }
+    // TODO ctx info
+    Myfile.close();
   }
 }

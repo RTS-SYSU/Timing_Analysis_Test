@@ -237,13 +237,13 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
                       ~(L2linesize - 1));
                 }
                 // 数据地址
-                if (currMI->mayLoad() || currMI->mayStore()) {
-                  auto list = AddrInfo.getvalueaddr(&*currMI);
-                  for (unsigned addr : list) {
-                    getfunctionaddr[funcName]->addrlist.emplace(
-                        addr & ~(L2linesize - 1));
-                  }
-                }
+                // if (currMI->mayLoad() || currMI->mayStore()) {
+                //   auto list = AddrInfo.getvalueaddr(&*currMI);
+                //   for (unsigned addr : list) {
+                //     getfunctionaddr[funcName]->addrlist.emplace(
+                //         addr & ~(L2linesize - 1));
+                //   }
+                // }
               }
             }
           }
@@ -266,6 +266,16 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     std::cout << "Key: " << entry.first << "\n";
     entry.second->print(); // 调用 functionaddr 类的 print 函数
   }
+  ofstream Myfile;
+  Myfile.open("LY_Contention.txt", ios_base::app);
+  Myfile << "###LiangYun's Addr###\n";
+  for (const auto &entry : functiontofs) {
+    Myfile << "EntryPoint: " << entry.first << "\n";
+    for(const auto &func : entry.second){
+      func->print(Myfile);
+    }
+  }
+  Myfile.close();
 
   for (auto Clist : taskMap) {
     outs() << "Timing Analysis for Core: " << Clist.first << "\n";
@@ -327,17 +337,18 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     }
   }
   // 打印 set 内容
-  ofstream Myfile;
-  Myfile.open("ACL.txt", ios_base::trunc);
-  Myfile << "###Instruction ACL###\n";
-  for (const auto &entry : IAddrCList) {
-    Myfile << entry;
+  if(ZWDebug){
+    Myfile.open("ZW_ACL.txt", ios_base::app);
+    Myfile << "###Instruction ACL###\n";
+    for (const auto &entry : IAddrCList) {
+      Myfile << entry;
+    }
+    Myfile << "###Data ACL###\n";
+    for (const auto &entry : DAddrCList) {
+      Myfile << entry;
+    }
+    Myfile.close();
   }
-  Myfile << "###Data ACL###\n";
-  for (const auto &entry : DAddrCList) {
-    Myfile << entry;
-  }
-  outs() << "Above is the collected CL & age of MI\n";
 
   if(MulCType==MultiCoreType::ZhangW){
     assert((MuArchType==MicroArchitecturalType::INORDER
@@ -408,7 +419,7 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     // WCET_{sum} = WCET_{intra} + WCEET
     std::ofstream myfile;
     std::string fileName = "ZW_Output.txt";
-    myfile.open(fileName, std::ios_base::trunc); // 表示若文件存在则清空内容，若不存在则创建文件
+    myfile.open(fileName, std::ios_base::app); 
     for (unsigned local = 0; local < CoreNums; ++local) {
       for (std::string &localFunc : mcif.coreinfo[local]){
         unsigned wcet_intra = mcif.currWcetIntra[local][localFunc];

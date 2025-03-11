@@ -157,6 +157,7 @@ SCEV *LoopBoundInfoPass::copySCEV(const SCEV *N) {
   } break;
   case scUnknown: {
     C = new SCEVUnknown(*dyn_cast<SCEVUnknown>(N));
+    dyn_cast<SCEVUnknown>(C)->IsCopied = true;
   } break;
   // Cases that we don't handle
   case scTruncate:
@@ -624,6 +625,10 @@ bool LoopBoundInfoPass::hasLoopBoundNoCtx(
         &ManualLoopBoundsNoCtx) const {
 
   bool HasBound = true;
+    // //jjy: 这里或许有问题
+  if (LoopContextMap.count(Loop) == 0) {
+    return false;
+  }
   for (auto Ctx : LoopContextMap.at(Loop)) {
     HasBound &= hasLoopBound(Loop, LoopBounds, ManualLoopBounds,
                              ManualLoopBoundsNoCtx, Ctx);
@@ -759,7 +764,7 @@ unsigned LoopBoundInfoPass::getLoopBound(
       if (FoundBoundManual && (AutoBound != Bound)) {
         //找到了以注释优先
         errs() << "Warnings Both automatic and manual loop bounds were found "
-                  "and bounds differ! (Automatic used) for:\n"
+                  "and bounds differ! (Manual used) for:\n"
                << Loop->getHeader()->getParent()->getName().str() << " | "
                << *Loop << "| AutoBound: " << AutoBound << ", Bound: " << Bound
                << "\n";

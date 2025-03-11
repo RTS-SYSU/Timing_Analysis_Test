@@ -85,7 +85,7 @@ public:
         if (it != callsiteMBB->end() && 
           std::next(it) != callsiteMBB->end()) { // 包含了下一条是MBB最后一条的情况了
           const llvm::MachineInstr* targetMI = &*(std::next(it));
-          // 从源头消除伪指令。我假设transient不会出现在BB头尾
+          // 从源头消除伪指令。我假设transient不会出现在BB尾
           if(targetMI->isTransient()){
             auto tmp_pair = transientHelper(callsiteMBB, targetMI);
             targetMI = tmp_pair.second;
@@ -138,6 +138,72 @@ public:
     return retSucc;
   }
 
+  std::vector<CtxMI> getSuccWithTransient(){ // useless
+    std::vector<CtxMI> retSucc;  
+    // call 和 return(嵌入处理)
+    auto &cg = TimingAnalysisPass::CallGraph::getGraph();
+    if(MI->isCall() && !cg.callsExternal(MI)){
+      for (const auto *callee : cg.getPotentialCallees(MI)) {
+        const MachineBasicBlock *calleeBeginBB = &*callee->begin();
+        const llvm::MachineInstr* calleeBeginMI = &(calleeBeginBB->front());
+        CtxMI succCM; // 继承了全部调用者，而且再加上自己
+        succCM.MI = calleeBeginMI;
+        assert(CallSites==this->CallSites && "Just Want to make sure");
+        succCM.CallSites = CallSites;
+        succCM.CallSites.push_back(MI);
+        retSucc.push_back(succCM);
+      }
+      return retSucc;
+    }
+    if(MI->isReturn()){
+      if(CallSites.size()>0){ // 针对main无调用者
+        const llvm::MachineInstr* callsite = CallSites.back();
+        const auto *callsiteMBB = callsite->getParent(); // 这里回到了call语句
+        // 但我们需要call的下一条指令(call不会是Basic Block里最后一条指令)
+        auto it = std::find_if(callsiteMBB->begin(), callsiteMBB->end(),
+                        [callsite](const MachineInstr &Instr) 
+                        { return &Instr == callsite; });
+        if (it != callsiteMBB->end() && 
+          std::next(it) != callsiteMBB->end()) { // 包含了下一条是MBB最后一条的情况了
+          const llvm::MachineInstr* targetMI = &*(std::next(it));
+          CtxMI succCM; // 退一次栈
+          succCM.MI = targetMI;
+          succCM.CallSites = CallSites;
+          succCM.CallSites.pop_back();
+          retSucc.push_back(succCM);
+        }else{
+          assert(0&&"This will not happend");
+        }
+      }
+      return retSucc;
+    }
+
+    const llvm::MachineBasicBlock *MBB = MI->getParent();
+    // 可能两种情况，MBB内下一条MI，或者MBB最后一条MI到后继MBB的第一条MI
+    if(MI == &(MBB->back())){
+      for (auto succit = MBB->succ_begin(); succit != MBB->succ_end(); ++succit){
+        const llvm::MachineBasicBlock *targetMBB = *succit;
+        const llvm::MachineInstr* targetMI = &(targetMBB->front());
+        CtxMI succCM; 
+        succCM.MI = targetMI;
+        succCM.CallSites = CallSites;
+        retSucc.push_back(succCM);
+      }
+    }else{
+      const llvm::MachineInstr* tmpMI = MI;
+      auto it = std::find_if(MBB->begin(), MBB->end(),
+                [tmpMI](const MachineInstr &Instr) { return &Instr == tmpMI; });
+      if (it != MBB->end() && std::next(it) != MBB->end()) {
+        const llvm::MachineInstr* targetMI = &*(std::next(it));
+        CtxMI succCM; 
+        succCM.MI = targetMI;
+        succCM.CallSites = CallSites;
+        retSucc.push_back(succCM);
+      }
+    }
+    return retSucc;
+  }
+
 private:
   // 跳过transient的办法就是拿到它的第一个非transient后继(可能递归执行)
   // 目前只考虑单个transient唯一后继的情况
@@ -163,6 +229,10 @@ private:
 struct X_Class {
   unsigned x;
   TimingAnalysisPass::dom::cache::Classification classification;
+  X_Class() : x(1), 
+    classification(
+      TimingAnalysisPass::dom::cache::CL_HIT
+    ) {}
 };
 
 /// 提供 ZW paper f函数运算所需的信息的查找方式
@@ -207,7 +277,7 @@ public:
   // 需要先从LoopBoundInfoPass偷到这个信息
   // std::map<std::string, MachineLoopInfo> f2MLI; // 算了目前这个设计上有点麻烦，暂时不采用
 
-  // 注意从0还是1开始计数,目前0,见main; FIXME这里参数有点冗余
+  // 注意从0还是1开始计数,目前0,见main; FIXME这里参数有点冗余; TODO需要数据cache分析
   unsigned getFValue(unsigned localCore, CEOP localPath, unsigned localUR,
       unsigned interCore, CEOP interPath, unsigned interUR){
     // TODO 这里参数是不是还漏了Core上的哪个函数？有CEOP问题不大，甚至Core号也是多余的
@@ -219,7 +289,7 @@ public:
 
     // for debug
     std::ofstream myfile;
-    std::string fileName = "addr_in_ur.txt";
+    std::string fileName = "ZW_F_addr.txt";
     if(ZWDebug){
       myfile.open(fileName, std::ios_base::app);
       myfile<<"Core:"<<localCore<<" LocalUR:"<<localUR<<
@@ -229,7 +299,7 @@ public:
       const llvm::MachineInstr* local_mi = local_pair.first.MI;
       unsigned tmp_exe_times = local_pair.second.x;
       if(local_pair.second.classification!=
-        TimingAnalysisPass::dom::cache::CL_HIT){ 
+        TimingAnalysisPass::dom::cache::CL2_HIT){ 
         continue;
       }
       index2ExeTimes[mi2cacheIndex(local_mi)] += tmp_exe_times;
@@ -241,10 +311,8 @@ public:
     }
     for(const auto &inter_pair:inter_ur.mi2xclass){
       const llvm::MachineInstr* inter_mi = inter_pair.first.MI;
-      if((inter_pair.second.classification!=
-        TimingAnalysisPass::dom::cache::CL_HIT)&&
-        (inter_pair.second.classification!=
-        TimingAnalysisPass::dom::cache::CL_UNKNOWN)){ 
+      if(inter_pair.second.classification==
+          TimingAnalysisPass::dom::cache::CL_HIT){ 
         continue;
       }
       indexIsDisturbed[mi2cacheIndex(inter_mi)] = true;
@@ -258,6 +326,9 @@ public:
       if(indexIsDisturbed[pair.first]){
         ret_val += pair.second;
       }
+    }
+    if(ZWDebug){
+      myfile<<"  Contention for "<<ret_val<<" times\n";
     }
     return ret_val;
   }
@@ -508,9 +579,9 @@ public:
 
     if(ZWDebug){
       std::ofstream myfile;
-      std::string fileName = function + "_CEOP_info.txt";
-      myfile.open(fileName, std::ios_base::trunc);
-      myfile<<"Function: "<<function<<"with "<<tmpCEOPs.size()<<"CEOPs"<<std::endl;
+      std::string fileName = "ZW_Output.txt";
+      myfile.open(fileName, std::ios_base::app);
+      myfile<<"EntryPoint: "<<function<<" with "<<tmpCEOPs.size()<<"CEOPs"<<std::endl;
       for (int i=0;i<tmpCEOPs.size();i++) {
         CEOP tmp_ceop = tmpCEOPs[i];
         myfile<<"  CEOP-"<<i<<" have "<<tmp_ceop.URs.size()<<" UR(s)"<<std::endl;
@@ -585,7 +656,7 @@ public:
     std::unordered_map<std::string, std::string> func_color_map;
     int color_index = 0;
     std::error_code EC;
-    raw_fd_ostream File(function + "machine_cfg.dot", EC, sys::fs::OpenFlags::OF_Text);
+    raw_fd_ostream File("ZW_" + function + "_ur_cfg.dot", EC, sys::fs::OpenFlags::OF_Text);
     if (EC) {
         errs() << "Error opening file: " << EC.message() << "\n";
     }

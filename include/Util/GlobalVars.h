@@ -35,6 +35,14 @@ public:
     }
     std::cout << "\n";
   }
+  void print(std::ostream& out) const {
+    out << "Function Name: " << functionname << "\n";
+    out << "Addresses: ";
+    for (const auto &addr : addrlist) {
+        out << addr << " ";
+    }
+    out << "\n";
+  }
 };
 
 // const char *ClassificationNames[13] = {
