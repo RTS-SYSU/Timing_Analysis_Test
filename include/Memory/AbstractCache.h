@@ -40,7 +40,7 @@
 #include "Memory/progana/Lattice.h"
 #include "Memory/util/CacheSetAnalysisConcept.h"
 #include "Memory/util/CacheUtils.h"
-
+#include "Util/GlobalVars.h"
 #include "Util/SharedStorage.h"
 #include "Util/Util.h"
 #include <fstream>
@@ -76,7 +76,9 @@ public:
   update(const AbstractAddress &addr, AccessType load_store,
          bool wantReport = false,
          const Classification assumption = dom::cache::CL_UNKNOWN) = 0;
-  virtual int getAge(const AbstractAddress &itv) const { return -1; };
+  virtual int getAge(const AbstractAddress &itv) const { return -1; }
+  virtual int getCSS(const CacheTraits::TagType tag) const { return -1; }
+  virtual int getCSS(const GlobalVariable *var) const { return -1; }
   virtual void join(const AbstractCache &y) = 0;
   virtual bool lessequal(const AbstractCache &y) const = 0;
   virtual void enterScope(const PersistenceScope &scope) = 0;
@@ -478,11 +480,47 @@ AbstractCacheImpl<T, C>::getPersistentScopes(const AbstractAddress addr) const {
                             std::inserter(intersection, intersection.begin()));
       ret = std::move(intersection);
     }
+    if (ret.size() > 0) {
+      for (auto s : ret) {
+        int cs = -1;
+        for (unsigned index = csItv.first; index <= csItv.second; index++) {
+          int t = cacheSets[index]->getCSS(addr.getArray());
+          cs = std::max(t, cs);
+        }
+        AddrPS aps(addr, cs, T->LEVEL);
+        if (AddrPSList[s].find(aps) != AddrPSList[s].end()) {
+          auto it = AddrPSList[s].find(aps);
+          auto aclo = *it;
+          AddrPSList[s].erase(it); // 删除旧元素
+          aps.join(aclo);
+          AddrPSList[s].insert(aps); // 重新插入
+        } else {
+          AddrPSList[s].insert(aps); // 重新插入
+        }
+      }
+    }
+
   } else {
     unsigned tag, index;
     assert(addr.isPrecise());
     boost::tie(tag, index) = getTagAndIndex(addr.getAsInterval().lower());
     ret = cacheSets[index]->getPersistentScopes(tag);
+
+    if (ret.size() > 0) {
+      int cs = cacheSets[index]->getCSS((TagType)tag);
+      AddrPS aps(addr, cs, T->LEVEL);
+      for (auto s : ret) {
+        if (AddrPSList[s].find(aps) != AddrPSList[s].end()) {
+          auto it = AddrPSList[s].find(aps);
+          auto aclo = *it;
+          AddrPSList[s].erase(it); // 删除旧元素
+          aps.join(aclo);
+          AddrPSList[s].insert(aps); // 重新插入
+        } else {
+          AddrPSList[s].insert(aps); // 重新插入
+        }
+      }
+    }
   }
   DEBUG_WITH_TYPE(
       "persistence", if (ret.size() > 0) {
@@ -491,16 +529,16 @@ AbstractCacheImpl<T, C>::getPersistentScopes(const AbstractAddress addr) const {
           dbgs() << "\t" << s << "\n";
         }
       });
-  if (ret.size() > 0) {
-    std::ofstream myfile;
-    myfile.open("DeBug.txt", std::ios_base::app);
-    myfile << "L" << T->LEVEL << ":" << addr
-           << " is persistent in the following scopes:\n";
-    for (auto s : ret) {
-      myfile << "\t" << s << "\n";
-    }
-    myfile.close();
-  }
+  // if (ret.size() > 0) {
+  //   std::ofstream myfile;
+  //   myfile.open("DeBug.txt", std::ios_base::app);
+  //   myfile << "L" << T->LEVEL << ":" << addr
+  //          << " is persistent in the following scopes:\n";
+  //   for (auto s : ret) {
+  //     myfile << "\t" << s << "\n";
+  //   }
+  //   myfile.close();
+  // }
   return ret;
 }
 

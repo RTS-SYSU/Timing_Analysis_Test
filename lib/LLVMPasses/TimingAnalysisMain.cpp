@@ -55,6 +55,7 @@
 #include "llvm/Support/MemoryBuffer.h"
 #include <cmath>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <list>
 #include <sstream>
@@ -323,12 +324,22 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
       } else {
         assert(0 && "Unsupported ISA for LLVMTA");
       }
+      PersistenceScopeInfo::deletper();
     }
   }
   // 打印 set 内容
+  std::ofstream myfile;
+  myfile.open("CLlist.txt", ios_base::trunc);
   for (const auto &entry : AddrCList) {
-    entry.print();
+    entry.print(myfile);
   }
+  for (const auto &entry : AddrPSList) {
+    myfile << "Scop:" << entry.first << "\n";
+    for (auto a : entry.second) {
+      myfile << a;
+    }
+  }
+  myfile.close();
 
   // if (!machineFunctionCollector->hasFunctionByName(AnalysisEntryPoint)) {
   //   outs() << "No Timing Analysis Run. There is no entry point: "

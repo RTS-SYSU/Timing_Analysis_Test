@@ -3,7 +3,7 @@
         "core": 0,
         "tasks": [
             {
-                "function": "fdct"
+                "function": "crc"
             }
         ]
     },
@@ -11,7 +11,7 @@
         "core": 1,
         "tasks": [
             {
-                "function": "loop"
+                "function": "expint"
             }
         ]
 

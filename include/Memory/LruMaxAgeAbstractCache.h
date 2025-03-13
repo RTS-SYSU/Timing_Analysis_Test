@@ -78,6 +78,8 @@ public:
   LruMaxAgeUpdateReport<TagType> *potentialUpdate(AbstractAddress addr,
                                                   AccessType load_store,
                                                   bool wantReport = false);
+  int getCSS(const TagType tag) const { return -1; }
+  int getCSS(const GlobalVariable *var) const { return -1; }
   int getAge(const AbstractAddress addr) const {
     TagType tag = getTag<T>(addr);
     for (unsigned i = 0; i < size; ++i)

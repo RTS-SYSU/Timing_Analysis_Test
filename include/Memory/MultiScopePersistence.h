@@ -32,9 +32,12 @@
 #include <set>
 
 #include "Memory/Classification.h"
+#include "Memory/UpdateReports.h"
 #include "Memory/progana/Lattice.h"
 #include "Memory/util/ImplicitSet.h"
+#include "Util/AbstractAddress.h"
 #include "Util/Options.h"
+#include "Util/PersistenceScope.h"
 
 /**
  * Using this macro you can enable strict scope consistency, i.e.
@@ -83,24 +86,24 @@ public:
   UpdateReport *update(const AbstractAddress addr, AccessType load_store,
                        AnaDeps *, bool wantReport = false,
                        const Classification assumption = CL_UNKNOWN);
-  int getAge(const AbstractAddress addr) const {
-
-    TagType tag = (addr.getAsInterval().lower() / Ilinesize) / Insets;
-    int age = INT_MAX;
+  int getAge(const AbstractAddress addr) const { return -1; }
+  int getCSS(const TagType tag) const {
+    int age = -1;
     for (auto &scope2pers : this->scopes2info) {
       if (scope2pers.second.isPersistent(tag)) {
-        int a = scope2pers.second.getAge(tag);
+        int a = scope2pers.second.getCSS(tag);
         age = age > a ? age : a;
       }
     }
-    if (age == INT_MAX) {
-      TagType tag = (addr.getAsInterval().lower() / L2linesize) / NN_SET;
-      int age = INT_MAX;
-      for (auto &scope2pers : this->scopes2info) {
-        if (scope2pers.second.isPersistent(tag)) {
-          int a = scope2pers.second.getAge(tag);
-          age = age > a ? age : a;
-        }
+    return age;
+  }
+  
+  int getCSS(const llvm::GlobalVariable *var) const {
+    int age = -1;
+    for (auto &scope2pers : this->scopes2info) {
+      if (scope2pers.second.isPersistent(var)) {
+        int a = scope2pers.second.getCSS(var);
+        age = age > a ? age : a;
       }
     }
     return age;

@@ -82,7 +82,7 @@ cl::opt<MultiCoreType> MulCType(
     cl::cat(MultiCoreCat));
 extern llvm::cl::opt<bool>
     TimingAnomalyAnalysis("Timing anomaly analysis, state splitting",
-                          cl::init(false), cl::desc("(default 'F')"),
+                          cl::init(true), cl::desc("(default 'T')"),
                           cl::cat(MultiCoreCat)
 
     );
@@ -295,12 +295,12 @@ cl::opt<unsigned> L2linesize(
     cl::cat(CacheConfigCat));
 
 cl::opt<unsigned>
-    L2assoc("ta-l2cache-assoc", cl::init(2),
+    L2assoc("ta-l2cache-assoc", cl::init(4),
             cl::desc("The associativity of the L2 cache. The default is 4"),
             cl::cat(CacheConfigCat));
 
 cl::opt<unsigned>
-    NN_SET("ta-l2cache-nsets", cl::init(64),
+    NN_SET("ta-l2cache-nsets", cl::init(32),
            cl::desc("The number of cache sets of L2 cache. The default is 128"),
            cl::cat(MultiCoreCat));
 
@@ -350,13 +350,13 @@ cl::opt<unsigned> Dnsets(
     cl::cat(CacheConfigCat));
 // 写回
 cl::opt<bool>
-    DataCacheWriteBack("ta-dcache-write-back", cl::init(true),
+    DataCacheWriteBack("ta-dcache-write-back", cl::init(false),
                        cl::desc("Enables write-back mode of the cache. The "
                                 "default is write-through (false)"),
                        cl::cat(CacheConfigCat));
 
 cl::opt<bool> DataCacheWriteAllocate(
-    "ta-dcache-write-allocate", cl::init(true),
+    "ta-dcache-write-allocate", cl::init(false),
     cl::desc("Enables write-allocate mode of the cache. The default is =false "
              "to use write-non-allocate mode"),
     cl::cat(CacheConfigCat));

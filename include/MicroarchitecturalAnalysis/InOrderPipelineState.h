@@ -117,7 +117,7 @@ public:
    * Virtual destructor
    */
   virtual ~InOrderPipelineState();
-  void getACL(Context ctx) const;
+  void getACL() const;
 
   /**
    * Container used to make the local metrics of this class
@@ -607,8 +607,11 @@ ConvergenceType InOrderPipelineState<MemoryTopology>::isConvergedAfterCycleFrom(
   return POTENTIALLY_NOT_CONVERGED;
 }
 #endif
-template <class MemoryTopology>
-void InOrderPipelineState<MemoryTopology>::getACL(Context ctx) const {
+template <class Mem> void InOrderPipelineState<Mem>::getACL() const {
+  auto &base = (const MicroArchitecturalState<
+                InOrderPipelineState<Mem>,
+                typename InOrderPipelineState<Mem>::StateDep> &)(*this);
+  Context ctx = base.getpc().getPc().second;
   auto result = this->memory.getIaccAdress();
   if (result) {
     auto [addr, CL, age] = *result;
@@ -627,15 +630,23 @@ void InOrderPipelineState<MemoryTopology>::getACL(Context ctx) const {
   result = this->memory.getDaccAdress();
   if (result) {
     auto [addr, CL, age] = *result;
-    AddrCL acl(addr, ctx, CL, age);
+    unsigned MIaddr = 0;
+    if (this->inflightInstruction[ID_EX_IND]) {
+      MIaddr = this->inflightInstruction[ID_EX_IND].get().first;
+      ctx = this->inflightInstruction[ID_EX_IND].get().second;
+    } else if (this->inflightInstruction[EX_MEM_IND]) {
+      MIaddr = this->inflightInstruction[EX_MEM_IND].get().first;
+      ctx = this->inflightInstruction[EX_MEM_IND].get().second;
+    }
+    AddrCL acl(addr, ctx, CL, age, MIaddr);
     if (AddrCList.find(acl) != AddrCList.end()) {
       auto it = AddrCList.find(acl);
       auto aclo = *it;
-      AddrCList.erase(it);    // 删除旧元素
-      acl.join(aclo);         // 修改值
+      AddrCList.erase(it);   // 删除旧元素
+      acl.join(aclo);        // 修改值
       AddrCList.insert(acl); // 重新插入
-    }else{
-      AddrCList.insert(acl); 
+    } else {
+      AddrCList.insert(acl);
     }
   }
 }
@@ -646,6 +657,7 @@ std::ostream &operator<<(std::ostream &stream,
   auto &base = (const MicroArchitecturalState<
                 InOrderPipelineState<Mem>,
                 typename InOrderPipelineState<Mem>::StateDep> &)iops;
+  iops.getACL();
   stream << base << "\n"; // 打印pc base.pc
   stream << "Fetching instruction: "
          << (iops.instructionAccessFinished ? "No" : "Yes") << "\n";

@@ -172,9 +172,16 @@ public:
   void enterScope(const PersistenceScope &scope) {}
   void leaveScope(const PersistenceScope &scope) {}
   bool isPersistent(const TagType tag) const;
-  int getAge(const TagType tag) const {
+
+  int getCSS(const TagType tag) const {
     return accessedBlocks.size() + accessedArrays.size();
   }
+
+  int getCSS(const GlobalVariable *var) const {
+    return accessedBlocks.size() + accessedArrays.size();
+  }
+
+  int getAge(const AbstractAddress addr) const { return -1; }
   bool isPersistent(const GlobalVariable *var) const;
   bool operator==(const Self &y) const;
   bool operator<(const Self &y) const;
@@ -217,9 +224,9 @@ UpdateReport *SetWiseCountingPersistence<T>::potentialUpdate(
   const GlobalVariable *array = addr.getArray();
   /* only update if we can have more accesses to array */
   if (accessedArrays.count(array) < getPerArrayBound(array)) {
-    if (accessedBlocks.size() + accessedArrays.size() >= T->ASSOCIATIVITY) {
+    if (accessedBlocks.size() + accessedArrays.size() > T->ASSOCIATIVITY) {
       this->gotoTop();
-      // std::cerr << "(" << T->ASSOCIATIVITY << ")";
+      // std::cerr << "(" <<T->LEVEL<<"|"<< T->ASSOCIATIVITY << ")";
     } else {
       accessedArrays.insert(array);
     }
@@ -234,6 +241,7 @@ template <CacheTraits *T>
 UpdateReport *SetWiseCountingPersistence<T>::update(
     const AbstractAddress addr, AccessType load_store, AnaDeps *,
     bool wantReport, const Classification assumption __attribute__((unused))) {
+  // std::cerr << "(" << T->LEVEL << "|" << T->ASSOCIATIVITY << ")";
   if (top) {
     return wantReport ? new UpdateReport : nullptr;
   }
@@ -248,7 +256,7 @@ UpdateReport *SetWiseCountingPersistence<T>::update(
   if (inserted) {
     if (accessedBlocks.size() + accessedArrays.size() > T->ASSOCIATIVITY) {
       this->gotoTop();
-      // std::cerr << "(" << T->ASSOCIATIVITY << ")";
+      // std::cerr << "(" << T->LEVEL << "|" << T->ASSOCIATIVITY << ")";
     }
   }
   return wantReport ? new UpdateReport : nullptr;

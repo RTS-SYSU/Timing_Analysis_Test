@@ -81,6 +81,8 @@ public:
 
   Classification classify(const AbstractAddress addr) const;
   int getAge(const AbstractAddress addr) const {return -1;}
+  int getCSS(const AbstractAddress addr) const { return -1; }
+  int getCSS(const GlobalVariable *var) const { return -1; }
   LruMaxAgeUpdateReport<TagType> *
   update(const AbstractAddress addr, AccessType load_store, AnaDeps *,
          bool wantReport = false, const Classification assumption = CL_UNKNOWN);

@@ -1,13 +1,7 @@
 #include "Util/GlobalVars.h"
-#include "AnalysisFramework/AnalysisDriver.h"
-#include "LLVMPasses/DispatchMemory.h"
-#include "Memory/CacheTraits.h"
-#include "Memory/LruMaxAgeAbstractCache.h"
-#include "Memory/LruMinAgeAbstractCache.h"
 #include "PathAnalysis/LoopBoundInfo.h"
 #include "PreprocessingAnalysis/AddressInformation.h"
 #include "Util/muticoreinfo.h"
-#include "llvm/IR/Function.h"
 #include <string>
 #include <vector>
 
@@ -20,10 +14,10 @@ int L2MISS = 0;
 int STBUS = 0;
 int BOUND = 0;
 
-
-std::map<std::string, std::set<functionaddr*>> functiontofs;
+std::map<std::string, std::set<functionaddr *>> functiontofs;
 std::map<std::string, functionaddr *> getfunctionaddr;
 std::set<AddrCL> AddrCList;
+std::map<TimingAnalysisPass::PersistenceScope, std::set<AddrPS>> AddrPSList;
 
 TimingAnalysisPass::AddressInformation *glAddrInfo = NULL;
 std::set<const MachineBasicBlock *> mylist;
