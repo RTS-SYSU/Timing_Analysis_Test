@@ -79,11 +79,16 @@ public:
   void enterScope(const PersistenceScope &scope) {}
   void leaveScope(const PersistenceScope &scope) {}
   bool isPersistent(const TagType tag) const;
-  int getAge(const TagType tag) const {
+
+  int getCSS(const TagType tag) const {
     if (conflicts.count(tag))
       return conflicts.at(tag);
     return INT_MAX;
   }
+  
+  int getCSS(const GlobalVariable *var) const { return INT_MAX; }
+
+  int getAge(const AbstractAddress addr) const { return -1; }
   bool isPersistent(const GlobalVariable *var) const;
   bool operator==(const Self &y) const;
   bool operator<(const Self &y) const;

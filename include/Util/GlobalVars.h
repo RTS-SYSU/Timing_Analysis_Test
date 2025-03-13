@@ -3,13 +3,14 @@
 
 #include "Memory/Classification.h"
 #include "PreprocessingAnalysis/AddressInformation.h"
+#include "Util/PersistenceScope.h"
 #include "muticoreinfo.h"
-#include "llvm/CodeGen/TargetRegisterInfo.h"
+#include "llvm/CodeGen/MachineInstr.h"
+#include "llvm/TableGen/Record.h"
 #include <ios>
 #include <iostream>
+#include <ostream>
 #include <string>
-#include <system_error>
-#include <type_traits>
 #include <vector>
 
 extern Multicoreinfo mcif;
@@ -52,11 +53,13 @@ class AddrCL {
 public:
   AddrCL(TimingAnalysisPass::AbstractAddress addr,
          TimingAnalysisPass::Context ctxa,
-         TimingAnalysisPass::dom::cache::Classification cl, int a) {
+         TimingAnalysisPass::dom::cache::Classification cl, int a,
+         unsigned aI = 0) {
     this->address = addr;
     this->ctx = ctxa;
     this->CL = cl;
-    this->age=a;
+    this->age = a;
+    this->MIAddr = aI;
   }
 
   TimingAnalysisPass::AbstractAddress address =
@@ -64,52 +67,100 @@ public:
   int age;
   TimingAnalysisPass::dom::cache::Classification CL;
   TimingAnalysisPass::Context ctx;
+  unsigned MIAddr;
+
   // CL不一样就join
   bool operator==(const AddrCL &other) const {
-    return this->address == other.address && this->ctx == other.ctx;
+    return this->address == other.address && this->ctx == other.ctx &&
+           this->MIAddr == other.MIAddr;
   }
   bool operator<(const AddrCL &other) const {
-    if (this->CL < other.CL) {
-      return true;
-    }
-    if (this->age < other.age) {
-      return true;
-    }
     if (this->address < other.address) {
       return true;
     }
-    if(this->ctx<other.ctx){
+    if (this->ctx < other.ctx) {
       return true;
     }
-
+    if (this->MIAddr < other.MIAddr) {
+      return true;
+    }
     return false;
   }
   // 打印函数
-  void print() const {
-    std::cout << "Address: " << std::hex << this->address << " : [" << this->CL
-              << "  | age : " << std::dec << this->age << "\nContex: " << ctx
-              << "]\n";
+  std::ostream &print(std::ostream &stream) const {
+    stream << "Address: " << std::hex << this->address << " : [" << this->CL
+           << "  | age : " << std::dec << this->age << "\nContex: " << ctx
+           << "|"<<this->MIAddr<<"]\n";
+    return stream;
   }
-  friend std::ostream& operator<<(std::ostream& os, AddrCL obj){
-    os << "Address: " << std::hex << obj.address << " : [" << obj.CL
-              << "  | age : " << std::dec << obj.age << "\nContex: " << obj.ctx
-              << "]\n";
-    return os;
-  }
-
-  bool join(AddrCL other) {
+  bool join(AddrCL &other) {
     if (*this == other) {
-      this->CL.join(other.CL);
-      this->age = this->age > other.age ? this->age : other.age;
+      if (this->CL < other.CL) {
+        this->CL = other.CL;
+        this->age = other.age;
+      }
     } else {
       std::cerr << "Addresses and contexts that do not match cannot be merged";
       return false;
     }
   }
 };
-extern std::set<AddrCL> IAddrCList;
-extern std::set<AddrCL> DAddrCList;
 
+class AddrPS {
+public:
+  AddrPS(TimingAnalysisPass::AbstractAddress addr, int a, int l)
+      : address(addr), CS_size(a), LEVEL(l) {}
+
+  TimingAnalysisPass::AbstractAddress address =
+      TimingAnalysisPass::AbstractAddress((unsigned)0);
+  int CS_size; // |CS|
+  int LEVEL;   // cache level
+
+  bool operator==(const AddrPS &other) const {
+    return this->address == other.address && this->LEVEL == other.LEVEL;
+  }
+
+  bool operator<(const AddrPS &other) const {
+    if (this->address < other.address) {
+      return true;
+    }
+    if (this->LEVEL < other.LEVEL) {
+      return true;
+    }
+    // if (this->CS_size < other.CS_size) {
+    //   return true;
+    // }
+    return false;
+  }
+  bool join(AddrPS &other) {
+    if (*this == other) {
+      if (this->CS_size < other.CS_size)
+        this->CS_size = other.CS_size;
+    } else {
+      std::cerr << "Addresses and contexts that do not match cannot be merged";
+      return false;
+    }
+  }
+
+  // bool join(AddrPS other) {
+  //   if (*this == other) {
+  //     this->CS_size =
+  //         this->CS_size > other.CS_size ? this->CS_size : other.CS_size;
+  //   } else {
+  //     std::cerr << "Address that do not match cannot be merged";
+  //     return false;
+  //   }
+  // }
+  // 打印函数
+};
+inline std::ostream &operator<<(std::ostream &stream, const AddrPS &ads) {
+  stream << "[ Address : " << std::hex << ads.address << std::dec << " | L"
+         << ads.LEVEL << " | " << ads.CS_size << "]\n";
+  return stream;
+}
+extern std::set<AddrCL> AddrCList;
+extern std::map<TimingAnalysisPass::PersistenceScope, std::set<AddrPS>>
+    AddrPSList;
 extern std::map<std::string, std::set<functionaddr *>> functiontofs;
 extern std::map<std::string, functionaddr *> getfunctionaddr;
 extern std::map<std::string, unsigned> func2corenum;

@@ -55,6 +55,7 @@
 #include "llvm/Support/MemoryBuffer.h"
 #include <cmath>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <list>
 #include <sstream>
@@ -271,7 +272,7 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
   Myfile << "###LiangYun's Addr###\n";
   for (const auto &entry : functiontofs) {
     Myfile << "EntryPoint: " << entry.first << "\n";
-    for(const auto &func : entry.second){
+    for (const auto &func : entry.second) {
       func->print(Myfile);
     }
   }
@@ -334,10 +335,11 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
       } else {
         assert(0 && "Unsupported ISA for LLVMTA");
       }
+      PersistenceScopeInfo::deletper();
     }
   }
-  // 打印 set 内容
-  if(ZWDebug){
+
+  if (ZWDebug) {
     Myfile.open("ZW_ACL.txt", ios_base::app);
     Myfile << "###Instruction ACL###\n";
     for (const auto &entry : IAddrCList) {
@@ -350,331 +352,349 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     Myfile.close();
   }
 
-  if(MulCType==MultiCoreType::ZhangW){
-    assert((MuArchType==MicroArchitecturalType::INORDER
-      || MuArchType==MicroArchitecturalType::STRICTINORDER)
-      && "Currently do not support other arch, because of timing anomaly");
+  if (MulCType == MultiCoreType::ZhangW) {
+    assert((MuArchType == MicroArchitecturalType::INORDER ||
+            MuArchType == MicroArchitecturalType::STRICTINORDER) &&
+           "Currently do not support other arch, because of timing anomaly");
     // 前面单核分析完成了XClass、ACL收集，此处转化到mcif中
     writeAclToMcif();
     // 进行UR和CEOP的获取
     for (unsigned i = 0; i < CoreNums; ++i) {
-      outs() << " -> UR Analysis for core: " << i; 
+      outs() << " -> UR Analysis for core: " << i;
 
       for (std::string &functionName : mcif.coreinfo[i]) {
         outs() << " entry point: " << functionName << '\n';
         mcif.URCalculation(i, functionName);
-        outs() << "Core-" << i << " Func: " << functionName <<
-          " have " << mcif.CEOPs[i][functionName].size() << " CEOP(s)"
-          << '\n';
+        outs() << "Core-" << i << " Func: " << functionName << " have "
+               << mcif.CEOPs[i][functionName].size() << " CEOP(s)" << '\n';
       }
     }
 
     // 现在先不实现生命周期迭代
     outs() << " -> WCET Inter Analysis start\n";
     for (unsigned local = 0; local < CoreNums; ++local) {
-      for (std::string &localFunc : mcif.coreinfo[local]){
+      for (std::string &localFunc : mcif.coreinfo[local]) {
         // 选出本地task
         unsigned wceetOfTSum = 0;
         for (unsigned inter = 0; inter < CoreNums; ++inter) { // interference
-          if (local==inter) continue;
-          for (std::string &interFunc : mcif.getInitConflictFunction(local, localFunc)){
+          if (local == inter)
+            continue;
+          for (std::string &interFunc :
+               mcif.getInitConflictFunction(local, localFunc)) {
             // 这个Init的就是返回几乎全部，反正是第一轮
             // 要考虑函数可能执行多次，这里默认getInitConflictFunction会多次返回
             // 选出冲突task
             unsigned wceetOf2T = 0; // 两个Task之间的WCEET
-            for (const CEOP &localP : mcif.CEOPs[local][localFunc]){
-              for (const CEOP &interP : mcif.CEOPs[inter][interFunc]){
+            for (const CEOP &localP : mcif.CEOPs[local][localFunc]) {
+              for (const CEOP &interP : mcif.CEOPs[inter][interFunc]) {
                 // 选出两条Path, 开始dp，横干扰、竖本地
                 unsigned localPLen = localP.URs.size();
                 unsigned interPLen = interP.URs.size();
                 unsigned ArvVal[localPLen][interPLen] = {0};
 
-                for(unsigned i=1;i<localPLen;i++){
-                  ArvVal[i][0] = mcif.getFValue(local, localP, i, inter, interP, 0) 
-                    + ArvVal[i-1][0]; // 感觉paper公式有问题，改成累加
+                for (unsigned i = 1; i < localPLen; i++) {
+                  ArvVal[i][0] =
+                      mcif.getFValue(local, localP, i, inter, interP, 0) +
+                      ArvVal[i - 1][0]; // 感觉paper公式有问题，改成累加
                 }
-                for(unsigned i=1;i<interPLen;i++){
-                  ArvVal[0][i] = mcif.getFValue(local, localP, 0, inter, interP, i)
-                    + ArvVal[0][i-1];
+                for (unsigned i = 1; i < interPLen; i++) {
+                  ArvVal[0][i] =
+                      mcif.getFValue(local, localP, 0, inter, interP, i) +
+                      ArvVal[0][i - 1];
                 }
-                for(unsigned i=1;i<localPLen;i++){
-                  for(unsigned j=1;j<interPLen;j++){
-                    ArvVal[i][j] = max(ArvVal[i-1][j], ArvVal[i][j-1]) 
-                      + mcif.getFValue(local, localP, i, inter, interP, j);
+                for (unsigned i = 1; i < localPLen; i++) {
+                  for (unsigned j = 1; j < interPLen; j++) {
+                    ArvVal[i][j] =
+                        max(ArvVal[i - 1][j], ArvVal[i][j - 1]) +
+                        mcif.getFValue(local, localP, i, inter, interP, j);
                   }
                 }
-                wceetOf2T = max(wceetOf2T, ArvVal[localPLen-1][interPLen-1]);
+                wceetOf2T =
+                    max(wceetOf2T, ArvVal[localPLen - 1][interPLen - 1]);
               }
             }
-            wceetOf2T *= Latency; // BG Mem的延迟值 from Command Line, 但感觉很容易重名
+            wceetOf2T *=
+                Latency; // BG Mem的延迟值 from Command Line, 但感觉很容易重名
             wceetOfTSum += wceetOf2T; // 不同核所有冲突的函数都加上
           }
         }
         mcif.currWcetInter[local][localFunc] = wceetOfTSum;
-        outs()<<"Core-"<<local<<" Func:"<<localFunc<<
-          " 's WCEET is "<<wceetOfTSum<<"\n";
+        outs() << "Core-" << local << " Func:" << localFunc << " 's WCEET is "
+               << wceetOfTSum << "\n";
       }
     }
 
     // WCET_{sum} = WCET_{intra} + WCEET
     std::ofstream myfile;
     std::string fileName = "ZW_Output.txt";
-    myfile.open(fileName, std::ios_base::app); 
+    myfile.open(fileName, std::ios_base::app);
     for (unsigned local = 0; local < CoreNums; ++local) {
-      for (std::string &localFunc : mcif.coreinfo[local]){
+      for (std::string &localFunc : mcif.coreinfo[local]) {
         unsigned wcet_intra = mcif.currWcetIntra[local][localFunc];
         unsigned wceet = mcif.currWcetInter[local][localFunc];
-        myfile << "Core-"<<local<<" F-"<<localFunc<<
-          " intra:"<<wcet_intra<<" wceet:"<<wceet<<std::endl;
+        myfile << "Core-" << local << " F-" << localFunc
+               << " intra:" << wcet_intra << " wceet:" << wceet << std::endl;
+      }
+    }
+    // 打印 set 内容
+    std::ofstream myfile;
+    myfile.open("CLlist.txt", ios_base::trunc);
+    for (const auto &entry : AddrCList) {
+      entry.print(myfile);
+    }
+    for (const auto &entry : AddrPSList) {
+      myfile << "Scop:" << entry.first << "\n";
+      for (auto a : entry.second) {
+        myfile << a;
+      }
+    }
+    myfile.close();
+
+    // if (!machineFunctionCollector->hasFunctionByName(AnalysisEntryPoint)) {
+    //   outs() << "No Timing Analysis Run. There is no entry point: "
+    //          << AnalysisEntryPoint << "\n";
+    //   exit(1);
+    // }
+
+    // ofstream Myfile;
+
+    // // Default analysis type: timing
+    // if (AnaType.getBits() == 0) {
+    //   AnaType.addValue(AnalysisType::TIMING);
+    // }
+
+    // // Statistics &Stats = Statistics::getInstance();
+    // // Stats.startMeasurement("Complete Analysis");
+
+    // if (CoRunnerSensitive) {
+    //   for (int I = 0; I <= UntilIterationMeasurement; ++I) {
+    //     std::string MeasurementId = "Until Iteration ";
+    //     MeasurementId += std::to_string(I);
+    //     // Stats.startMeasurement(MeasurementId);
+    //   }
+    // }
+
+    // if (OutputExtFuncAnnotationFile) {
+    //   Myfile.open("ExtFuncAnnotations.csv", ios_base::trunc);
+    //   CallGraph::getGraph().dumpUnknownExternalFunctions(Myfile);
+    //   Myfile.close();
+    //   return false;
+    // }
+    // if (!QuietMode) {
+    //   Myfile.open("AnnotatedHeuristics.txt", ios_base::trunc);
+    //   DirectiveHeuristicsPassInstance->dump(Myfile);
+    //   Myfile.close();
+
+    //   // Myfile.open("PersistenceScopes.txt", ios_base::trunc);
+    //   // PersistenceScopeInfo::getInfo().dump(Myfile);
+    //   // Myfile.close();
+
+    //   Myfile.open("CallGraph.txt", ios_base::trunc);
+    //   CallGraph::getGraph().dump(Myfile);
+    //   Myfile.close();
+    // }
+    // VERBOSE_PRINT(" -> Finished Preprocessing Phase\n");
+
+    // for (auto Clist : taskMap) {
+    //   outs() << "Timing Analysis for Core: " << Clist.first << "\n";
+    //   CurrentCore = Clist.first;
+    //   for (string entry : Clist.second) {
+    //     AnalysisEntryPoint = entry;
+    //     outs() << "Timing Analysis for entry point: " << AnalysisEntryPoint
+    //            << "\n";
+
+    //     Myfile.open("PersistenceScopes.txt", ios_base::trunc);
+    //     PersistenceScopeInfo::getInfo().dump(Myfile);
+    //     Myfile.close();
+
+    //     // Dispatch the value analysis
+    //     auto Arch = getTargetMachine().getTargetTriple().getArch();
+    //     if (Arch == Triple::ArchType::arm) {
+    //       dispatchValueAnalysis<Triple::ArchType::arm>();
+    //     } else if (Arch == Triple::ArchType::riscv32) {
+    //       dispatchValueAnalysis<Triple::ArchType::riscv32>();
+    //     } else {
+    //       assert(0 && "Unsupported ISA for LLVMTA");
+    //     }
+    //   }
+    // }
+
+    return false;
+  }
+
+  template <Triple::ArchType ISA>
+  void TimingAnalysisMain::dispatchValueAnalysis() {
+    ofstream Myfile;
+
+    std::tuple<> NoDep;
+    AnalysisDriverInstr<ConstantValueDomain<ISA>> ConstValAna(
+        AnalysisEntryPoint, NoDep);
+    auto CvAnaInfo = ConstValAna.runAnalysis();
+
+    LoopBoundInfo->computeLoopBoundFromCVDomain(*CvAnaInfo);
+
+    if (OutputLoopAnnotationFile) {
+      ofstream Myfile2;
+      Myfile.open("CtxSensLoopAnnotations.csv", ios_base::trunc);
+      Myfile2.open("LoopAnnotations.csv", ios_base::trunc);
+      LoopBoundInfo->dumpNonUpperBoundLoops(Myfile, Myfile2);
+      Myfile2.close();
+      Myfile.close();
+      return;
+    }
+
+    for (auto BoundsFile : ManualLoopBounds) {
+      LoopBoundInfo->parseManualUpperLoopBounds(BoundsFile.c_str());
+    }
+    // jjy:循环下界
+    if (ParallelPrograms) {
+      for (auto BoundsFile : ManuallowerLoopBounds) {
+        LoopBoundInfo->parseManualLowerLoopBounds(BoundsFile.c_str());
+      }
+    }
+
+    if (!QuietMode) {
+      Myfile.open("LoopBounds.txt", ios_base::trunc);
+      LoopBoundInfo->dump(Myfile);
+      Myfile.close();
+
+      Myfile.open("ConstantValueAnalysis.txt", ios_base::trunc);
+      CvAnaInfo->dump(Myfile);
+      Myfile.close();
+    }
+
+    AddressInformationImpl<ConstantValueDomain<ISA>> AddrInfo(*CvAnaInfo);
+
+    if (!QuietMode) {
+      Myfile.open("AddressInformation.txt", ios_base::trunc);
+      AddrInfo.dump(Myfile);
+      Myfile.close();
+    }
+
+    VERBOSE_PRINT(" -> Finished Value & Address Analysis\n");
+
+    // Set and check the parameters of the instruction and data cache
+    icacheConf.LINE_SIZE = Ilinesize;
+    icacheConf.ASSOCIATIVITY = Iassoc;
+    icacheConf.N_SETS = Insets;
+    icacheConf.LEVEL = 1;
+    icacheConf.checkParams();
+
+    dcacheConf.LINE_SIZE = Dlinesize;
+    dcacheConf.ASSOCIATIVITY = Dassoc;
+    dcacheConf.N_SETS = Dnsets;
+    dcacheConf.WRITEBACK = DataCacheWriteBack;
+    dcacheConf.WRITEALLOCATE = DataCacheWriteAllocate;
+    dcacheConf.LEVEL = 1;
+    dcacheConf.checkParams();
+
+    dcacheConf.LINE_SIZE = L2linesize;
+    l2cacheConf.LINE_SIZE = Dlinesize;
+    l2cacheConf.N_SETS = NN_SET;
+    l2cacheConf.ASSOCIATIVITY = L2assoc;
+    l2cacheConf.LATENCY = L2Latency;
+    l2cacheConf.LEVEL = 2;
+    l2cacheConf.checkParams();
+
+    // WCET
+    // Select the analysis to execute
+    dispatchAnalysisType(AddrInfo);
+
+    // No need for constant value information
+    delete CvAnaInfo;
+
+    // // Release the call graph instance
+    // CallGraph::getGraph().releaseInstance();
+
+    // Write results and statistics
+    // Statistics &Stats = Statistics::getInstance();
+    // AnalysisResults &Ar = AnalysisResults::getInstance();
+
+    // Stats.stopMeasurement("Complete Analysis");
+
+    Myfile.open("Statistics.txt", ios_base::trunc);
+    // Stats.dump(Myfile);
+    Myfile.close();
+
+    Myfile.open("TotalBound.xml", ios_base::trunc);
+    // Ar.dump(Myfile);
+    Myfile.close();
+  }
+
+  void TimingAnalysisMain::dispatchAnalysisType(AddressInformation &
+                                                AddressInfo) {
+    AnalysisResults &Ar = AnalysisResults::getInstance();
+    // Timing & CRPD calculation need normal muarch analysis first
+    if (AnaType.isSet(AnalysisType::TIMING) ||
+        AnaType.isSet(AnalysisType::CRPD)) {
+      auto Bound = dispatchTimingAnalysis(AddressInfo);
+      // Ar.registerResult("total", Bound);
+      if (Bound) {
+        outs() << "Calculated Timing Bound: "
+               << llvm::format("%-20.0f", Bound.get().ub) << "\n";
+      } else {
+        outs() << "Calculated Timing Bound: infinite\n";
+      }
+    }
+    if (AnaType.isSet(AnalysisType::L1ICACHE)) {
+      auto Bound = dispatchCacheAnalysis(AnalysisType::L1ICACHE, AddressInfo);
+      // Ar.registerResult("icache", Bound);
+      if (Bound) {
+        outs() << "Calculated " << "Instruction Cache Miss Bound: "
+               << llvm::format("%-20.0f", Bound.get().ub) << "\n";
+      } else {
+        outs() << "Calculated " << "Instruction Cache Miss Bound: infinite\n";
+      }
+    }
+    if (AnaType.isSet(AnalysisType::L1DCACHE)) {
+      auto Bound = dispatchCacheAnalysis(AnalysisType::L1DCACHE, AddressInfo);
+      // Ar.registerResult("dcache", Bound);
+      if (Bound) {
+        outs() << "Calculated " << "Data Cache Miss Bound: "
+               << llvm::format("%-20.0f", Bound.get().ub) << "\n";
+      } else {
+        outs() << "Calculated " << "Data Cache Miss Bound: infinite\n";
       }
     }
   }
 
-  // if (!machineFunctionCollector->hasFunctionByName(AnalysisEntryPoint)) {
-  //   outs() << "No Timing Analysis Run. There is no entry point: "
-  //          << AnalysisEntryPoint << "\n";
-  //   exit(1);
-  // }
+  ///////////////////////////////////////////////////////////////////////////////
+  /// Timing Analysis
+  /// ///////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////////
 
-  // ofstream Myfile;
-
-  // // Default analysis type: timing
-  // if (AnaType.getBits() == 0) {
-  //   AnaType.addValue(AnalysisType::TIMING);
-  // }
-
-  // // Statistics &Stats = Statistics::getInstance();
-  // // Stats.startMeasurement("Complete Analysis");
-
-  // if (CoRunnerSensitive) {
-  //   for (int I = 0; I <= UntilIterationMeasurement; ++I) {
-  //     std::string MeasurementId = "Until Iteration ";
-  //     MeasurementId += std::to_string(I);
-  //     // Stats.startMeasurement(MeasurementId);
-  //   }
-  // }
-
-  // if (OutputExtFuncAnnotationFile) {
-  //   Myfile.open("ExtFuncAnnotations.csv", ios_base::trunc);
-  //   CallGraph::getGraph().dumpUnknownExternalFunctions(Myfile);
-  //   Myfile.close();
-  //   return false;
-  // }
-  // if (!QuietMode) {
-  //   Myfile.open("AnnotatedHeuristics.txt", ios_base::trunc);
-  //   DirectiveHeuristicsPassInstance->dump(Myfile);
-  //   Myfile.close();
-
-  //   // Myfile.open("PersistenceScopes.txt", ios_base::trunc);
-  //   // PersistenceScopeInfo::getInfo().dump(Myfile);
-  //   // Myfile.close();
-
-  //   Myfile.open("CallGraph.txt", ios_base::trunc);
-  //   CallGraph::getGraph().dump(Myfile);
-  //   Myfile.close();
-  // }
-  // VERBOSE_PRINT(" -> Finished Preprocessing Phase\n");
-
-  // for (auto Clist : taskMap) {
-  //   outs() << "Timing Analysis for Core: " << Clist.first << "\n";
-  //   CurrentCore = Clist.first;
-  //   for (string entry : Clist.second) {
-  //     AnalysisEntryPoint = entry;
-  //     outs() << "Timing Analysis for entry point: " << AnalysisEntryPoint
-  //            << "\n";
-
-  //     Myfile.open("PersistenceScopes.txt", ios_base::trunc);
-  //     PersistenceScopeInfo::getInfo().dump(Myfile);
-  //     Myfile.close();
-
-  //     // Dispatch the value analysis
-  //     auto Arch = getTargetMachine().getTargetTriple().getArch();
-  //     if (Arch == Triple::ArchType::arm) {
-  //       dispatchValueAnalysis<Triple::ArchType::arm>();
-  //     } else if (Arch == Triple::ArchType::riscv32) {
-  //       dispatchValueAnalysis<Triple::ArchType::riscv32>();
-  //     } else {
-  //       assert(0 && "Unsupported ISA for LLVMTA");
-  //     }
-  //   }
-  // }
-
-  return false;
-}
-
-template <Triple::ArchType ISA>
-void TimingAnalysisMain::dispatchValueAnalysis() {
-  ofstream Myfile;
-
-  std::tuple<> NoDep;
-  AnalysisDriverInstr<ConstantValueDomain<ISA>> ConstValAna(AnalysisEntryPoint,
-                                                            NoDep);
-  auto CvAnaInfo = ConstValAna.runAnalysis();
-
-  LoopBoundInfo->computeLoopBoundFromCVDomain(*CvAnaInfo);
-
-  if (OutputLoopAnnotationFile) {
-    ofstream Myfile2;
-    Myfile.open("CtxSensLoopAnnotations.csv", ios_base::trunc);
-    Myfile2.open("LoopAnnotations.csv", ios_base::trunc);
-    LoopBoundInfo->dumpNonUpperBoundLoops(Myfile, Myfile2);
-    Myfile2.close();
-    Myfile.close();
-    return;
-  }
-
-  for (auto BoundsFile : ManualLoopBounds) {
-    LoopBoundInfo->parseManualUpperLoopBounds(BoundsFile.c_str());
-  }
-  // jjy:循环下界
-  if (ParallelPrograms) {
-    for (auto BoundsFile : ManuallowerLoopBounds) {
-      LoopBoundInfo->parseManualLowerLoopBounds(BoundsFile.c_str());
+  boost::optional<BoundItv> TimingAnalysisMain::dispatchTimingAnalysis(
+      AddressInformation & AddressInfo) {
+    switch (MuArchType) {
+    case MicroArchitecturalType::FIXEDLATENCY:
+      assert(MemTopType == MemoryTopologyType::NONE &&
+             "Fixed latency has no external memory");
+      return dispatchFixedLatencyTimingAnalysis();
+    case MicroArchitecturalType::PRET:
+      return dispatchPretTimingAnalysis(AddressInfo);
+    case MicroArchitecturalType::INORDER:
+    case MicroArchitecturalType::STRICTINORDER:
+      return dispatchInOrderTimingAnalysis(AddressInfo);
+    case MicroArchitecturalType::OUTOFORDER:
+      return dispatchOutOfOrderTimingAnalysis(AddressInfo);
+    default:
+      errs() << "No known microarchitecture chosen.\n";
+      return boost::none;
     }
   }
 
-  if (!QuietMode) {
-    Myfile.open("LoopBounds.txt", ios_base::trunc);
-    LoopBoundInfo->dump(Myfile);
-    Myfile.close();
-
-    Myfile.open("ConstantValueAnalysis.txt", ios_base::trunc);
-    CvAnaInfo->dump(Myfile);
-    Myfile.close();
-  }
-
-  AddressInformationImpl<ConstantValueDomain<ISA>> AddrInfo(*CvAnaInfo);
-
-  if (!QuietMode) {
-    Myfile.open("AddressInformation.txt", ios_base::trunc);
-    AddrInfo.dump(Myfile);
-    Myfile.close();
-  }
-
-  VERBOSE_PRINT(" -> Finished Value & Address Analysis\n");
-
-  // Set and check the parameters of the instruction and data cache
-  icacheConf.LINE_SIZE = Ilinesize;
-  icacheConf.ASSOCIATIVITY = Iassoc;
-  icacheConf.N_SETS = Insets;
-  icacheConf.LEVEL = 1;
-  icacheConf.checkParams();
-
-  dcacheConf.LINE_SIZE = Dlinesize;
-  dcacheConf.ASSOCIATIVITY = Dassoc;
-  dcacheConf.N_SETS = Dnsets;
-  dcacheConf.WRITEBACK = DataCacheWriteBack;
-  dcacheConf.WRITEALLOCATE = DataCacheWriteAllocate;
-  dcacheConf.LEVEL = 1;
-  dcacheConf.checkParams();
-
-  dcacheConf.LINE_SIZE = L2linesize;
-  l2cacheConf.LINE_SIZE = Dlinesize;
-  l2cacheConf.N_SETS = NN_SET;
-  l2cacheConf.ASSOCIATIVITY = L2assoc;
-  l2cacheConf.LATENCY = L2Latency;
-  l2cacheConf.LEVEL = 2;
-  l2cacheConf.checkParams();
-
-  // WCET
-  // Select the analysis to execute
-  dispatchAnalysisType(AddrInfo);
-
-  // No need for constant value information
-  delete CvAnaInfo;
-
-  // // Release the call graph instance
-  // CallGraph::getGraph().releaseInstance();
-
-  // Write results and statistics
-  // Statistics &Stats = Statistics::getInstance();
-  // AnalysisResults &Ar = AnalysisResults::getInstance();
-
-  // Stats.stopMeasurement("Complete Analysis");
-
-  Myfile.open("Statistics.txt", ios_base::trunc);
-  // Stats.dump(Myfile);
-  Myfile.close();
-
-  Myfile.open("TotalBound.xml", ios_base::trunc);
-  // Ar.dump(Myfile);
-  Myfile.close();
-}
-
-void TimingAnalysisMain::dispatchAnalysisType(AddressInformation &AddressInfo) {
-  AnalysisResults &Ar = AnalysisResults::getInstance();
-  // Timing & CRPD calculation need normal muarch analysis first
-  if (AnaType.isSet(AnalysisType::TIMING) ||
-      AnaType.isSet(AnalysisType::CRPD)) {
-    auto Bound = dispatchTimingAnalysis(AddressInfo);
-    // Ar.registerResult("total", Bound);
-    if (Bound) {
-      outs() << "Calculated Timing Bound: "
-             << llvm::format("%-20.0f", Bound.get().ub) << "\n";
-    } else {
-      outs() << "Calculated Timing Bound: infinite\n";
+  boost::optional<BoundItv> TimingAnalysisMain::dispatchCacheAnalysis(
+      AnalysisType Anatype, AddressInformation & AddressInfo) {
+    switch (MuArchType) {
+    case MicroArchitecturalType::INORDER:
+    case MicroArchitecturalType::STRICTINORDER:
+      return dispatchInOrderCacheAnalysis(Anatype, AddressInfo);
+    default:
+      errs() << "Unsupported microarchitecture for standalone cache "
+                "analysis.\n";
+      return boost::none;
     }
   }
-  if (AnaType.isSet(AnalysisType::L1ICACHE)) {
-    auto Bound = dispatchCacheAnalysis(AnalysisType::L1ICACHE, AddressInfo);
-    // Ar.registerResult("icache", Bound);
-    if (Bound) {
-      outs() << "Calculated " << "Instruction Cache Miss Bound: "
-             << llvm::format("%-20.0f", Bound.get().ub) << "\n";
-    } else {
-      outs() << "Calculated " << "Instruction Cache Miss Bound: infinite\n";
-    }
-  }
-  if (AnaType.isSet(AnalysisType::L1DCACHE)) {
-    auto Bound = dispatchCacheAnalysis(AnalysisType::L1DCACHE, AddressInfo);
-    // Ar.registerResult("dcache", Bound);
-    if (Bound) {
-      outs() << "Calculated " << "Data Cache Miss Bound: "
-             << llvm::format("%-20.0f", Bound.get().ub) << "\n";
-    } else {
-      outs() << "Calculated " << "Data Cache Miss Bound: infinite\n";
-    }
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// Timing Analysis
-/// ///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-boost::optional<BoundItv>
-TimingAnalysisMain::dispatchTimingAnalysis(AddressInformation &AddressInfo) {
-  switch (MuArchType) {
-  case MicroArchitecturalType::FIXEDLATENCY:
-    assert(MemTopType == MemoryTopologyType::NONE &&
-           "Fixed latency has no external memory");
-    return dispatchFixedLatencyTimingAnalysis();
-  case MicroArchitecturalType::PRET:
-    return dispatchPretTimingAnalysis(AddressInfo);
-  case MicroArchitecturalType::INORDER:
-  case MicroArchitecturalType::STRICTINORDER:
-    return dispatchInOrderTimingAnalysis(AddressInfo);
-  case MicroArchitecturalType::OUTOFORDER:
-    return dispatchOutOfOrderTimingAnalysis(AddressInfo);
-  default:
-    errs() << "No known microarchitecture chosen.\n";
-    return boost::none;
-  }
-}
-
-boost::optional<BoundItv>
-TimingAnalysisMain::dispatchCacheAnalysis(AnalysisType Anatype,
-                                          AddressInformation &AddressInfo) {
-  switch (MuArchType) {
-  case MicroArchitecturalType::INORDER:
-  case MicroArchitecturalType::STRICTINORDER:
-    return dispatchInOrderCacheAnalysis(Anatype, AddressInfo);
-  default:
-    errs() << "Unsupported microarchitecture for standalone cache "
-              "analysis.\n";
-    return boost::none;
-  }
-}
 
 } // namespace TimingAnalysisPass
 

@@ -371,7 +371,7 @@ private:
     OngoingAccess(Access acc)
         : access(acc), phase(AccessPhase::WaitForSTART), bgmemStall(false),
           bgMemAccessId(0), bgl2AccessId(0), l1timeBlocked(0), l2timeBlocked(0),
-          cl(CL_BOT),age1(-1),age2(-1) {}
+          cl(CL_BOT), age1(-1), age2(-1) {}
   };
 
   struct MemoryComponent {
@@ -395,7 +395,6 @@ private:
     unsigned nmisses;
     // Collect the number of stores that access the bus in this basic block
     unsigned numStoreBusAccess;
-
 
     // Constructor
     MemoryComponent(AbstractCache *cache)
@@ -798,11 +797,14 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
           OngoingAccess(instructionComponent.waitingQueue.front());
       instructionComponent.waitingQueue.pop_front();
 
-      instructionComponent.ongoingAccess.get().age1 =
-          instructionComponent.cache->getAge(
-              instructionComponent.ongoingAccess.get().access.addr);
-      instructionComponent.ongoingAccess.get().age2 = L2Component.cache->getAge(
-          instructionComponent.ongoingAccess.get().access.addr);
+      if (MulCType == MultiCoreType::ZhangW) {
+        instructionComponent.ongoingAccess.get().age1 =
+            instructionComponent.cache->getAge(
+                instructionComponent.ongoingAccess.get().access.addr);
+        instructionComponent.ongoingAccess.get().age2 =
+            L2Component.cache->getAge(
+                instructionComponent.ongoingAccess.get().access.addr);
+      }
 
       // check cache for hit/l2hit/l2miss/l2unknown
       Classification L1 = instructionComponent.cache->classify(
@@ -821,19 +823,16 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
           }
           this->processInstrCacheAccess(CL2_HIT);
         } else {
-          if (L2 == CL_UNKNOWN) {
-            if (TimingAnomalyAnalysis) {
-              if (L1 == CL_UNKNOWN) {
-                // 时序异常
-                JJYSeparateCachesMemoryTopology l2hit(*this);
-                l2hit.processInstrCacheAccess(CL_HIT);
-                resultList.push_back(l2hit);
-              } else {
-                JJYSeparateCachesMemoryTopology l3hit(*this);
-                l3hit.processInstrCacheAccess(CL2_HIT);
-                resultList.push_back(l3hit);
-              }
+          if (L2 == CL_UNKNOWN && TimingAnomalyAnalysis) {
+            if (L1 == CL_UNKNOWN) {
+              // 时序异常
+              JJYSeparateCachesMemoryTopology l2hit(*this);
+              l2hit.processInstrCacheAccess(CL_HIT);
+              resultList.push_back(l2hit);
             }
+            JJYSeparateCachesMemoryTopology l3hit(*this);
+            l3hit.processInstrCacheAccess(CL2_HIT);
+            resultList.push_back(l3hit);
           }
           this->processInstrCacheAccess(CL2_MISS);
         }
@@ -906,11 +905,13 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
       dataComponent.ongoingAccess =
           OngoingAccess(dataComponent.waitingQueue.front());
       dataComponent.waitingQueue.pop_front();
-      //get the age
-      dataComponent.ongoingAccess.get().age1 = dataComponent.cache->getAge(
-          dataComponent.ongoingAccess.get().access.addr);
-      dataComponent.ongoingAccess.get().age2 = L2Component.cache->getAge(
-          dataComponent.ongoingAccess.get().access.addr);
+      if (MulCType == MultiCoreType::ZhangW) {
+        // get the age
+        dataComponent.ongoingAccess.get().age1 = dataComponent.cache->getAge(
+            dataComponent.ongoingAccess.get().access.addr);
+        dataComponent.ongoingAccess.get().age2 = L2Component.cache->getAge(
+            dataComponent.ongoingAccess.get().access.addr);
+      }
 
       // check cache for hit/miss/unknown
       Classification L1 = dataComponent.cache->classify(
@@ -930,18 +931,15 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
           this->processDataCacheAccess(CL2_HIT);
         } else {
           // 时序异常
-          if (TimingAnomalyAnalysis) {
-            if (L2 == CL_UNKNOWN) {
-              if (L1 == CL_UNKNOWN) {
-                JJYSeparateCachesMemoryTopology l2hit(*this);
-                l2hit.processDataCacheAccess(CL_HIT);
-                resultList.push_back(l2hit);
-              } else {
-                JJYSeparateCachesMemoryTopology l3hit(*this);
-                l3hit.processDataCacheAccess(CL2_HIT);
-                resultList.push_back(l3hit);
-              }
+          if (L2 == CL_UNKNOWN && TimingAnomalyAnalysis) {
+            if (L1 == CL_UNKNOWN) {
+              JJYSeparateCachesMemoryTopology l2hit(*this);
+              l2hit.processDataCacheAccess(CL_HIT);
+              resultList.push_back(l2hit);
             }
+            JJYSeparateCachesMemoryTopology l3hit(*this);
+            l3hit.processDataCacheAccess(CL2_HIT);
+            resultList.push_back(l3hit);
           }
           this->processDataCacheAccess(CL2_MISS);
         }
@@ -1000,6 +998,9 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
         instructionComponent.cache->update(ongoingAcc.access.addr,
                                            ongoingAcc.access.load_store, false,
                                            ongoingAcc.cl);
+        L2Component.cache->update(ongoingAcc.access.addr,
+                                  ongoingAcc.access.load_store, false,
+                                  ongoingAcc.cl);
         instructionComponent.ongoingAccess = boost::none;
       }
     }
@@ -1169,8 +1170,7 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
           }
 
           bool mightMiss =
-              ongoingAcc.cl == CL2_MISS || ongoingAcc.cl == CL2_UNKNOWN ||
-              ongoingAcc.cl == CL_MISS || ongoingAcc.cl == CL_UNKNOWN;
+              ongoingAcc.cl == CL2_MISS || ongoingAcc.cl == CL2_UNKNOWN;
           if (needAccessedDataAddresses()) {
             dataComponent.justUpdatedCache = addr;
           }
@@ -1187,6 +1187,9 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
               isWBCache && (mightMiss || accType == AccessType::STORE);
           UpdateReport *report = dataComponent.cache->update(
               addr, accType, wantReport, ongoingAcc.cl);
+          L2Component.cache->update(ongoingAcc.access.addr,
+                                    ongoingAcc.access.load_store, wantReport,
+                                    ongoingAcc.cl);
 
           if (isWBCache) {
             /* If the report is a WriteBackReport improve our
@@ -1745,12 +1748,12 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
   if (instructionComponent.ongoingAccess) {
     AbstractAddress addr = instructionComponent.ongoingAccess.get().access.addr;
     Classification CL = instructionComponent.ongoingAccess.get().cl;
-    int age;
+    int age = -1;
     if (CL == CL2_MISS) {
       age = INT_MAX;
     } else if (CL == CL2_HIT) {
       age = instructionComponent.ongoingAccess.get().age2;
-    } else {
+    } else if (CL == CL_HIT) {
       age = instructionComponent.ongoingAccess.get().age1;
     }
 
@@ -1768,7 +1771,7 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
   if (dataComponent.ongoingAccess) {
     AbstractAddress addr = dataComponent.ongoingAccess.get().access.addr;
     Classification CL = dataComponent.ongoingAccess.get().cl;
-    int age;
+    int age = -1;
     if (CL == CL2_MISS) {
       age = INT_MAX;
     } else if (CL == CL2_HIT) {
@@ -1780,7 +1783,6 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
   }
   return boost::none;
 }
-
 
 } // namespace TimingAnalysisPass
 #endif

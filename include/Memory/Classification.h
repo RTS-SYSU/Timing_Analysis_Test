@@ -37,7 +37,7 @@ namespace cache {
 
 class Classification;
 
-extern const char *ClassificationNames[13];
+extern const char *ClassificationNames[14];
 extern const Classification CL_BOT, CL_HIT, CL_MISS, CL_UNKNOWN, CL2_HIT,
     CL2_MISS, CL2_UNKNOWN;
 

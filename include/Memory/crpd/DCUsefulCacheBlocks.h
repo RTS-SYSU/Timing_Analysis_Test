@@ -74,7 +74,8 @@ public:
                        AnaDeps *deps = nullptr, bool wantReport = false,
                        const Classification assumption = CL_UNKNOWN);
   int getAge(const AbstractAddress addr) const { return -1; }
-
+  int getCSS(const TagType tag) const { return -1; }
+  int getCSS(const GlobalVariable *var) const { return -1; }
   UpdateReport *potentialUpdate(AbstractAddress addr, AccessType load_store,
                                 bool wantReport = false);
   void join(const Self &y);
