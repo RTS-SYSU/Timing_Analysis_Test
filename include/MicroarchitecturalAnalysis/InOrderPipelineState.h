@@ -616,14 +616,14 @@ template <class Mem> void InOrderPipelineState<Mem>::getACL() const {
   if (result) {
     auto [addr, CL, age] = *result;
     AddrCL acl(addr, ctx, CL, age);
-    if (IAddrCList.find(acl) != IAddrCList.end()) {
-      auto it = IAddrCList.find(acl);
+    if (AddrCList.find(acl) != AddrCList.end()) {
+      auto it = AddrCList.find(acl);
       auto aclo = *it;
-      IAddrCList.erase(it); // 删除旧元素
+      AddrCList.erase(it); // 删除旧元素
       acl.join(aclo);
-      IAddrCList.insert(acl); // 重新插入
+      AddrCList.insert(acl); // 重新插入
     } else {
-      IAddrCList.insert(acl); // 重新插入
+      AddrCList.insert(acl); // 重新插入
     }
   }
 

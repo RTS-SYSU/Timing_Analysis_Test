@@ -18,7 +18,7 @@
 
 #include "LLVMPasses/MachineFunctionCollector.h" // 由函数名找函数
 #include "LLVMPasses/StaticAddressProvider.h" // mi -> addr
-#include "LLVMPasses/DispatchMemory.h" // cacheconfig
+// #include "LLVMPasses/DispatchMemory.h" // cacheconfig
 
 #include "Memory/Classification.h" // CL_MISS/UNKONWN/HIT
 #include "Memory/CacheTraits.h" // addr -> cache index
@@ -29,6 +29,8 @@
 #include "Util/Util.h"
 
 // using namespace TimingAnalysisPass;
+
+// TODO 重构globalvars 和 multicoreinfo，以避免头文件循环引用
 
 /*
   MI + 完整的函数调用栈，可以在UR-CFG上唯一标识一个MI
@@ -231,7 +233,7 @@ struct X_Class {
   TimingAnalysisPass::dom::cache::Classification classification;
   X_Class() : x(1), 
     classification(
-      TimingAnalysisPass::dom::cache::CL_HIT
+      TimingAnalysisPass::dom::cache::CL_HIT // FIXME
     ) {}
 };
 
@@ -336,8 +338,7 @@ public:
   // helper function
   unsigned mi2cacheIndex(const llvm::MachineInstr* mi){
     unsigned tmp_addr = TimingAnalysisPass::StaticAddrProvider->getAddr(mi);
-    return (tmp_addr / TimingAnalysisPass::l2cacheConf.LINE_SIZE) 
-      % TimingAnalysisPass::l2cacheConf.N_SETS;
+    return (tmp_addr / L2linesize) % NN_SET;
     // line_size为64byte的话，低6位地址是offset；1024set的话，再过10位是index
   }
 
@@ -689,8 +690,8 @@ public:
         << "CHMC:" << ctxmi_xclass[cur_core][function][CM].classification
         << "\\l  ";
       unsigned tmp_addr = TimingAnalysisPass::StaticAddrProvider->getAddr(MI);
-      unsigned tmp_line = tmp_addr / TimingAnalysisPass::l2cacheConf.LINE_SIZE;
-      unsigned tmp_index = tmp_line % TimingAnalysisPass::l2cacheConf.N_SETS;
+      unsigned tmp_line = tmp_addr / L2linesize;
+      unsigned tmp_index = tmp_line % NN_SET;
       File << "MI's addr:";
       TimingAnalysisPass::printHex(File, tmp_addr);
       File << " cache line:" << tmp_line
@@ -716,7 +717,23 @@ public:
     for(auto tmp_pair:mi_ur){
       CtxMI tmp_cm = tmp_pair.first;
       X_Class obj;
-      obj.classification = ctxmi_class[cur_core][cur_func][tmp_cm];
+      // FIXME: for CL that we don't collect
+      if(ctxmi_class[cur_core][cur_func].find(tmp_cm)==
+        ctxmi_class[cur_core][cur_func].end()){
+        obj.classification = TimingAnalysisPass::dom::cache::CL_UNKNOWN;
+        if(ZWDebug){
+          std::ofstream myfile;
+          std::string fileName = "ZW_Uncollected.txt";
+          myfile.open(fileName, std::ios_base::app); 
+          myfile << "Core:"<<cur_core<<" Func:"<<cur_func<<" MI:"<<tmp_cm.MI<<
+            " is uncollected\n";
+          myfile.close();
+        }
+      }else{
+        TimingAnalysisPass::dom::cache::Classification tmp_cl = 
+          ctxmi_class[cur_core][cur_func][tmp_cm];
+        obj.classification = tmp_cl;
+      }
       obj.x = getGlobalUpBd(tmp_cm);
       ctxmi_xclass[cur_core][cur_func][tmp_cm] = obj;
     }

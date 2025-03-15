@@ -10,7 +10,7 @@
 
 pushd "/workspaces/llvmta/build" || echo "Unable to compile"
     echo "compiling..."
-    ninja -j4 llvmta
+    ninja -j4 || exit
 popd || exit
 
 testcases=test
