@@ -74,6 +74,7 @@ public:
   virtual ~FixedLatencyState() { /* Nothing to clean up */
   }
   void getACL() const {};
+  void getACL(Context ctx) const {};
   /**
    * Container used to make the local metrics of this class
    * available to the world outside.

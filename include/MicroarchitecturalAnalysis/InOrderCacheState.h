@@ -63,6 +63,7 @@ public:
 
   typedef typename SuperClass::StateSet StateSet;
   void getACL() const {};
+  void getACL(Context ctx) const {};
   template <typename T>
   using MapFromStates = typename SuperClass::template MapFromStates<T>;
 
