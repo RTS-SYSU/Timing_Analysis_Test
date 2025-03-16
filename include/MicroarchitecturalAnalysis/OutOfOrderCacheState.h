@@ -66,6 +66,7 @@ public:
   template <typename T>
   using MapFromStates = typename SuperClass::template MapFromStates<T>;
   void getACL() const {};
+  void getACL(Context ctx) const {};
   /**
    * Constructor. Creates a cache microarchitectural state for program location
    * pl.

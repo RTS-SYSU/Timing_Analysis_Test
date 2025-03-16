@@ -991,6 +991,15 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
       }
 
       if (ongoingAcc.l1timeBlocked == 0) {
+        Classification L1 = instructionComponent.cache->classify(
+            instructionComponent.ongoingAccess.get().access.addr);
+        Classification L2 = L2Component.cache->classify(
+            instructionComponent.ongoingAccess.get().access.addr);
+        if (L1 == CL_UNKNOWN && L2 == CL_UNKNOWN) {
+          L2Component.cache->update(ongoingAcc.access.addr,
+                                    ongoingAcc.access.load_store, false,
+                                    ongoingAcc.cl);
+        }
         instructionComponent.finishedId = ongoingAcc.access.id;
         if (needAccessedInstructionAddresses()) {
           instructionComponent.justUpdatedCache = ongoingAcc.access.addr;
@@ -998,9 +1007,7 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
         instructionComponent.cache->update(ongoingAcc.access.addr,
                                            ongoingAcc.access.load_store, false,
                                            ongoingAcc.cl);
-        L2Component.cache->update(ongoingAcc.access.addr,
-                                  ongoingAcc.access.load_store, false,
-                                  ongoingAcc.cl);
+
         instructionComponent.ongoingAccess = boost::none;
       }
     }
@@ -1183,13 +1190,18 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
           /* we are interested in the report for dirtifying stores and
            * writebacks
            */
+          Classification L1 = dataComponent.cache->classify(
+              dataComponent.ongoingAccess.get().access.addr);
+          Classification L2 = L2Component.cache->classify(
+              dataComponent.ongoingAccess.get().access.addr);
+          if (L1 == CL_UNKNOWN && L2 == CL_UNKNOWN) {
+            L2Component.cache->update(addr, accType, false, ongoingAcc.cl);
+          }
+          
           bool wantReport =
               isWBCache && (mightMiss || accType == AccessType::STORE);
           UpdateReport *report = dataComponent.cache->update(
               addr, accType, wantReport, ongoingAcc.cl);
-          L2Component.cache->update(ongoingAcc.access.addr,
-                                    ongoingAcc.access.load_store, wantReport,
-                                    ongoingAcc.cl);
 
           if (isWBCache) {
             /* If the report is a WriteBackReport improve our

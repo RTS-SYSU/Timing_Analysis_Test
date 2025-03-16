@@ -118,6 +118,7 @@ public:
    */
   virtual ~InOrderPipelineState();
   void getACL() const;
+  void getACL(Context ctx) const;
 
   /**
    * Container used to make the local metrics of this class
@@ -607,11 +608,11 @@ ConvergenceType InOrderPipelineState<MemoryTopology>::isConvergedAfterCycleFrom(
   return POTENTIALLY_NOT_CONVERGED;
 }
 #endif
-template <class Mem> void InOrderPipelineState<Mem>::getACL() const {
-  auto &base = (const MicroArchitecturalState<
-                InOrderPipelineState<Mem>,
-                typename InOrderPipelineState<Mem>::StateDep> &)(*this);
-  Context ctx = base.getpc().getPc().second;
+template <class Mem> void InOrderPipelineState<Mem>::getACL(Context ctx) const {
+  // auto &base = (const MicroArchitecturalState<
+  //               InOrderPipelineState<Mem>,
+  //               typename InOrderPipelineState<Mem>::StateDep> &)(*this);
+  // Context ctx = base.getpc().getPc().second;
   auto result = this->memory.getIaccAdress();
   if (result) {
     auto [addr, CL, age] = *result;
@@ -620,8 +621,8 @@ template <class Mem> void InOrderPipelineState<Mem>::getACL() const {
       auto it = AddrCList.find(acl);
       auto aclo = *it;
       AddrCList.erase(it); // 删除旧元素
-      acl.join(aclo);
-      AddrCList.insert(acl); // 重新插入
+      aclo.join(acl);
+      AddrCList.insert(aclo); // 重新插入
     } else {
       AddrCList.insert(acl); // 重新插入
     }
@@ -631,20 +632,17 @@ template <class Mem> void InOrderPipelineState<Mem>::getACL() const {
   if (result) {
     auto [addr, CL, age] = *result;
     unsigned MIaddr = 0;
-    if (this->inflightInstruction[ID_EX_IND]) {
-      MIaddr = this->inflightInstruction[ID_EX_IND].get().first;
-      ctx = this->inflightInstruction[ID_EX_IND].get().second;
-    } else if (this->inflightInstruction[EX_MEM_IND]) {
+    if (this->inflightInstruction[EX_MEM_IND]) {
       MIaddr = this->inflightInstruction[EX_MEM_IND].get().first;
-      ctx = this->inflightInstruction[EX_MEM_IND].get().second;
+      // ctx = this->inflightInstruction[EX_MEM_IND].get().second;
     }
     AddrCL acl(addr, ctx, CL, age, MIaddr);
     if (AddrCList.find(acl) != AddrCList.end()) {
       auto it = AddrCList.find(acl);
       auto aclo = *it;
-      AddrCList.erase(it);   // 删除旧元素
-      acl.join(aclo);        // 修改值
-      AddrCList.insert(acl); // 重新插入
+      AddrCList.erase(it); // 删除旧元素
+      aclo.join(acl);
+      AddrCList.insert(aclo); // 重新插入
     } else {
       AddrCList.insert(acl);
     }
@@ -657,7 +655,7 @@ std::ostream &operator<<(std::ostream &stream,
   auto &base = (const MicroArchitecturalState<
                 InOrderPipelineState<Mem>,
                 typename InOrderPipelineState<Mem>::StateDep> &)iops;
-  iops.getACL();
+  // iops.getACL();
   stream << base << "\n"; // 打印pc base.pc
   stream << "Fetching instruction: "
          << (iops.instructionAccessFinished ? "No" : "Yes") << "\n";

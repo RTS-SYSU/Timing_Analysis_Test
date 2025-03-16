@@ -531,6 +531,9 @@ void StateSensitiveGraph<MicroArchDom>::cycleUntilFinal(
   State start(id2state.at(currWorkingState));
   bool startfinal = start.isFinal(execLoc);
   if (startfinal) {
+    // if (MulCType == MultiCoreType::ZhangW) {
+    //   start.getACL();
+    // }
     // We create a new id for, with new context, etc.
     // We update all edge weights to move ones further without changing the
     // weight. Later on, do the normal advanceEdges stuff on the graph
@@ -608,6 +611,9 @@ void StateSensitiveGraph<MicroArchDom>::cycleUntilFinal(
         ++numRemainingPredecessors[succId];
         continue;
       }
+      // if (MulCType == MultiCoreType::ZhangW) {
+      //   succ.getACL();
+      // }
       State st(succ);
       bool stfinal = st.isFinal(execLoc);
       unsigned stId = graph.addVertex();
@@ -2020,8 +2026,8 @@ void StateSensitiveGraph<MicroArchDom>::dump(
     for (MachineFunction *currFunc :
          machineFunctionCollector->getAllMachineFunctions()) {
       std::string funcName = currFunc->getName().str();
-      mystream << "graph : {\n	title : \"" << funcName
-               << "\"\n	label : \"" << funcName << "\"\n";
+      mystream << "graph : {\n	title : \"" << funcName << "\"\n	label : \""
+               << funcName << "\"\n";
       for (auto &currMBB : *currFunc) {
         std::string mbbName = currMBB.getFullName();
         mystream << "graph : {\n	title : \"" << mbbName

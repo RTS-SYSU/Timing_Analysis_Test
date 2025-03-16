@@ -338,8 +338,6 @@ void StateExplorationDomainBase<StateExplorationDom, MicroArchState>::
          "Analysis cannot update top states, it would diverge otherwise");
   // For each state in our set do cycle() updates until isFinal(MI, currentCtx)
   // is true
-  // std::ofstream myfile;
-  // myfile.open("temp.txt", std::ios_base::app);
 
   typename MicroArchState::StateSet intermediateResults;
 
@@ -353,7 +351,9 @@ void StateExplorationDomainBase<StateExplorationDom, MicroArchState>::
     } else {
       // Else compute successor and add them to the workingset
       for (auto &succ : copy.cycle(anaInfo)) {
-        // myfile<<succ<<'\n';
+        if (MulCType == MultiCoreType::ZhangW) {
+          succ.getACL(*currentCtx);
+        }
         if (succ.isWaitingForJoin()) {
           // if the state recommends to try
           // joining it with others in a set

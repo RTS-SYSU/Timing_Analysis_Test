@@ -90,7 +90,7 @@ public:
   std::ostream &print(std::ostream &stream) const {
     stream << "Address: " << std::hex << this->address << " : [" << this->CL
            << "  | age : " << std::dec << this->age << "\nContex: " << ctx
-           << "|"<<this->MIAddr<<"]\n";
+           << "|" << std::hex << this->MIAddr << "]\n";
     return stream;
   }
   bool join(AddrCL &other) {
