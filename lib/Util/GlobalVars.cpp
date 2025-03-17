@@ -57,41 +57,49 @@ void celectaddr(const MachineBasicBlock *MBB,
   }
 }
 
-void writeAclToMcif(){
-  std::map<std::string, std::map<TimingAnalysisPass::dom::cache::Classification,
-   unsigned>> cl_cnt;
-  for(const auto& tmp_acl: AddrCList){
-    if(tmp_acl.MIAddr!=0){
+void writeAclToMcif() {
+  std::map<std::string,
+           std::map<TimingAnalysisPass::dom::cache::Classification, unsigned>>
+      cl_cnt;
+  for (const auto &tmp_acl : AddrCList) {
+    if (tmp_acl.MIAddr != 0) {
       continue; // TODO DataCache
-    }else{
+    } else {
       auto itv = tmp_acl.address.getAsInterval();
-      const TimingAnalysisPass::Address tmp_upper_cache_line
-          = itv.upper() & ~(L2linesize - 1);
-      const TimingAnalysisPass::Address tmp_lower_cache_line
-          = itv.lower() & ~(L2linesize - 1);
-      assert(tmp_lower_cache_line==tmp_upper_cache_line);
-      if(TimingAnalysisPass::StaticAddrProvider->hasMachineInstrByAddr(itv.lower())){
-        const llvm::MachineInstr* miptr = // got mi
-          TimingAnalysisPass::StaticAddrProvider->getMachineInstrByAddr(itv.lower());
+      const TimingAnalysisPass::Address tmp_upper_cache_line =
+          itv.upper() & ~(L2linesize - 1);
+      const TimingAnalysisPass::Address tmp_lower_cache_line =
+          itv.lower() & ~(L2linesize - 1);
+      assert(tmp_lower_cache_line == tmp_upper_cache_line);
+      if (TimingAnalysisPass::StaticAddrProvider->hasMachineInstrByAddr(
+              itv.lower())) {
+        const llvm::MachineInstr *miptr = // got mi
+            TimingAnalysisPass::StaticAddrProvider->getMachineInstrByAddr(
+                itv.lower());
         auto tokenlist = tmp_acl.ctx.getTokenList();
         std::vector<const llvm::MachineInstr *> CallSites;
         std::string tmp_entry = "";
         unsigned tmp_entry_corenum = -1;
-        for (const auto& tmptoken : tokenlist) { // got callsites
-          if(tmptoken->getType()==TimingAnalysisPass::PartitionTokenType::CALLSITE){
-            TimingAnalysisPass::PartitionTokenCallSite* cstoken 
-              = dynamic_cast<TimingAnalysisPass::PartitionTokenCallSite*>(tmptoken);
-            if(!cstoken){
+        for (const auto &tmptoken : tokenlist) { // got callsites
+          if (tmptoken->getType() ==
+              TimingAnalysisPass::PartitionTokenType::CALLSITE) {
+            TimingAnalysisPass::PartitionTokenCallSite *cstoken =
+                dynamic_cast<TimingAnalysisPass::PartitionTokenCallSite *>(
+                    tmptoken);
+            if (!cstoken) {
               assert(0 && "fail to convert token into callsite token");
             }
-            const llvm::MachineInstr* callsite = cstoken->getCallSite();
+            const llvm::MachineInstr *callsite = cstoken->getCallSite();
             CallSites.push_back(callsite);
-          }else if(tmptoken->getType()==TimingAnalysisPass::PartitionTokenType::FUNCALLEE){
-            if(tmp_entry==""){
-              TimingAnalysisPass::PartitionTokenFunCallee* cetoken 
-                = dynamic_cast<TimingAnalysisPass::PartitionTokenFunCallee*>(tmptoken);
+          } else if (tmptoken->getType() ==
+                     TimingAnalysisPass::PartitionTokenType::FUNCALLEE) {
+            if (tmp_entry == "") {
+              TimingAnalysisPass::PartitionTokenFunCallee *cetoken =
+                  dynamic_cast<TimingAnalysisPass::PartitionTokenFunCallee *>(
+                      tmptoken);
               tmp_entry = cetoken->getCallee()->getName().str();
-              tmp_entry_corenum = func2corenum[tmp_entry]; // got corenum & entry
+              tmp_entry_corenum =
+                  func2corenum[tmp_entry]; // got corenum & entry
             }
           }
         }
@@ -100,22 +108,72 @@ void writeAclToMcif(){
         tmpCM.CallSites = CallSites;
         mcif.addClass(tmp_entry_corenum, tmp_entry, tmpCM, tmp_acl.CL, 1);
         cl_cnt[tmp_entry][tmp_acl.CL] += 1;
-      }else{
-        assert(itv.lower()==0 && "why we have an addr without mi?");
+      } else {
+        assert(itv.lower() == 0 && "why we have an addr without mi?");
       }
     }
   }
-  if(ZWDebug){ // 查看收集的CL信息
+  if (ZWDebug) { // 查看收集的CL信息
     std::ofstream Myfile;
     Myfile.open("ZW_ACL_Summary.txt", std::ios_base::app);
     Myfile << "###CL Information###\n";
-    for(const auto& clmap:cl_cnt){
+    for (const auto &clmap : cl_cnt) {
       Myfile << "##EntryPoint: " << clmap.first << "\n";
-      for(const auto& cl_pair:clmap.second){
-        Myfile << "#CL: " << cl_pair.first << " cnt is " << cl_pair.second << "\n";
+      for (const auto &cl_pair : clmap.second) {
+        Myfile << "#CL: " << cl_pair.first << " cnt is " << cl_pair.second
+               << "\n";
       }
     }
     // TODO ctx info
     Myfile.close();
   }
+}
+
+void CL_clean() {
+  std::set<AddrCL> AddrCList_clean;
+  std::map<TimingAnalysisPass::PersistenceScope, std::set<AddrPS>>
+      AddrPSList_clean;
+  // 清理一下数据
+  for (const auto &entry : AddrCList) {
+    if (entry.CL == TimingAnalysisPass::dom::cache::CL2_HIT &&
+        entry.age == INT_MAX) {
+      AddrCL copy(entry);
+      copy.CL = TimingAnalysisPass::dom::cache::CL2_MISS;
+      AddrCList_clean.insert(copy);
+    } else {
+      AddrCList_clean.insert(entry);
+    }
+  }
+  for (const auto &entry : AddrPSList) {
+    for (auto &a : entry.second) {
+      if (a.LEVEL == 2) {
+        bool t = true;
+        for (auto &b : entry.second) {
+          if (a.address == b.address && b.LEVEL == 1) {
+            t = false;
+            break;
+          }
+        }
+        if (t) {
+          AddrPSList_clean[entry.first].insert(a);
+        }
+      } else {
+        AddrPSList_clean[entry.first].insert(a);
+      }
+    }
+  }
+  std::ofstream myfile;
+  myfile.open("ZW_Clist_clean.txt", std::ios_base::trunc);
+  for (const auto &entry : AddrCList_clean) {
+    entry.print(myfile);
+  }
+  for (const auto &entry : AddrPSList_clean) {
+    myfile << "Scop:" << entry.first << "\n";
+    for (auto &a : entry.second) {
+      myfile << a;
+    }
+  }
+  myfile.close();
+  AddrCList = AddrCList_clean;
+  AddrPSList = AddrPSList_clean;
 }

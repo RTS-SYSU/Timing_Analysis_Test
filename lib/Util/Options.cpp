@@ -27,6 +27,7 @@
 #include "Util/Options.h"
 
 #include "PathAnalysis/GetEdges.h"
+#include "llvm/CodeGen/FastISel.h"
 #include "llvm/Support/CommandLine.h"
 
 using namespace llvm;
@@ -80,12 +81,12 @@ cl::opt<MultiCoreType> MulCType(
                           "running on shared cache multi-cores"),
                clEnumValN(MultiCoreType::NONE, "none", "no analysis")),
     cl::cat(MultiCoreCat));
-extern llvm::cl::opt<bool>
-    TimingAnomalyAnalysis("Timing anomaly analysis, state splitting",
-                          cl::init(true), cl::desc("(default 'T')"),
-                          cl::cat(MultiCoreCat)
+extern llvm::cl::opt<bool> TimingAnomalyAnalysis(
+    "time-anomaly", cl::init(true),
+    cl::desc("Timing anomaly analysis, state splitting (default 'T')"),
+    cl::cat(MultiCoreCat)
 
-    );
+);
 
 cl::opt<bool>
     QuietMode("ta-quiet", cl::init(false),

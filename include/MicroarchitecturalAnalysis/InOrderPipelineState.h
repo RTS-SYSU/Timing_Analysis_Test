@@ -655,7 +655,6 @@ std::ostream &operator<<(std::ostream &stream,
   auto &base = (const MicroArchitecturalState<
                 InOrderPipelineState<Mem>,
                 typename InOrderPipelineState<Mem>::StateDep> &)iops;
-  // iops.getACL();
   stream << base << "\n"; // 打印pc base.pc
   stream << "Fetching instruction: "
          << (iops.instructionAccessFinished ? "No" : "Yes") << "\n";

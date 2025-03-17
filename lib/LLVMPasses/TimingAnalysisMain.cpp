@@ -35,6 +35,7 @@
 #include "LLVMPasses/DispatchPretPipeline.h"
 #include "LLVMPasses/MachineFunctionCollector.h"
 #include "LLVMPasses/StaticAddressProvider.h"
+#include "Memory/Classification.h"
 #include "Memory/PersistenceScopeInfo.h"
 #include "PartitionUtil/DirectiveHeuristics.h"
 #include "PathAnalysis/LoopBoundInfo.h"
@@ -53,6 +54,7 @@
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/JSON.h"
 #include "llvm/Support/MemoryBuffer.h"
+#include <climits>
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -238,13 +240,13 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
                       ~(L2linesize - 1));
                 }
                 // 数据地址
-                // if (currMI->mayLoad() || currMI->mayStore()) {
-                //   auto list = AddrInfo.getvalueaddr(&*currMI);
-                //   for (unsigned addr : list) {
-                //     getfunctionaddr[funcName]->addrlist.emplace(
-                //         addr & ~(L2linesize - 1));
-                //   }
-                // }
+                if (currMI->mayLoad() || currMI->mayStore()) {
+                  auto list = AddrInfo.getvalueaddr(&*currMI);
+                  for (unsigned addr : list) {
+                    getfunctionaddr[funcName]->addrlist.emplace(
+                        addr & ~(L2linesize - 1));
+                  }
+                }
               }
             }
           }
@@ -351,13 +353,14 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     }
     for (const auto &entry : AddrPSList) {
       myfile << "Scop:" << entry.first << "\n";
-      for (auto a : entry.second) {
+      for (auto &a : entry.second) {
         myfile << a;
       }
     }
     myfile.close();
-
-
+    // 清理一下数据
+    CL_clean();
+ 
     // 前面单核分析完成了XClass、ACL收集，此处转化到mcif中
     writeAclToMcif();
     // 进行UR和CEOP的获取
@@ -515,8 +518,8 @@ void TimingAnalysisMain::dispatchValueAnalysis() {
   ofstream Myfile;
 
   std::tuple<> NoDep;
-  AnalysisDriverInstr<ConstantValueDomain<ISA>> ConstValAna(
-      AnalysisEntryPoint, NoDep);
+  AnalysisDriverInstr<ConstantValueDomain<ISA>> ConstValAna(AnalysisEntryPoint,
+                                                            NoDep);
   auto CvAnaInfo = ConstValAna.runAnalysis();
 
   LoopBoundInfo->computeLoopBoundFromCVDomain(*CvAnaInfo);
@@ -609,8 +612,7 @@ void TimingAnalysisMain::dispatchValueAnalysis() {
   Myfile.close();
 }
 
-void TimingAnalysisMain::dispatchAnalysisType(AddressInformation &
-                                              AddressInfo) {
+void TimingAnalysisMain::dispatchAnalysisType(AddressInformation &AddressInfo) {
   AnalysisResults &Ar = AnalysisResults::getInstance();
   // Timing & CRPD calculation need normal muarch analysis first
   if (AnaType.isSet(AnalysisType::TIMING) ||
@@ -619,7 +621,7 @@ void TimingAnalysisMain::dispatchAnalysisType(AddressInformation &
     // Ar.registerResult("total", Bound);
     if (Bound) {
       outs() << "Calculated Timing Bound: "
-              << llvm::format("%-20.0f", Bound.get().ub) << "\n";
+             << llvm::format("%-20.0f", Bound.get().ub) << "\n";
     } else {
       outs() << "Calculated Timing Bound: infinite\n";
     }
@@ -629,7 +631,7 @@ void TimingAnalysisMain::dispatchAnalysisType(AddressInformation &
     // Ar.registerResult("icache", Bound);
     if (Bound) {
       outs() << "Calculated " << "Instruction Cache Miss Bound: "
-              << llvm::format("%-20.0f", Bound.get().ub) << "\n";
+             << llvm::format("%-20.0f", Bound.get().ub) << "\n";
     } else {
       outs() << "Calculated " << "Instruction Cache Miss Bound: infinite\n";
     }
@@ -639,7 +641,7 @@ void TimingAnalysisMain::dispatchAnalysisType(AddressInformation &
     // Ar.registerResult("dcache", Bound);
     if (Bound) {
       outs() << "Calculated " << "Data Cache Miss Bound: "
-              << llvm::format("%-20.0f", Bound.get().ub) << "\n";
+             << llvm::format("%-20.0f", Bound.get().ub) << "\n";
     } else {
       outs() << "Calculated " << "Data Cache Miss Bound: infinite\n";
     }
@@ -651,12 +653,12 @@ void TimingAnalysisMain::dispatchAnalysisType(AddressInformation &
 /// ///////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-boost::optional<BoundItv> TimingAnalysisMain::dispatchTimingAnalysis(
-    AddressInformation & AddressInfo) {
+boost::optional<BoundItv>
+TimingAnalysisMain::dispatchTimingAnalysis(AddressInformation &AddressInfo) {
   switch (MuArchType) {
   case MicroArchitecturalType::FIXEDLATENCY:
     assert(MemTopType == MemoryTopologyType::NONE &&
-            "Fixed latency has no external memory");
+           "Fixed latency has no external memory");
     return dispatchFixedLatencyTimingAnalysis();
   case MicroArchitecturalType::PRET:
     return dispatchPretTimingAnalysis(AddressInfo);
@@ -671,8 +673,9 @@ boost::optional<BoundItv> TimingAnalysisMain::dispatchTimingAnalysis(
   }
 }
 
-boost::optional<BoundItv> TimingAnalysisMain::dispatchCacheAnalysis(
-    AnalysisType Anatype, AddressInformation & AddressInfo) {
+boost::optional<BoundItv>
+TimingAnalysisMain::dispatchCacheAnalysis(AnalysisType Anatype,
+                                          AddressInformation &AddressInfo) {
   switch (MuArchType) {
   case MicroArchitecturalType::INORDER:
   case MicroArchitecturalType::STRICTINORDER:

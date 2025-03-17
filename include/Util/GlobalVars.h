@@ -61,6 +61,13 @@ public:
     this->age = a;
     this->MIAddr = aI;
   }
+  AddrCL(AddrCL const &o) {
+    this->address = o.address;
+    this->ctx = o.ctx;
+    this->CL = o.CL;
+    this->age = o.age;
+    this->MIAddr = o.MIAddr;
+  }
 
   TimingAnalysisPass::AbstractAddress address =
       TimingAnalysisPass::AbstractAddress((unsigned)0);
@@ -161,6 +168,9 @@ inline std::ostream &operator<<(std::ostream &stream, const AddrPS &ads) {
 extern std::set<AddrCL> AddrCList;
 extern std::map<TimingAnalysisPass::PersistenceScope, std::set<AddrPS>>
     AddrPSList;
+extern std::set<AddrCL> AddrCList_clean;
+extern std::map<TimingAnalysisPass::PersistenceScope, std::set<AddrPS>>
+    AddrPSList_clean;
 extern std::map<std::string, std::set<functionaddr *>> functiontofs;
 extern std::map<std::string, functionaddr *> getfunctionaddr;
 extern std::map<std::string, unsigned> func2corenum;
@@ -176,4 +186,5 @@ void celectaddr(const MachineBasicBlock *MBB,
                 const TimingAnalysisPass::Context &ctx);
 
 void writeAclToMcif();
+void CL_clean();
 #endif

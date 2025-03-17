@@ -139,12 +139,12 @@ LruMaxAgeAbstractCache<T>::classify(const AbstractAddress addr) const {
           for (unsigned address : f->addrlist) {
             if (getindex<T>(address) == index && getTag<T>(address) != tag) {
               CNN++;
-              if(ZWDebug){
+              if (ZWDebug) {
                 std::ofstream Myfile;
                 Myfile.open("LY_Must.txt", std::ios_base::app);
                 Myfile << AnalysisEntryPoint << "_localaddr: ";
                 printHex(Myfile, getintaddr<T>(addr));
-                Myfile  << " " << entry << "_interaddr: ";
+                Myfile << " " << entry << "_interaddr: ";
                 printHex(Myfile, address);
                 Myfile << "\n";
                 Myfile.close();
@@ -153,6 +153,12 @@ LruMaxAgeAbstractCache<T>::classify(const AbstractAddress addr) const {
           }
         }
       }
+    }
+    if (ZWDebug) {
+      std::ofstream Myfile;
+      Myfile.open("LY_Must.txt", std::ios_base::app);
+      Myfile << CNN << "\n";
+      Myfile.close();
     }
   }
 

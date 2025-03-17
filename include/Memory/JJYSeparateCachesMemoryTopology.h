@@ -1197,7 +1197,7 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
           if (L1 == CL_UNKNOWN && L2 == CL_UNKNOWN) {
             L2Component.cache->update(addr, accType, false, ongoingAcc.cl);
           }
-          
+
           bool wantReport =
               isWBCache && (mightMiss || accType == AccessType::STORE);
           UpdateReport *report = dataComponent.cache->update(
