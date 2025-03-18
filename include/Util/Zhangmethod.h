@@ -22,8 +22,8 @@
 #include "Util/Util.h"
 #include "llvm/Support/FileSystem.h" // 输出ur-cfg图片
 #include "llvm/Support/raw_ostream.h"
-#include <iostream>
 #include <fstream>
+#include <iostream>
 /*
   MI + 完整的函数调用栈，可以在UR-CFG上唯一标识一个MI
 */
@@ -42,7 +42,21 @@ public:
     }
     return CallSites < other.CallSites;
   }
-
+  friend std::ostream &operator<<(std::ostream &os, const CtxMI &tmpCM) {
+    os << "[" << std::endl;
+    unsigned tmpAddr =
+        TimingAnalysisPass::StaticAddrProvider->getAddr(tmpCM.MI);
+    os << "MI's Addr:";
+    TimingAnalysisPass::printHex(os, tmpAddr);
+    os << std::endl;
+    os << "With Call Context:" << std::endl;
+    for (auto &tmpCS : tmpCM.CallSites) {
+      os << "  " << TimingAnalysisPass::getMachineInstrIdentifier(tmpCS)
+         << std::endl;
+    }
+    os << "]" << std::endl;
+    return os;
+  }
   std::vector<CtxMI> getSucc() {
     std::vector<CtxMI> retSucc;
 
@@ -341,7 +355,7 @@ public:
   }
   // 张伟复现
   // (Core, Function) -> [CEOP]
-  void run(){
+  void run() {
     // 进行UR和CEOP的获取
     for (unsigned i = 0; i < CoreNums; ++i) {
       outs() << " -> UR Analysis for core: " << i;
@@ -733,7 +747,7 @@ public:
           std::string fileName = "ZW_Uncollected.txt";
           myfile.open(fileName, std::ios_base::app);
           myfile << "Core:" << cur_core << " Func:" << cur_func
-                 << " MI:" << tmp_cm.MI << " is uncollected\n";
+                 << " MI:" << tmp_cm << " is uncollected\n";
           myfile.close();
         }
       } else {

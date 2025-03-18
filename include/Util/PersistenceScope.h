@@ -69,6 +69,8 @@ private:
   static unsigned globalScopeId;
 
   unsigned scopeId;
+
+public:
   const llvm::MachineLoop *loop;
 };
 

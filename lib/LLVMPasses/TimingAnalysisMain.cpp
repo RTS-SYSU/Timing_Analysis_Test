@@ -211,7 +211,7 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     ly_info.print(Myfile);
     Myfile.close();
   }
-
+  std::map<std::string, unsigned> func2corenum; // 冗余但是先写着
   for (auto Clist : taskMap) {
     outs() << "Timing Analysis for Core: " << Clist.first << "\n";
     CurrentCore = Clist.first;
@@ -284,7 +284,7 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     myfile.close();
     // 清理一下数据
     cl_info.CL_clean();
-    ZW_mth = Zhangmethod(mcif.coreinfo,cl_info,func2corenum);
+    Zhangmethod ZW_mth = Zhangmethod(mcif.coreinfo, cl_info, func2corenum);
     ZW_mth.run();
   }
   return false;
