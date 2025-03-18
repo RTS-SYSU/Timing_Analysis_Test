@@ -198,85 +198,17 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
       for (string entry : Clist.second) {
         AnalysisEntryPoint = entry;
         outs() << "Address Analysis for entry point: " << entry << "\n";
-        auto Arch = getTargetMachine().getTargetTriple().getArch();
-        std::tuple<> NoDep;
-        if (Arch == Triple::ArchType::arm) {
-          AnalysisDriverInstr<ConstantValueDomain<Triple::ArchType::arm>>
-              ConstValAna(entry, NoDep);
-          auto CvAnaInfo = ConstValAna.runAnalysis();
-          AddressInformationImpl<ConstantValueDomain<Triple::ArchType::arm>>
-              AddrInfo(*CvAnaInfo);
-          ofstream Myfile;
-          if (!QuietMode) {
-            Myfile.open("AddressInformation.txt", ios_base::trunc);
-            AddrInfo.dump(Myfile);
-            Myfile.close();
-          }
-
-          functiontofs.emplace(entry, std::set<functionaddr *>());
-
-          CallGraph &cg = CallGraph::getGraph();
-          for (auto *currFunc :
-               machineFunctionCollector->getAllMachineFunctions()) {
-            string funcName = currFunc->getName().str();
-            if (!cg.reachableFromEntryPoint(currFunc)) {
-              continue;
-            }
-            if (getfunctionaddr.find(funcName) == getfunctionaddr.end()) {
-              functionaddr *f = new functionaddr(funcName);
-              getfunctionaddr[funcName] = f;
-            }
-            functiontofs[entry].emplace(getfunctionaddr[funcName]);
-
-            for (auto currBB = currFunc->begin(); currBB != currFunc->end();
-                 ++currBB) {
-              for (auto currMI = currBB->begin(); currMI != currBB->end();
-                   ++currMI) {
-                // 指令地址
-                if (StaticAddrProvider->Ins2addr.find(&*currMI) !=
-                    StaticAddrProvider->Ins2addr.end()) {
-                  getfunctionaddr[funcName]->addrlist.emplace(
-                      StaticAddrProvider->Ins2addr[&*currMI] &
-                      ~(L2linesize - 1));
-                }
-                // 数据地址
-                if (currMI->mayLoad() || currMI->mayStore()) {
-                  auto list = AddrInfo.getvalueaddr(&*currMI);
-                  for (unsigned addr : list) {
-                    getfunctionaddr[funcName]->addrlist.emplace(
-                        addr & ~(L2linesize - 1));
-                  }
-                }
-              }
-            }
-          }
-
-        } else if (Arch == Triple::ArchType::riscv32) {
-          AnalysisDriverInstr<ConstantValueDomain<Triple::ArchType::riscv32>>
-              ConstValAna(entry, NoDep);
-          auto CvAnaInfo = ConstValAna.runAnalysis();
-          AddressInformationImpl<ConstantValueDomain<Triple::ArchType::riscv32>>
-              AddrInfo(*CvAnaInfo);
-
-        } else {
-          assert(0 && "Unsupported ISA for LLVMTA");
-        }
+        ly_info.run(entry);
       }
     }
     // liang分析的CCN收集
-    for (const auto &entry : getfunctionaddr) {
-      std::cout << "Entry: " << entry.first << "\n";
-      entry.second->print(); // 调用 functionaddr 类的 print 函数
-    }
+    // for (const auto &entry : getfunctionaddr) {
+    //   std::cout << "Entry: " << entry.first << "\n";
+    //   entry.second->print(); // 调用 functionaddr 类的 print 函数
+    // }
     ofstream Myfile;
     Myfile.open("LY_Contention.txt", ios_base::app);
-    Myfile << "###LiangYun's Addr###\n";
-    for (const auto &entry : functiontofs) {
-      Myfile << "EntryPoint: " << entry.first << "\n";
-      for (const auto &func : entry.second) {
-        func->print(Myfile);
-      }
-    }
+    ly_info.print(Myfile);
     Myfile.close();
   }
 
@@ -345,170 +277,15 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     assert((MuArchType == MicroArchitecturalType::INORDER ||
             MuArchType == MicroArchitecturalType::STRICTINORDER) &&
            "Currently do not support other arch, because of timing anomaly");
-    // 打印 set 内容
+    // 打印 cl_info 内容
     std::ofstream myfile;
     myfile.open("ZW_Clist.txt", ios_base::trunc);
-    for (const auto &entry : AddrCList) {
-      entry.print(myfile);
-    }
-    for (const auto &entry : AddrPSList) {
-      myfile << "Scop:" << entry.first << "\n";
-      for (auto &a : entry.second) {
-        myfile << a;
-      }
-    }
+    cl_info.print(myfile);
     myfile.close();
     // 清理一下数据
-    CL_clean();
- 
-    // 前面单核分析完成了XClass、ACL收集，此处转化到mcif中
-    writeAclToMcif();
-    // 进行UR和CEOP的获取
-    for (unsigned i = 0; i < CoreNums; ++i) {
-      outs() << " -> UR Analysis for core: " << i;
-
-      for (std::string &functionName : mcif.coreinfo[i]) {
-        outs() << " entry point: " << functionName << '\n';
-        mcif.URCalculation(i, functionName);
-        outs() << "Core-" << i << " Func: " << functionName << " have "
-               << mcif.CEOPs[i][functionName].size() << " CEOP(s)" << '\n';
-      }
-    }
-
-    // 现在先不实现生命周期迭代
-    outs() << " -> WCET Inter Analysis start\n";
-    for (unsigned local = 0; local < CoreNums; ++local) {
-      for (std::string &localFunc : mcif.coreinfo[local]) {
-        // 选出本地task
-        unsigned wceetOfTSum = 0;
-        for (unsigned inter = 0; inter < CoreNums; ++inter) { // interference
-          if (local == inter)
-            continue;
-          for (std::string &interFunc :
-               mcif.getInitConflictFunction(local, localFunc)) {
-            // 这个Init的就是返回几乎全部，反正是第一轮
-            // 要考虑函数可能执行多次，这里默认getInitConflictFunction会多次返回
-            // 选出冲突task
-            unsigned wceetOf2T = 0; // 两个Task之间的WCEET
-            for (const CEOP &localP : mcif.CEOPs[local][localFunc]) {
-              for (const CEOP &interP : mcif.CEOPs[inter][interFunc]) {
-                // 选出两条Path, 开始dp，横干扰、竖本地
-                unsigned localPLen = localP.URs.size();
-                unsigned interPLen = interP.URs.size();
-                unsigned ArvVal[localPLen][interPLen] = {0};
-
-                for (unsigned i = 1; i < localPLen; i++) {
-                  ArvVal[i][0] =
-                      mcif.getFValue(local, localP, i, inter, interP, 0) +
-                      ArvVal[i - 1][0]; // 感觉paper公式有问题，改成累加
-                }
-                for (unsigned i = 1; i < interPLen; i++) {
-                  ArvVal[0][i] =
-                      mcif.getFValue(local, localP, 0, inter, interP, i) +
-                      ArvVal[0][i - 1];
-                }
-                for (unsigned i = 1; i < localPLen; i++) {
-                  for (unsigned j = 1; j < interPLen; j++) {
-                    ArvVal[i][j] =
-                        max(ArvVal[i - 1][j], ArvVal[i][j - 1]) +
-                        mcif.getFValue(local, localP, i, inter, interP, j);
-                  }
-                }
-                wceetOf2T =
-                    max(wceetOf2T, ArvVal[localPLen - 1][interPLen - 1]);
-              }
-            }
-            wceetOf2T *=
-                Latency; // BG Mem的延迟值 from Command Line, 但感觉很容易重名
-            wceetOfTSum += wceetOf2T; // 不同核所有冲突的函数都加上
-          }
-        }
-        mcif.currWcetInter[local][localFunc] = wceetOfTSum;
-        outs() << "Core-" << local << " Func:" << localFunc << " 's WCEET is "
-               << wceetOfTSum << "\n";
-      }
-    }
-
-    // WCET_{sum} = WCET_{intra} + WCEET
-    std::string fileName = "ZW_Output.txt";
-    myfile.open(fileName, std::ios_base::app);
-    for (unsigned local = 0; local < CoreNums; ++local) {
-      for (std::string &localFunc : mcif.coreinfo[local]) {
-        unsigned wcet_intra = mcif.currWcetIntra[local][localFunc];
-        unsigned wceet = mcif.currWcetInter[local][localFunc];
-        myfile << "Core-" << local << " F-" << localFunc
-               << " intra:" << wcet_intra << " wceet:" << wceet << std::endl;
-      }
-    }
-
-    // if (!machineFunctionCollector->hasFunctionByName(AnalysisEntryPoint)) {
-    //   outs() << "No Timing Analysis Run. There is no entry point: "
-    //          << AnalysisEntryPoint << "\n";
-    //   exit(1);
-    // }
-
-    // ofstream Myfile;
-
-    // // Default analysis type: timing
-    // if (AnaType.getBits() == 0) {
-    //   AnaType.addValue(AnalysisType::TIMING);
-    // }
-
-    // // Statistics &Stats = Statistics::getInstance();
-    // // Stats.startMeasurement("Complete Analysis");
-
-    // if (CoRunnerSensitive) {
-    //   for (int I = 0; I <= UntilIterationMeasurement; ++I) {
-    //     std::string MeasurementId = "Until Iteration ";
-    //     MeasurementId += std::to_string(I);
-    //     // Stats.startMeasurement(MeasurementId);
-    //   }
-    // }
-
-    // if (OutputExtFuncAnnotationFile) {
-    //   Myfile.open("ExtFuncAnnotations.csv", ios_base::trunc);
-    //   CallGraph::getGraph().dumpUnknownExternalFunctions(Myfile);
-    //   Myfile.close();
-    //   return false;
-    // }
-    // if (!QuietMode) {
-    //   Myfile.open("AnnotatedHeuristics.txt", ios_base::trunc);
-    //   DirectiveHeuristicsPassInstance->dump(Myfile);
-    //   Myfile.close();
-
-    //   // Myfile.open("PersistenceScopes.txt", ios_base::trunc);
-    //   // PersistenceScopeInfo::getInfo().dump(Myfile);
-    //   // Myfile.close();
-
-    //   Myfile.open("CallGraph.txt", ios_base::trunc);
-    //   CallGraph::getGraph().dump(Myfile);
-    //   Myfile.close();
-    // }
-    // VERBOSE_PRINT(" -> Finished Preprocessing Phase\n");
-
-    // for (auto Clist : taskMap) {
-    //   outs() << "Timing Analysis for Core: " << Clist.first << "\n";
-    //   CurrentCore = Clist.first;
-    //   for (string entry : Clist.second) {
-    //     AnalysisEntryPoint = entry;
-    //     outs() << "Timing Analysis for entry point: " << AnalysisEntryPoint
-    //            << "\n";
-
-    //     Myfile.open("PersistenceScopes.txt", ios_base::trunc);
-    //     PersistenceScopeInfo::getInfo().dump(Myfile);
-    //     Myfile.close();
-
-    //     // Dispatch the value analysis
-    //     auto Arch = getTargetMachine().getTargetTriple().getArch();
-    //     if (Arch == Triple::ArchType::arm) {
-    //       dispatchValueAnalysis<Triple::ArchType::arm>();
-    //     } else if (Arch == Triple::ArchType::riscv32) {
-    //       dispatchValueAnalysis<Triple::ArchType::riscv32>();
-    //     } else {
-    //       assert(0 && "Unsupported ISA for LLVMTA");
-    //     }
-    //   }
-    // }
+    cl_info.CL_clean();
+    ZW_mth = Zhangmethod(mcif.coreinfo,cl_info,func2corenum);
+    ZW_mth.run();
   }
   return false;
 }

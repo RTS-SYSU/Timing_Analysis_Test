@@ -609,25 +609,12 @@ ConvergenceType InOrderPipelineState<MemoryTopology>::isConvergedAfterCycleFrom(
 }
 #endif
 template <class Mem> void InOrderPipelineState<Mem>::getACL(Context ctx) const {
-  // auto &base = (const MicroArchitecturalState<
-  //               InOrderPipelineState<Mem>,
-  //               typename InOrderPipelineState<Mem>::StateDep> &)(*this);
-  // Context ctx = base.getpc().getPc().second;
   auto result = this->memory.getIaccAdress();
   if (result) {
     auto [addr, CL, age] = *result;
     AddrCL acl(addr, ctx, CL, age);
-    if (AddrCList.find(acl) != AddrCList.end()) {
-      auto it = AddrCList.find(acl);
-      auto aclo = *it;
-      AddrCList.erase(it); // 删除旧元素
-      aclo.join(acl);
-      AddrCList.insert(aclo); // 重新插入
-    } else {
-      AddrCList.insert(acl); // 重新插入
-    }
+    cl_info.insert_CL(acl);
   }
-
   result = this->memory.getDaccAdress();
   if (result) {
     auto [addr, CL, age] = *result;
@@ -637,15 +624,7 @@ template <class Mem> void InOrderPipelineState<Mem>::getACL(Context ctx) const {
       // ctx = this->inflightInstruction[EX_MEM_IND].get().second;
     }
     AddrCL acl(addr, ctx, CL, age, MIaddr);
-    if (AddrCList.find(acl) != AddrCList.end()) {
-      auto it = AddrCList.find(acl);
-      auto aclo = *it;
-      AddrCList.erase(it); // 删除旧元素
-      aclo.join(acl);
-      AddrCList.insert(aclo); // 重新插入
-    } else {
-      AddrCList.insert(acl);
-    }
+    cl_info.insert_CL(acl);
   }
 }
 

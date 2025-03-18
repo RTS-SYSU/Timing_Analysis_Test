@@ -28,25 +28,19 @@
 #define ANALYSISDRIVER_H
 
 #include "ARM.h"
-#include "ARMMachineFunctionInfo.h"
-#include "llvm/CodeGen/MachineFunctionPass.h"
 #include "llvm/CodeGen/MachineJumpTableInfo.h"
 #include "llvm/CodeGen/MachineModuleInfo.h"
-#include "llvm/IR/Module.h"
 #include "llvm/Support/Debug.h"
 
-#include "AnalysisFramework/AnalysisDomain.h"
 #include "AnalysisFramework/AnalysisInformation.h"
 #include "AnalysisFramework/CollectingContextsDomain.h"
 #include "AnalysisFramework/PartitioningDomain.h"
 #include "LLVMPasses/MachineFunctionCollector.h"
 #include "PartitionUtil/DirectiveHeuristics.h"
 
-#include "Util/Statistics.h"
 
 #include <boost/static_assert.hpp>
 #include <boost/type_traits.hpp>
-#include "Util/GlobalVars.h"
 
 #include <iostream>
 #include <list>

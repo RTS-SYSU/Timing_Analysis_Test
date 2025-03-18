@@ -135,7 +135,7 @@ LruMaxAgeAbstractCache<T>::classify(const AbstractAddress addr) const {
         continue;
       }
       for (std::string entry : mcif.coreinfo[i]) {
-        for (functionaddr *f : functiontofs[entry]) {
+        for (functionaddr *f : ly_info.functiontofs[entry]) {
           for (unsigned address : f->addrlist) {
             if (getindex<T>(address) == index && getTag<T>(address) != tag) {
               CNN++;

@@ -14,11 +14,11 @@ int L2MISS = 0;
 int STBUS = 0;
 int BOUND = 0;
 
-std::map<std::string, std::set<functionaddr *>> functiontofs;
-std::map<std::string, functionaddr *> getfunctionaddr;
+
 std::map<std::string, unsigned> func2corenum; // 冗余但是先写着
-std::set<AddrCL> AddrCList;
-std::map<TimingAnalysisPass::PersistenceScope, std::set<AddrPS>> AddrPSList;
+CL_info cl_info;
+Liangy_info ly_info;
+Zhangmethod ZW_mth;
 
 TimingAnalysisPass::AddressInformation *glAddrInfo = NULL;
 std::set<const MachineBasicBlock *> mylist;
@@ -61,7 +61,7 @@ void writeAclToMcif() {
   std::map<std::string,
            std::map<TimingAnalysisPass::dom::cache::Classification, unsigned>>
       cl_cnt;
-  for (const auto &tmp_acl : AddrCList) {
+  for (const auto &tmp_acl : cl_info.AddrCList) {
     if (tmp_acl.MIAddr != 0) {
       continue; // TODO DataCache
     } else {
@@ -106,7 +106,7 @@ void writeAclToMcif() {
         CtxMI tmpCM;
         tmpCM.MI = miptr;
         tmpCM.CallSites = CallSites;
-        mcif.addClass(tmp_entry_corenum, tmp_entry, tmpCM, tmp_acl.CL, 1);
+        ZW_mth.addClass(tmp_entry_corenum, tmp_entry, tmpCM, tmp_acl.CL, 1);
         cl_cnt[tmp_entry][tmp_acl.CL] += 1;
       } else {
         assert(itv.lower() == 0 && "why we have an addr without mi?");
@@ -127,53 +127,4 @@ void writeAclToMcif() {
     // TODO ctx info
     Myfile.close();
   }
-}
-
-void CL_clean() {
-  std::set<AddrCL> AddrCList_clean;
-  std::map<TimingAnalysisPass::PersistenceScope, std::set<AddrPS>>
-      AddrPSList_clean;
-  // 清理一下数据
-  for (const auto &entry : AddrCList) {
-    if (entry.CL == TimingAnalysisPass::dom::cache::CL2_HIT &&
-        entry.age == INT_MAX) {
-      AddrCL copy(entry);
-      copy.CL = TimingAnalysisPass::dom::cache::CL2_MISS;
-      AddrCList_clean.insert(copy);
-    } else {
-      AddrCList_clean.insert(entry);
-    }
-  }
-  for (const auto &entry : AddrPSList) {
-    for (auto &a : entry.second) {
-      if (a.LEVEL == 2) {
-        bool t = true;
-        for (auto &b : entry.second) {
-          if (a.address == b.address && b.LEVEL == 1) {
-            t = false;
-            break;
-          }
-        }
-        if (t) {
-          AddrPSList_clean[entry.first].insert(a);
-        }
-      } else {
-        AddrPSList_clean[entry.first].insert(a);
-      }
-    }
-  }
-  std::ofstream myfile;
-  myfile.open("ZW_Clist_clean.txt", std::ios_base::trunc);
-  for (const auto &entry : AddrCList_clean) {
-    entry.print(myfile);
-  }
-  for (const auto &entry : AddrPSList_clean) {
-    myfile << "Scop:" << entry.first << "\n";
-    for (auto &a : entry.second) {
-      myfile << a;
-    }
-  }
-  myfile.close();
-  AddrCList = AddrCList_clean;
-  AddrPSList = AddrPSList_clean;
 }

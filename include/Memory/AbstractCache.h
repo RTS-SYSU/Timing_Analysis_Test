@@ -481,22 +481,14 @@ AbstractCacheImpl<T, C>::getPersistentScopes(const AbstractAddress addr) const {
       ret = std::move(intersection);
     }
     if (ret.size() > 0) {
-      for (auto s : ret) {
+      for (auto &s : ret) {
         int cs = -1;
         for (unsigned index = csItv.first; index <= csItv.second; index++) {
           int t = cacheSets[index]->getCSS(addr.getArray());
           cs = std::max(t, cs);
         }
         AddrPS aps(addr, cs, T->LEVEL);
-        if (AddrPSList[s].find(aps) != AddrPSList[s].end()) {
-          auto it = AddrPSList[s].find(aps);
-          auto aclo = *it;
-          AddrPSList[s].erase(it); // 删除旧元素
-          aps.join(aclo);
-          AddrPSList[s].insert(aps); // 重新插入
-        } else {
-          AddrPSList[s].insert(aps); // 重新插入
-        }
+        cl_info.insert_PS(s, aps);
       }
     }
 
@@ -509,16 +501,8 @@ AbstractCacheImpl<T, C>::getPersistentScopes(const AbstractAddress addr) const {
     if (ret.size() > 0) {
       int cs = cacheSets[index]->getCSS((TagType)tag);
       AddrPS aps(addr, cs, T->LEVEL);
-      for (auto s : ret) {
-        if (AddrPSList[s].find(aps) != AddrPSList[s].end()) {
-          auto it = AddrPSList[s].find(aps);
-          auto aclo = *it;
-          AddrPSList[s].erase(it); // 删除旧元素
-          aps.join(aclo);
-          AddrPSList[s].insert(aps); // 重新插入
-        } else {
-          AddrPSList[s].insert(aps); // 重新插入
-        }
+      for (auto &s : ret) {
+        cl_info.insert_PS(s, aps);
       }
     }
   }
