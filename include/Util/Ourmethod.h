@@ -8,13 +8,14 @@
 #include "llvm/CodeGen/MachineInstr.h"
 #include "llvm/CodeGen/MachineLoopInfo.h"
 #include <climits>
+#include <cstdint>
 #include <vector>
 
 struct BlockInfo {
   unsigned address;
-  unsigned exe_cnt; //执行次数
-  int age;     // 年龄，非持久性块使用
-  int cs_size; // 冲突集，持久性块专用
+  unsigned exe_cnt; // 执行次数
+  int age;          // 年龄，非持久性块使用
+  int cs_size;      // 冲突集，持久性块专用
   TimingAnalysisPass::dom::cache::Classification cl;
   BlockInfo() : cs_size(INT_MAX) {}
   BlockInfo(unsigned addr, unsigned cnt, int a,
@@ -36,13 +37,6 @@ public:
   std::map<std::string, Ceops> f2ceops;
 
   OurM(Zhangmethod zm, CL_info &cl_infor) {
-    // pre processing of PS block
-    std::map<const llvm::MachineLoop *, TimingAnalysisPass::PersistenceScope>
-        tmp_loop2scope;
-    for (auto &tmp_scope : cl_infor.AddrPSList) {
-      tmp_loop2scope[tmp_scope.first.loop] =
-          tmp_scope.first; // we make loop public
-    }
     for (auto &tmp_core : zm.CEOPs) {
       unsigned core_num = tmp_core.first;
       // FIXME, core_num is nor used now
@@ -53,24 +47,24 @@ public:
           Ceop ceop_res;
           for (auto &tmp_ur : tmp_ceop.URs) {
             UR ur_res;
-            // handling PS access
-            std::set<llvm::MachineLoop *> tmp_loop = loop_helper(tmp_ur);
-            std::set<AddrPS> tmp_ps_blocks;
-            if (!tmp_loop.empty()) {
-
-              //   TimingAnalysisPass::PersistenceScope tmp_ps =
-              //       tmp_loop2scope[tmp_loop];
-              //   tmp_ps_blocks = cl_infor.AddrPSList[tmp_ps];
-            }
             for (auto &tmp_pair : tmp_ur.mi2xclass) {
-              // handling instruction access
-              BlockInfo bi_res(TimingAnalysisPass::StaticAddrProvider->getAddr(
-                                   tmp_pair.first.MI),
-                               tmp_pair.second.x, INT_MAX,
-                               tmp_pair.second.classification);
-              // TODO PS is not handle, data access is not handle
+              unsigned addr = TimingAnalysisPass::StaticAddrProvider->getAddr(
+                  tmp_pair.first.MI);
+              int CS = INT_MAX;
+              // handling PS access
+              // for (auto &psB : tmp_ps_blocks) {
+              //   if (psB.address.getAsInterval().lower() == addr) {
+              //     CS = psB.CS_size;
+              //     break;
+              //   }
+              // }
+              BlockInfo bi_res(addr, tmp_pair.second.x, INT_MAX,
+                               tmp_pair.second.classification, CS);
+
               ur_res.push_back(bi_res);
             }
+            // TODO PS is not handle, data access is not handle
+
             ceop_res.push_back(ur_res);
           }
           ceops_res.push_back(ceop_res);
@@ -83,7 +77,39 @@ public:
 private:
   /*get the outmost loop in the same function, so that we can identify an ps
    * scope*/
-  std::set<llvm::MachineLoop *> loop_helper(const UnorderedRegion) {}
+  /// ctxmi的loop栈，最靠近的loop在vector头部
+  std::map<
+      std::string,
+      std::map<CtxMI, std::vector<std::pair<const llvm::MachineLoop *, bool>>>>
+      ctxmi2ps_loop_stack;
+  /// ctxdata的loop栈
+  // std::map<std::string,
+  //          std::map<CtxData,
+  //                   std::vector<std::pair<const llvm::MachineLoop *, bool>>>>
+  //     ctxdata2ps_loop_stack;
+
+  std::set<llvm::MachineLoop *> loop_helper(const MachineInstr *MI) {}
+
+  std::set<AddrPS> getPS(
+      const UnorderedRegion ur,
+      std::map<TimingAnalysisPass::PersistenceScope, std::set<AddrPS>> PSlist) {
+    // handling PS access
+    std::set<llvm::MachineLoop *> tmp_loop = loop_helper(ur);
+    std::set<AddrPS> tmp_ps_blocks;
+    for (llvm::MachineLoop *loop : tmp_loop) {
+      for (auto &scop : PSlist) {
+        if (scop.first.loop == loop) {
+          for (const AddrPS &ps : scop.second) {
+            if (ps.LEVEL == 2) {
+              tmp_ps_blocks.insert(ps);
+            }
+          }
+          break;
+        }
+      }
+    }
+    return tmp_ps_blocks;
+  }
 };
 
 #endif

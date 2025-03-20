@@ -611,6 +611,9 @@ ConvergenceType InOrderPipelineState<MemoryTopology>::isConvergedAfterCycleFrom(
 template <class Mem> void InOrderPipelineState<Mem>::getACL(Context ctx) const {
   auto result = this->memory.getIaccAdress();
   if (result) {
+    // if (this->inflightInstruction[IF_ID_IND] != boost::none) {
+    //   ctx = this->inflightInstruction[IF_ID_IND].get().second;
+    // }
     auto [addr, CL, age] = *result;
     AddrCL acl(addr, ctx, CL, age);
     cl_info.insert_CL(acl);
