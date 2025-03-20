@@ -1,4 +1,8 @@
 int exec() {
+	for(int i=0;i < 5; ++i){
+		i += 1;
+		i -= 1;
+	}
 	return 0;
 }
 
@@ -17,7 +21,9 @@ int b() {
 }
 
 int loop() {
-	a();
-	b();
+	for(int i=0;i<3;i++){
+		a();
+		b();
+	}
 	return 0;
 }

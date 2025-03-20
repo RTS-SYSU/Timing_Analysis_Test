@@ -285,7 +285,7 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     // 清理一下数据
     cl_info.CL_clean();
     Zhangmethod ZW_mth = Zhangmethod(mcif.coreinfo, cl_info, func2corenum);
-    ZW_mth.run();
+    ZW_mth.run(cl_info);
   }
   return false;
 }
