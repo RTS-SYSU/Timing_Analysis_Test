@@ -10,6 +10,8 @@ UtilPathAnalysis.cpp
 Vertex.cpp
 AbstractAddress.cpp
 GlobalVars.cpp
+Zhangmethod.cpp
+Ourmethod.cpp
 DEPENDS LLVMAnalysis LLVMCodeGen LLVMCore LLVMSupport LLVMTarget
 )
 

@@ -31,6 +31,9 @@ class CtxMI {
 public:
   const llvm::MachineInstr *MI;
   std::vector<const llvm::MachineInstr *> CallSites;
+  CtxMI(){
+    MI = nullptr;
+  }
 
   bool operator==(const CtxMI &other) const {
     return MI == other.MI && CallSites == other.CallSites;
@@ -240,18 +243,59 @@ private:
   }
 };
 
-struct X_Class {
+class CtxData {
+public:
+  CtxMI ctx_mi;
+  TimingAnalysisPass::AbstractAddress data_addr;
+  CtxData()
+  :data_addr(TimingAnalysisPass::AbstractAddress(unsigned(0))){}
+  bool operator==(const CtxData &other) const {
+    return ctx_mi == other.ctx_mi && data_addr == other.data_addr;
+  }
+  bool operator!=(const CtxData &other) const { return !(*this == other); }
+  bool operator<(const CtxData &other) const { // 为了能作为map的键
+    if (ctx_mi != other.ctx_mi) {
+      return ctx_mi < other.ctx_mi;
+    }
+    return data_addr < other.data_addr;
+  }
+};
+
+class AccessInfo {
+public:
   unsigned x; // 执行次数
   TimingAnalysisPass::dom::cache::Classification classification;
-  X_Class()
-      : x(1), classification(TimingAnalysisPass::dom::cache::CL_HIT // FIXME
-              ) {}
+  int age;
+  unsigned data_addr; // only for data access
+  AccessInfo()
+      :x(1), 
+      classification(TimingAnalysisPass::dom::cache::CL_BOT), 
+      age(INT_MAX),
+      data_addr(0)
+    {}
+  friend std::ostream &operator<<(std::ostream &os, const AccessInfo &AI) {
+    os << "[addr_0x" << std::hex << AI.data_addr << 
+    "_cl_" << AI.classification << "_age_" << AI.age 
+    << "_execnt_" << AI.x <<"]\n";
+    return os;
+  }
+};
+// 暂时废弃
+struct PSAccessInfo {
+  unsigned exe_cnt;
+  int cs_size;
+  unsigned address; 
+  PSAccessInfo()
+      :exe_cnt(0), 
+      cs_size(INT_MAX),
+      address(0)
+    {}
 };
 
 /// 提供 ZW paper f函数运算所需的信息的查找方式
 class UnorderedRegion {
 public:
-  std::map<CtxMI, X_Class> mi2xclass;
+  std::map<CtxMI, AccessInfo> mi2xclass;
 };
 
 class CEOP {
@@ -264,177 +308,54 @@ class Zhangmethod {
 public:
   Zhangmethod() {}
   Zhangmethod(std::vector<std::vector<std::string>> &setc, CL_info &cl_infor,
-              std::map<std::string, unsigned> &func2corenum1) {
-    this->coreinfo = setc;
-    std::map<std::string,
-             std::map<TimingAnalysisPass::dom::cache::Classification, unsigned>>
-        cl_cnt;
-    for (const auto &tmp_acl : cl_infor.AddrCList) {
-      if (tmp_acl.MIAddr != 0) {
-        continue; // TODO DataCache
-      } else {
-        auto itv = tmp_acl.address.getAsInterval();
-        const TimingAnalysisPass::Address tmp_upper_cache_line =
-            itv.upper() & ~(L2linesize - 1);
-        const TimingAnalysisPass::Address tmp_lower_cache_line =
-            itv.lower() & ~(L2linesize - 1);
-        assert(tmp_lower_cache_line == tmp_upper_cache_line);
-        if (TimingAnalysisPass::StaticAddrProvider->hasMachineInstrByAddr(
-                itv.lower())) {
-          const llvm::MachineInstr *miptr = // got mi
-              TimingAnalysisPass::StaticAddrProvider->getMachineInstrByAddr(
-                  itv.lower());
-          auto tokenlist = tmp_acl.ctx.getTokenList();
-          std::vector<const llvm::MachineInstr *> CallSites;
-          std::string tmp_entry = "";
-          unsigned tmp_entry_corenum = -1;
-          for (const auto &tmptoken : tokenlist) { // got callsites
-            if (tmptoken->getType() ==
-                TimingAnalysisPass::PartitionTokenType::CALLSITE) {
-              TimingAnalysisPass::PartitionTokenCallSite *cstoken =
-                  dynamic_cast<TimingAnalysisPass::PartitionTokenCallSite *>(
-                      tmptoken);
-              if (!cstoken) {
-                assert(0 && "fail to convert token into callsite token");
-              }
-              const llvm::MachineInstr *callsite = cstoken->getCallSite();
-              CallSites.push_back(callsite);
-            } else if (tmptoken->getType() ==
-                       TimingAnalysisPass::PartitionTokenType::FUNCALLEE) {
-              if (tmp_entry == "") {
-                TimingAnalysisPass::PartitionTokenFunCallee *cetoken =
-                    dynamic_cast<TimingAnalysisPass::PartitionTokenFunCallee *>(
-                        tmptoken);
-                tmp_entry = cetoken->getCallee()->getName().str();
-                tmp_entry_corenum =
-                    func2corenum1[tmp_entry]; // got corenum & entry
-              }
-            }
-          }
-          CtxMI tmpCM;
-          tmpCM.MI = miptr;
-          tmpCM.CallSites = CallSites;
-          addClass(tmp_entry_corenum, tmp_entry, tmpCM, tmp_acl.CL, 1);
-          cl_cnt[tmp_entry][tmp_acl.CL] += 1;
-        } else {
-          assert(itv.lower() == 0 && "why we have an addr without mi?");
-        }
-      }
-    }
-    if (ZWDebug) { // 查看收集的CL信息
-      std::ofstream Myfile;
-      Myfile.open("ZW_ACL_Summary.txt", std::ios_base::app);
-      Myfile << "###CL Information###\n";
-      for (const auto &clmap : cl_cnt) {
-        Myfile << "##EntryPoint: " << clmap.first << "\n";
-        for (const auto &cl_pair : clmap.second) {
-          Myfile << "#CL: " << cl_pair.first << " cnt is " << cl_pair.second
-                 << "\n";
-        }
-      }
-      // TODO ctx info
-      Myfile.close();
-    }
-  }
-  // CoreNum -> vector of function
-  std::vector<std::vector<std::string>> coreinfo;
-  // 第一轮迭代，直接返回所有能冲突的函数，而与上述基于生命周期的getConflictFunction区分开来
+              std::map<std::string, unsigned> &func2corenum1);
+  /// helper: 第一轮迭代，直接返回所有能冲突的函数(生命周期迭代)
   std::vector<std::string>
-  getInitConflictFunction(unsigned core, const std::string &function) {
-    // 目前没有考虑跨核依赖
-    std::vector<std::string> list;
-    for (int i = 0; i < coreinfo.size(); i++) {
-      if (i == core) {
-        continue;
-      }
-      for (int j = 0; j < coreinfo[i].size(); j++) {
-        list.emplace_back(coreinfo[i][j]);
-      }
-    }
-    return list;
-  }
-  // 张伟复现
-  // (Core, Function) -> [CEOP]
-  void run() {
-    // 进行UR和CEOP的获取
-    for (unsigned i = 0; i < CoreNums; ++i) {
-      outs() << " -> UR Analysis for core: " << i;
+  getInitConflictFunction(unsigned core, const std::string &function);
+  /// 计算UR，计算张伟WCEET
+  void run(CL_info &cl_infor);
 
-      for (std::string &functionName : coreinfo[i]) {
-        outs() << " entry point: " << functionName << '\n';
-        URCalculation(i, functionName);
-        outs() << "Core-" << i << " Func: " << functionName << " have "
-               << CEOPs[i][functionName].size() << " CEOP(s)" << '\n';
-      }
-    }
-
-    // 现在先不实现生命周期迭代
-    outs() << " -> WCET Inter Analysis start\n";
-    for (unsigned local = 0; local < CoreNums; ++local) {
-      for (std::string &localFunc : coreinfo[local]) {
-        // 选出本地task
-        unsigned wceetOfTSum = 0;
-        for (unsigned inter = 0; inter < CoreNums; ++inter) { // interference
-          if (local == inter)
-            continue;
-          for (std::string &interFunc :
-               getInitConflictFunction(local, localFunc)) {
-            // 这个Init的就是返回几乎全部，反正是第一轮
-            // 要考虑函数可能执行多次，这里默认getInitConflictFunction会多次返回
-            // 选出冲突task
-            unsigned wceetOf2T = 0; // 两个Task之间的WCEET
-            for (const CEOP &localP : CEOPs[local][localFunc]) {
-              for (const CEOP &interP : CEOPs[inter][interFunc]) {
-                // 选出两条Path, 开始dp，横干扰、竖本地
-                unsigned localPLen = localP.URs.size();
-                unsigned interPLen = interP.URs.size();
-                unsigned ArvVal[localPLen][interPLen] = {0};
-
-                for (unsigned i = 1; i < localPLen; i++) {
-                  ArvVal[i][0] =
-                      getFValue(local, localP, i, inter, interP, 0) +
-                      ArvVal[i - 1][0]; // 感觉paper公式有问题，改成累加
-                }
-                for (unsigned i = 1; i < interPLen; i++) {
-                  ArvVal[0][i] = getFValue(local, localP, 0, inter, interP, i) +
-                                 ArvVal[0][i - 1];
-                }
-                for (unsigned i = 1; i < localPLen; i++) {
-                  for (unsigned j = 1; j < interPLen; j++) {
-                    ArvVal[i][j] =
-                        std::max(ArvVal[i - 1][j], ArvVal[i][j - 1]) +
-                        getFValue(local, localP, i, inter, interP, j);
-                  }
-                }
-                wceetOf2T =
-                    std::max(wceetOf2T, ArvVal[localPLen - 1][interPLen - 1]);
-              }
-            }
-            wceetOf2T *=
-                Latency; // BG Mem的延迟值 from Command Line, 但感觉很容易重名
-            wceetOfTSum += wceetOf2T; // 不同核所有冲突的函数都加上
-          }
-        }
-        currWcetInter[local][localFunc] = wceetOfTSum;
-        outs() << "Core-" << local << " Func:" << localFunc << " 's WCEET is "
-               << wceetOfTSum << "\n";
-      }
-    }
-    std::ofstream myfile;
-    // WCET_{sum} = WCET_{intra} + WCEET
-    std::string fileName = "ZW_Output.txt";
-    myfile.open(fileName, std::ios_base::app);
-    for (unsigned local = 0; local < CoreNums; ++local) {
-      for (std::string &localFunc : coreinfo[local]) {
-        unsigned wcet_intra = currWcetIntra[local][localFunc];
-        unsigned wceet = currWcetInter[local][localFunc];
-        myfile << "Core-" << local << " F-" << localFunc
-               << " intra:" << wcet_intra << " wceet:" << wceet << std::endl;
-      }
-    }
-  }
+  // Must Instr Access
   std::map<unsigned, std::map<std::string, std::vector<CEOP>>>
       CEOPs; // 各个task的CEOP集合(别set了，比较函数不好写)
+  // Must Data Access
+  /// @brief  helper：存储ctxmi有哪些关联data访存(unsigned格式)
+  /// 可供Ourmethod使用
+  std::map<std::string, // 初始化时记录了除exe_cnt外信息
+    std::map<CtxMI, std::vector<AccessInfo>>> entry2ctxmi2datainfo;
+  /// @brief  helper：存储ctxmi有哪些关联data访存(AbstractAddress格式)
+  /// 可供Ourmethod使用
+  std::map<std::string, 
+    std::map<CtxMI, std::vector
+      <TimingAnalysisPass::AbstractAddress>>> entry2ctxmi2data_absaddr;
+  /// ctxmi的loop栈，最靠近的loop在vector头部
+  std::map<std::string,
+    std::map<CtxMI, std::vector<
+      std::pair<const llvm::MachineLoop*, bool>>>> ctxmi2ps_loop_stack;
+  /// ctxdata的loop栈
+  std::map<std::string,
+    std::map<CtxData, std::vector<
+      std::pair<const llvm::MachineLoop*, bool>>>> ctxdata2ps_loop_stack;
+  // PS Instr Access(暂时废弃)
+  std::map<std::string,
+    std::map<CtxMI, PSAccessInfo>> ctxmi2ps_ai;
+  // PS Data Access(暂时废弃)
+  std::map<std::string,
+    std::map<CtxData, PSAccessInfo>> ctxdata2ps_ai;
+private:    
+  // CoreNum -> vector of function
+  std::vector<std::vector<std::string>> coreinfo;
+// ===== Persistence analysis =====
+  // TODO 废弃
+  std::map<const llvm::MachineLoop *, TimingAnalysisPass::PersistenceScope>
+    loop2ps_scope;
+  /// helper: PS Scope内有哪些持久性块地址？(AbsAddr版) 在get loop stack之前需要构建
+  /// 此处包含了Instr和Data
+  std::map<const llvm::MachineLoop *, std::map<
+    TimingAnalysisPass::AbstractAddress, bool>>
+    loop2addr_isps;
+// ===== end Persistence analysis =====
+  // for metrics
   std::map<unsigned, std::map<std::string, unsigned>> currWcetIntra;
   std::map<unsigned, std::map<std::string, unsigned>>
       currWcetInter; // 目前各Task的WCEET，迭代更新
@@ -449,60 +370,7 @@ public:
   // 注意从0还是1开始计数,目前0,见main; FIXME这里参数有点冗余;
   // TODO需要数据cache分析
   unsigned getFValue(unsigned localCore, CEOP localPath, unsigned localUR,
-                     unsigned interCore, CEOP interPath, unsigned interUR) {
-    // TODO
-    // 这里参数是不是还漏了Core上的哪个函数？有CEOP问题不大，甚至Core号也是多余的
-    UnorderedRegion local_ur = localPath.URs[localUR];
-    UnorderedRegion inter_ur = interPath.URs[interUR];
-    std::map<unsigned, unsigned> index2ExeTimes;
-    std::map<unsigned, bool> indexIsDisturbed;
-    unsigned ret_val = 0;
-
-    // for debug
-    std::ofstream myfile;
-    std::string fileName = "ZW_F_addr.txt";
-    if (ZWDebug) {
-      myfile.open(fileName, std::ios_base::app);
-      myfile << "Core:" << localCore << " LocalUR:" << localUR << " Core"
-             << interCore << " InterUR:" << interUR << "\n";
-    }
-    for (const auto &local_pair : local_ur.mi2xclass) {
-      const llvm::MachineInstr *local_mi = local_pair.first.MI;
-      unsigned tmp_exe_times = local_pair.second.x;
-      if (local_pair.second.classification !=
-          TimingAnalysisPass::dom::cache::CL2_HIT) {
-        continue;
-      }
-      index2ExeTimes[mi2cacheIndex(local_mi)] += tmp_exe_times;
-      if (ZWDebug) {
-        myfile << "  " << "LocalMI" << local_mi << " Iaddr:"
-               << TimingAnalysisPass::StaticAddrProvider->getAddr(local_mi)
-               << " Cindex" << mi2cacheIndex(local_mi) << "\n";
-      }
-    }
-    for (const auto &inter_pair : inter_ur.mi2xclass) {
-      const llvm::MachineInstr *inter_mi = inter_pair.first.MI;
-      if (inter_pair.second.classification ==
-          TimingAnalysisPass::dom::cache::CL_HIT) {
-        continue;
-      }
-      indexIsDisturbed[mi2cacheIndex(inter_mi)] = true;
-      if (ZWDebug) {
-        myfile << "  " << "InterMI" << inter_mi << " Iaddr:"
-               << TimingAnalysisPass::StaticAddrProvider->getAddr(inter_mi)
-               << " Cindex" << mi2cacheIndex(inter_mi) << "\n";
-      }
-    }
-    for (auto &pair : index2ExeTimes) {
-      if (indexIsDisturbed[pair.first]) {
-        ret_val += pair.second;
-      }
-    }
-    if (ZWDebug) {
-      myfile << "  Contention for " << ret_val << " times\n";
-    }
-    return ret_val;
-  }
+                     unsigned interCore, CEOP interPath, unsigned interUR);
 
   // helper function
   unsigned mi2cacheIndex(const llvm::MachineInstr *mi) {
@@ -511,15 +379,14 @@ public:
     // line_size为64byte的话，低6位地址是offset；1024set的话，再过10位是index
   }
 
-  void addClass(unsigned core, std::string function, CtxMI mi,
-                TimingAnalysisPass::dom::cache::Classification classification,
-                unsigned x // 目前收集的位置没有x信息所以闲置
-  ) {
-    ctxmi_class[core][function][mi] = classification;
-    return;
-  }
+  // void addClass(unsigned core, std::string function, CtxMI mi,
+  //               TimingAnalysisPass::dom::cache::Classification classification,
+  //               unsigned x // 目前收集的位置没有x信息所以闲置
+  // ) {
+  //   ctxmi_class[core][function][mi] = classification;
+  //   return;
+  // }
 
-private:
   // module1: 暂存对一个task的UR分析数据，对应oi-wiki tarjan算法
   std::map<CtxMI, unsigned> dfn;
   std::map<CtxMI, unsigned> low;
@@ -541,14 +408,14 @@ private:
                     std::map<const llvm::MachineInstr *,
                              TimingAnalysisPass::dom::cache::Classification>>>
       mi_class; // aborted
-  std::map<
-      unsigned,
-      std::map<std::string, // 先存下分类信息
-               std::map<CtxMI, TimingAnalysisPass::dom::cache::Classification>>>
-      ctxmi_class;
+  // std::map<
+  //     unsigned,
+  //     std::map<std::string, // 先存下分类信息
+  //              std::map<CtxMI, TimingAnalysisPass::dom::cache::Classification>>>
+  //     ctxmi_class;
   std::map<unsigned, std::map<std::string, // core, function, ctxmi -> xclass
-                              std::map<CtxMI, X_Class>>>
-      ctxmi_xclass;
+                              std::map<CtxMI, AccessInfo>>>
+      ctxmi_miai;
   unsigned cur_core;
   std::string cur_func;
 
@@ -559,207 +426,144 @@ private:
   // 显式收集MI-CFG，用于debug
   std::map<CtxMI, std::vector<CtxMI>> mi_cfg; // TODO 输出修改
 
-public:
   /// UR于CEOP的计算函数
-  void URCalculation(unsigned core, const std::string &function) {
-    // 参照analysisDriver.h
-    auto MF = TimingAnalysisPass::machineFunctionCollector->getFunctionByName(
-        function);
-    const MachineBasicBlock *analysisStart = &*(MF->begin());
-    const llvm::MachineInstr *firstMI = &(analysisStart->front());
-    // 每次需要清空上述用于暂存的数据结构
-    dfncnt = stack_pt = ur_id = 0;
-    // 新的task清空全部暂存的数据结构；map用迭代器清空会把实例都清了，这里就只清指针
-    dfn.clear();
-    low.clear();
-    ur_stack.clear();
-    in_stack.clear();
-    mi_ur.clear();
-    ur_size.clear();
-    ur_graph.clear();
-    ur_mi.clear();
-    tmpCEOPs.clear();
-    mi_cfg.clear();
-
-    cur_core = core;
-    cur_func = function;
-
-    CtxMI firstCM;
-    firstCM.MI = firstMI;
-    tarjan(firstCM); // module1: 在CFG上获取UR
-    getXClass(); // module3: 需要先收集x_class信息，这样下一步得到的信息才完整
-    if (ZWDebug) {
-      print_mi_cfg(function); // debug
-    }
-    collectUrInfo(); // module2: 建立UR图和ur为键的信息映射
-    collectCEOPInfo(firstCM); // module4: dfs遍历图，并同时建立起CEOP的数据结构
-    CEOPs[core][function] = tmpCEOPs;
-
-    if (ZWDebug) {
-      std::ofstream myfile;
-      std::string fileName = "ZW_Output.txt";
-      myfile.open(fileName, std::ios_base::app);
-      myfile << "EntryPoint: " << function << " with " << tmpCEOPs.size()
-             << "CEOPs" << std::endl;
-      for (int i = 0; i < tmpCEOPs.size(); i++) {
-        CEOP tmp_ceop = tmpCEOPs[i];
-        myfile << "  CEOP-" << i << " have " << tmp_ceop.URs.size() << " UR(s)"
-               << std::endl;
-      }
-    }
-  }
-
+  void URCalculation(unsigned core, const std::string &function);
   // helper, 在此将所有CEOP所需数据存入tmpCEOPs
-  void ceopDfs(unsigned u) {
-    UnorderedRegion curUR{};
-    std::vector<CtxMI> curMIs = ur_mi[u];
-    for (int i = 0; i < curMIs.size(); i++) {
-      X_Class obj = ctxmi_xclass[cur_core][cur_func][curMIs[i]];
-      // if(curMIs[i]->isTransient()) continue; // 这里包括伪指令等
-      curUR.mi2xclass.insert(std::make_pair(curMIs[i], obj));
-    }
-    assert(curUR.mi2xclass.size() != 0 && "UR must have at least 1 instr");
-    tmpPath.push_back(curUR);
-
-    std::vector<unsigned> vs = ur_graph[u];
-    if (vs.size() == 0) { // 出口
-      CEOP curCeop{};
-      curCeop.URs = tmpPath;
-      tmpCEOPs.push_back(curCeop); // recorded
-      tmpPath.pop_back();
-      return;
-    }
-
-    for (int i = 0; i < vs.size(); i++) {
-      unsigned v = vs[i];
-      ceopDfs(v);
-    }
-    tmpPath.pop_back();
-    return;
-  }
-
-  // 构造之前定义的CEOP和UR对象，UR中的X_Class内容先设置为空
-  void collectCEOPInfo(CtxMI firstCM) {
-    unsigned s = mi_ur[firstCM];
-    ceopDfs(s);
-  }
-
+  void ceopDfs(unsigned u);
+  // 构造之前定义的CEOP和UR对象，UR中的AccessInfo内容先设置为空
+  void collectCEOPInfo(CtxMI firstCM);
   // 反过来获取UR -> (出边、 MI);也即包含了建立UR图
-  void collectUrInfo() { // 改为 ur_ctxmi
-    for (auto m_u : mi_ur) {
-      CtxMI tmp_cm = m_u.first;
-      unsigned ur_id_num = m_u.second;
-      auto it = ur_graph.find(ur_id_num);
-      if (it == ur_graph.end()) { // 首次记录某个UR
-        std::vector<unsigned> ur_out_edge_vec;
-        ur_graph[ur_id_num] = ur_out_edge_vec;
-        std::vector<CtxMI> ur_mi_vec;
-        ur_mi[ur_id_num] = ur_mi_vec;
+  void collectUrInfo();
+  void print_mi_cfg(const std::string &function);
+
+  /// 在拥有Class之后，此函数计算X(即执行次数)，需要cur_core core_func.
+  /// 这里只计算Must的I/D Access, PS不在这里算
+  void getExeCntMust();
+  /// @brief 计算PS块的执行次数
+  unsigned getExeCntPSI(CtxMI CM);
+    /// @brief 计算PS块的执行次数
+  unsigned getExeCntPSD(CtxData CD);
+  // 遍历MI-CFG
+  void tarjan(CtxMI CM);
+
+  /// @brief 用于给run()写ctxmi2ps_loop_stack，返回一条CtxMI的loop stack
+  /// @param CM 
+  /// @return 
+  std::vector<std::pair<const llvm::MachineLoop*, bool>> 
+  getGlobalLoop(CtxMI CM, const CtxMI topCM){
+    // 首先拿到同function的最入loop，使用动态的CM
+    const llvm::MachineInstr *MI = CM.MI;
+    const llvm::MachineBasicBlock *MBB = MI->getParent();
+    const llvm::MachineFunction *MF = MBB->getParent();
+    const llvm::MachineLoop *targetLoop = nullptr;
+    std::vector<const llvm::MachineLoop *> tmp_loops;
+    for (const llvm::MachineLoop *loop :
+         TimingAnalysisPass::LoopBoundInfo->getAllLoops()) {
+      if (MF == loop->getHeader()->getParent() && loop->contains(MBB)) {
+        tmp_loops.push_back(loop);
       }
-      // 在ur中添加mi
-      ur_mi[ur_id_num].push_back(tmp_cm);
-      // 在ur中添加后继ur
-      std::vector<CtxMI> succ_cms = tmp_cm.getSucc();
-      for (auto succ_cm : succ_cms) {
-        unsigned target_ur_id_num = mi_ur[succ_cm];
-        if (ur_id_num != target_ur_id_num) {
-          ur_graph[ur_id_num].push_back(target_ur_id_num);
+    }
+    for(auto &tmp_loop:tmp_loops){
+      bool tmp_flag = false;
+      for (auto *Subloop : tmp_loop->getSubLoops()) {
+        if(Subloop->contains(MBB)){
+          tmp_flag = true;
+          break;
         }
       }
-    }
-  }
-
-  void print_mi_cfg(const std::string &function) {
-    const std::vector<std::string> colors = {
-        "turquoise", "lightblue", "lightgreen", "lightyellow", "white"};
-    std::unordered_map<std::string, std::string> func_color_map;
-    int color_index = 0;
-    std::error_code EC;
-    raw_fd_ostream File("ZW_" + function + "_ur_cfg.dot", EC,
-                        sys::fs::OpenFlags::OF_Text);
-    if (EC) {
-      errs() << "Error opening file: " << EC.message() << "\n";
-    }
-    File << "digraph \"MachineCFG of " + function + "\" {\n";
-    // 为CtxMI分配简短ID
-    std::map<CtxMI, unsigned> cm_id_map;
-    unsigned cnt = 0;
-    for (auto tmp_pair : mi_cfg) {
-      CtxMI CM = tmp_pair.first;
-      cm_id_map[CM] = cnt++;
-    }
-    for (auto tmp_pair : mi_cfg) {
-      // 函数获取或分配颜色
-      CtxMI CM = tmp_pair.first;
-      const llvm::MachineInstr *MI = CM.MI;
-      const std::string func_name =
-          MI->getParent()->getParent()->getFunction().getName().str();
-      if (func_color_map.find(func_name) == func_color_map.end()) {
-        func_color_map[func_name] = colors[color_index % colors.size()];
-        color_index++;
-      }
-      const std::string color = func_color_map[func_name];
-      // 节点
-      File << "  " << "Node" << cm_id_map[CM] << " [label=\"MI" << MI
-           << "\\l  ";
-      MI->print(File, false, false, true);
-      File << "\\l  ";
-      std::string tmp_flag = (MI->isTransient()) ? "True" : "False";
-      File << "isTransient:" << tmp_flag << "\\l  ";
-      File << "ExeCnt:" << ctxmi_xclass[cur_core][function][CM].x << " "
-           << "CHMC:" << ctxmi_xclass[cur_core][function][CM].classification
-           << "\\l  ";
-      unsigned tmp_addr = TimingAnalysisPass::StaticAddrProvider->getAddr(MI);
-      unsigned tmp_line = tmp_addr / L2linesize;
-      unsigned tmp_index = tmp_line % NN_SET;
-      File << "MI's addr:";
-      TimingAnalysisPass::printHex(File, tmp_addr);
-      File << " cache line:" << tmp_line << " cache index:" << tmp_index
-           << "\\l  ";
-      File << "More Info of MI:"
-           << TimingAnalysisPass::getMachineInstrIdentifier(MI) << "\\l";
-      File << "in UR" << mi_ur[CM] << "\\l  ";
-      File << "\" fillcolor=\"" << color << "\" style=\"filled\"];\n";
-      // 边
-      std::vector<CtxMI> tmp_CMs = tmp_pair.second;
-      for (auto tmp_CM : tmp_CMs) {
-        File << "  " << "Node" << cm_id_map[CM] << " -> " << "Node"
-             << cm_id_map[tmp_CM] << ";\n";
+      if(!tmp_flag){
+        targetLoop = tmp_loop;
       }
     }
-    File << "}\n";
+    // 入栈所有同function的loop，key须为原分析topCM
+    std::vector<std::pair<const llvm::MachineLoop*, bool>> res_loop_stack;
+    const llvm::MachineLoop* tmp_loop = targetLoop;
+    while(tmp_loop!=nullptr){
+      TimingAnalysisPass::AbstractAddress tmp_aa = 
+        TimingAnalysisPass::AbstractAddress(
+          TimingAnalysisPass::StaticAddrProvider->getAddr(topCM.MI)
+        );
+      std::pair<const llvm::MachineLoop*, bool> tmp_pair 
+        = std::make_pair(tmp_loop, loop2addr_isps[tmp_loop][tmp_aa]);
+      res_loop_stack.push_back(tmp_pair);
+      tmp_loop = tmp_loop->getParentLoop();
+    }
+    // 递归, 使用动态的CM
+    if(CM.CallSites.size()!=0){
+      const llvm::MachineInstr *tmp_callsite = CM.CallSites.back();
+      std::vector<const llvm::MachineInstr *> tmpCS = CM.CallSites;
+      tmpCS.pop_back();
+      CtxMI tmpCM;
+      tmpCM.MI = tmp_callsite;
+      tmpCM.CallSites = tmpCS;
+      std::vector<std::pair<const llvm::MachineLoop*, bool>> 
+        callers_ls = getGlobalLoop(tmpCM, topCM);
+      for(int i=0;i<callers_ls.size();i++){
+        res_loop_stack.push_back(callers_ls[i]);
+      }
+    }
+    return res_loop_stack;
   }
 
-  // 在拥有Class之后，此函数计算X(即执行次数)，需要cur_core core_func.
-  // FIXME：以CtxMI标识
-  void getXClass() {
-    // assert(mi_class[cur_core][cur_func].size() > 0 &&
-    //   "We must collect CHMC first");
-    for (auto tmp_pair : mi_ur) {
-      CtxMI tmp_cm = tmp_pair.first;
-      X_Class obj;
-      // FIXME: for CL that we don't collect
-      if (ctxmi_class[cur_core][cur_func].find(tmp_cm) ==
-          ctxmi_class[cur_core][cur_func].end()) {
-        obj.classification = TimingAnalysisPass::dom::cache::CL_BOT;
-        if (ZWDebug) {
-          std::ofstream myfile;
-          std::string fileName = "ZW_Uncollected.txt";
-          myfile.open(fileName, std::ios_base::app);
-          myfile << "Core:" << cur_core << " Func:" << cur_func
-                 << " MI:" << tmp_cm << " is uncollected\n";
-          myfile.close();
+  /// @brief 用于给run()写ctxdata2ps_loop_stack，
+  /// 返回一条CtxMI的对应访存的loop stack
+  /// @param CM 
+  /// @return 
+  std::vector<std::pair<const llvm::MachineLoop*, bool>> 
+  getGlobalLoopData(CtxData CD){
+    // 首先拿到同function的最入loop(same as getGlobalLoop)
+    const llvm::MachineInstr *MI = CD.ctx_mi.MI;
+    const llvm::MachineBasicBlock *MBB = MI->getParent();
+    const llvm::MachineFunction *MF = MBB->getParent();
+    const llvm::MachineLoop *targetLoop = nullptr;
+    std::vector<const llvm::MachineLoop *> tmp_loops;
+    for (const llvm::MachineLoop *loop :
+         TimingAnalysisPass::LoopBoundInfo->getAllLoops()) {
+      if (MF == loop->getHeader()->getParent() && loop->contains(MBB)) {
+        tmp_loops.push_back(loop);
+      }
+    }
+    for(auto &tmp_loop:tmp_loops){
+      bool tmp_flag = false;
+      for (auto *Subloop : tmp_loop->getSubLoops()) {
+        if(Subloop->contains(MBB)){
+          tmp_flag = true;
+          break;
         }
-      } else {
-        TimingAnalysisPass::dom::cache::Classification tmp_cl =
-            ctxmi_class[cur_core][cur_func][tmp_cm];
-        obj.classification = tmp_cl;
       }
-      obj.x = getGlobalUpBd(tmp_cm);
-      ctxmi_xclass[cur_core][cur_func][tmp_cm] = obj;
+      if(!tmp_flag){
+        targetLoop = tmp_loop;
+      }
     }
+    // 入栈所有同function的loop
+    std::vector<std::pair<const llvm::MachineLoop*, bool>> res_loop_stack;
+    const llvm::MachineLoop* tmp_loop = targetLoop;
+    while(tmp_loop!=nullptr){
+      TimingAnalysisPass::AbstractAddress tmp_aa = CD.data_addr; // diff
+      std::pair<const llvm::MachineLoop*, bool> tmp_pair 
+        = std::make_pair(tmp_loop, loop2addr_isps[tmp_loop][tmp_aa]);
+      res_loop_stack.push_back(tmp_pair);
+      tmp_loop = tmp_loop->getParentLoop();
+    }
+    // 递归
+    if(CD.ctx_mi.CallSites.size()!=0){
+      const llvm::MachineInstr *tmp_callsite = CD.ctx_mi.CallSites.back();
+      std::vector<const llvm::MachineInstr *> tmpCS = CD.ctx_mi.CallSites;
+      tmpCS.pop_back();
+      CtxData tmpCD;
+      CtxMI tmpCM; // diff
+      tmpCM.MI = tmp_callsite;
+      tmpCM.CallSites = tmpCS;
+      tmpCD.ctx_mi = tmpCM;
+      tmpCD.data_addr = CD.data_addr; // this is not changed
+      std::vector<std::pair<const llvm::MachineLoop*, bool>> 
+        callers_ls = getGlobalLoopData(tmpCD);
+      for(int i=0;i<callers_ls.size();i++){
+        res_loop_stack.push_back(callers_ls[i]);
+      }
+    }
+    return res_loop_stack;
   }
-
   /*
       搞不了自底向上，搞自顶向下也是ok，在一个函数的所有loop里搜，搜到此BB在此loop里即可取
     优先取更深层的loop；一个函数多个循环是可以的，一个Basic
@@ -768,101 +572,12 @@ public:
     处理。于是我们可以处理任意层函数和任意层循环。
       一个local函数中，loop再多也就是个森林，通向我们要寻找的那个BB路径是唯一的。
   */
-  unsigned getGlobalUpBd(CtxMI CM) {
-    const llvm::MachineInstr *MI = CM.MI;
-    const llvm::MachineBasicBlock *MBB = MI->getParent();
-    const llvm::MachineFunction *MF = MBB->getParent();
-    unsigned x_local = 1;
-    // local execute times
-    for (const MachineLoop *loop :
-         TimingAnalysisPass::LoopBoundInfo->getAllLoops()) {
-      if (MF == loop->getHeader()->getParent() &&
-          loop->contains(
-              MBB)) { // 这里得到的就是路径上的一层loop，需要向下、向上搜
-        x_local *= bd_helper1(MBB, loop);
-        if (loop->getParentLoop() != nullptr) {
-          x_local *= bd_helper2(loop->getParentLoop());
-        }
-        break;
-      }
-    }
-    if (CM.CallSites.size() != 0) { // 非最外层函数
-      const llvm::MachineInstr *callsite = CM.CallSites.back();
-      std::vector<const llvm::MachineInstr *> tmpCS = CM.CallSites;
-      tmpCS.pop_back();
-      CtxMI tmpCM;
-      tmpCM.MI = callsite;
-      tmpCM.CallSites = tmpCS;
-      x_local *= getGlobalUpBd(tmpCM);
-    }
-    return x_local;
-  }
+  unsigned getGlobalUpBd(CtxMI CM) ;
 
   unsigned bd_helper1(const llvm::MachineBasicBlock *MBB,
-                      const llvm::MachineLoop *Loop) {
-    unsigned x_local = 1;
-    if (TimingAnalysisPass::LoopBoundInfo->hasUpperLoopBound(
-            Loop, TimingAnalysisPass::Context())) {
-      x_local *= TimingAnalysisPass::LoopBoundInfo->getUpperLoopBound(
-          Loop, TimingAnalysisPass::Context());
-      // 此函数加了个else已经是以manual而非SCEV优先
-    }
-    for (auto *Subloop : Loop->getSubLoops()) {
-      if (Subloop->getParentLoop() == Loop // 必须是直接儿子，不能是孙子等
-          && Subloop->contains(MBB)) {
-        x_local *= bd_helper1(MBB, Subloop);
-        break; // 不会有两个同时包含的
-      }
-    }
-    return x_local;
-  }
+                      const llvm::MachineLoop *Loop);
 
-  unsigned bd_helper2(const llvm::MachineLoop *Loop) {
-    unsigned scalar = 1;
-    if (TimingAnalysisPass::LoopBoundInfo->hasUpperLoopBound(
-            Loop, TimingAnalysisPass::Context())) {
-      scalar *= TimingAnalysisPass::LoopBoundInfo->getUpperLoopBound(
-          Loop, TimingAnalysisPass::Context());
-    } else {
-      assert(0 && "why we have a loop but no LoopBound?");
-    }
-    if (Loop->getParentLoop() == nullptr) { // 已经是最外层
-      return scalar;
-    } else {
-      scalar *= bd_helper2(Loop->getParentLoop());
-    }
-    return scalar;
-  }
-
-  // 遍历MI-CFG
-  void tarjan(CtxMI CM) {
-    low[CM] = dfn[CM] = ++dfncnt;
-    ur_stack[++stack_pt] = CM;
-    in_stack[CM] = 1;
-    std::vector<CtxMI> SUCCs = CM.getSucc();
-
-    // 收集mi_cfg，用来输出debug
-    if (mi_cfg.find(CM) == mi_cfg.end()) {
-      mi_cfg[CM] = SUCCs;
-    }
-
-    for (auto SUCC : SUCCs) {
-      if (dfn.find(SUCC) == dfn.end()) { // 从未访问
-        tarjan(SUCC);
-        low[CM] = std::min(low[CM], low[SUCC]); // 回溯，可能子树somehow返祖
-      } else if (in_stack[SUCC]) {
-        low[CM] = std::min(low[CM], dfn[SUCC]);
-      }
-    }
-    if (dfn[CM] == low[CM]) { // 回溯的时候再消，eg无子直接自成1个分量
-      // 所以最后回访到子树的根时，别的都pop掉了
-      ++ur_id;
-      do {
-        mi_ur[ur_stack[stack_pt]] = ur_id;
-        ur_size[ur_id] += 1;
-        in_stack[ur_stack[stack_pt]] = 0;
-      } while (ur_stack[stack_pt--] != CM);
-    }
-  }
+  unsigned bd_helper2(const llvm::MachineLoop *Loop);
 };
+
 #endif

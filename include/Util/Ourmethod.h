@@ -1,10 +1,10 @@
 #ifndef JJY
 #define JJY
-#include "LLVMPasses/StaticAddressProvider.h"
+
 #include "Options.h"
 #include "Util/CLinfo.h"
 #include "Util/PersistenceScope.h"
-#include "Zhangmethod.h"
+#include "Util/Zhangmethod.h"
 #include "llvm/CodeGen/MachineInstr.h"
 #include "llvm/CodeGen/MachineLoopInfo.h"
 #include <climits>

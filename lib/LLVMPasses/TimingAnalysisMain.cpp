@@ -285,7 +285,7 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     // 清理一下数据
     cl_info.CL_clean();
     Zhangmethod ZW_mth = Zhangmethod(mcif.coreinfo, cl_info, func2corenum);
-    ZW_mth.run();
+    ZW_mth.run(cl_info);
   }
   return false;
 }
@@ -375,17 +375,17 @@ void TimingAnalysisMain::dispatchValueAnalysis() {
   // CallGraph::getGraph().releaseInstance();
 
   // Write results and statistics
-  // Statistics &Stats = Statistics::getInstance();
-  // AnalysisResults &Ar = AnalysisResults::getInstance();
+  Statistics &Stats = Statistics::getInstance();
+  AnalysisResults &Ar = AnalysisResults::getInstance();
 
   // Stats.stopMeasurement("Complete Analysis");
 
   Myfile.open("Statistics.txt", ios_base::trunc);
-  // Stats.dump(Myfile);
+  Stats.dump(Myfile);
   Myfile.close();
 
-  Myfile.open("TotalBound.xml", ios_base::trunc);
-  // Ar.dump(Myfile);
+  Myfile.open("TotalBound.xml", ios_base::app);
+  Ar.dump(Myfile);
   Myfile.close();
 }
 
@@ -395,7 +395,7 @@ void TimingAnalysisMain::dispatchAnalysisType(AddressInformation &AddressInfo) {
   if (AnaType.isSet(AnalysisType::TIMING) ||
       AnaType.isSet(AnalysisType::CRPD)) {
     auto Bound = dispatchTimingAnalysis(AddressInfo);
-    // Ar.registerResult("total", Bound);
+    Ar.registerResult(AnalysisEntryPoint + " total ", Bound);
     if (Bound) {
       outs() << "Calculated Timing Bound: "
              << llvm::format("%-20.0f", Bound.get().ub) << "\n";
@@ -405,7 +405,7 @@ void TimingAnalysisMain::dispatchAnalysisType(AddressInformation &AddressInfo) {
   }
   if (AnaType.isSet(AnalysisType::L1ICACHE)) {
     auto Bound = dispatchCacheAnalysis(AnalysisType::L1ICACHE, AddressInfo);
-    // Ar.registerResult("icache", Bound);
+    Ar.registerResult("icache", Bound);
     if (Bound) {
       outs() << "Calculated " << "Instruction Cache Miss Bound: "
              << llvm::format("%-20.0f", Bound.get().ub) << "\n";
@@ -415,7 +415,7 @@ void TimingAnalysisMain::dispatchAnalysisType(AddressInformation &AddressInfo) {
   }
   if (AnaType.isSet(AnalysisType::L1DCACHE)) {
     auto Bound = dispatchCacheAnalysis(AnalysisType::L1DCACHE, AddressInfo);
-    // Ar.registerResult("dcache", Bound);
+    Ar.registerResult("dcache", Bound);
     if (Bound) {
       outs() << "Calculated " << "Data Cache Miss Bound: "
              << llvm::format("%-20.0f", Bound.get().ub) << "\n";

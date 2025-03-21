@@ -72,7 +72,7 @@ cl::opt<unsigned>
 cl::opt<MultiCoreType> MulCType(
     "ta-multicore-type",
     cl::desc("Choose the multicore analysis type (default '')"),
-    cl::init(MultiCoreType::ZhangW),
+    cl::init(MultiCoreType::NONE),
     cl::values(clEnumValN(MultiCoreType::ZhangW, "zhangw",
                           "In paper:Precise and scalable shared cache "
                           "contention analysis for WCET estimation"),
