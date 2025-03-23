@@ -61,6 +61,10 @@ public:
   boost::optional<
       std::tuple<AbstractAddress, dom::cache::Classification, int>>
   getDaccAdress() const {};
+  boost::optional<
+    std::tuple<AbstractAddress, dom::cache::Classification
+    , int, Context>>
+  getIaccAddressWithCtx() const {};
 
   /**
    * Container used to make the local metrics of this class
@@ -99,6 +103,8 @@ public:
    */
   virtual boost::optional<unsigned> accessInstr(unsigned addr,
                                                 unsigned numWords);
+  boost::optional<unsigned> accessInstrWithCtx(unsigned addr,
+                    unsigned numWords, Context ctx){}
   // 我为什么要加这个来的？
   void setcurrentid(unsigned id) { currentId = id; }
 

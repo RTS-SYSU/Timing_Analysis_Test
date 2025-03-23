@@ -60,7 +60,9 @@ public:
   getIaccAdress() const{};
   boost::optional<std::tuple<AbstractAddress, dom::cache::Classification, int>>
   getDaccAdress() const{};
-
+  boost::optional<std::tuple<AbstractAddress, dom::cache::Classification
+  , int, Context>>
+  getIaccAddressWithCtx() const{};
 
   /**
    * Container used to make the local metrics of this class
@@ -109,6 +111,8 @@ public:
    */
   virtual boost::optional<unsigned> accessInstr(unsigned addr,
                                                 unsigned numWords);
+  boost::optional<unsigned> accessInstrWithCtx(unsigned addr,
+                unsigned numWords, Context ctx){}
 
   /**
    * Tells the memory topology to access an instruction.

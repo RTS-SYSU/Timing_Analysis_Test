@@ -50,9 +50,15 @@ public:
     AbstractAddress addr;
     AccessType load_store;
     unsigned numWords;
+    Context ctx; // csl: add this to collect right ctx
     Access(unsigned _id, AbstractAddress _addr, AccessType _load_store,
            unsigned _numWords)
         : id(_id), addr(_addr), load_store(_load_store), numWords(_numWords) {}
+    Access(unsigned _id, AbstractAddress _addr, AccessType _load_store,
+           unsigned _numWords, Context _ctx)
+        : id(_id), addr(_addr), load_store(_load_store), numWords(_numWords),
+        ctx(_ctx)
+        {}
   };
 
   /**

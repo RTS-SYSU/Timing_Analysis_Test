@@ -51,6 +51,7 @@ public:
         TimingAnalysisPass::StaticAddrProvider->getAddr(tmpCM.MI);
     os << "MI's Addr:";
     TimingAnalysisPass::printHex(os, tmpAddr);
+    os << "_" << TimingAnalysisPass::getMachineInstrIdentifier(tmpCM.MI);
     os << std::endl;
     os << "With Call Context:" << std::endl;
     for (auto &tmpCS : tmpCM.CallSites) {
@@ -346,7 +347,7 @@ private:
   // CoreNum -> vector of function
   std::vector<std::vector<std::string>> coreinfo;
 // ===== Persistence analysis =====
-  // TODO 废弃
+  // TODO(仅用于输出)
   std::map<const llvm::MachineLoop *, TimingAnalysisPass::PersistenceScope>
     loop2ps_scope;
   /// helper: PS Scope内有哪些持久性块地址？(AbsAddr版) 在get loop stack之前需要构建
