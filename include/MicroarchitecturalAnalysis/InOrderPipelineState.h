@@ -333,7 +333,8 @@ InOrderPipelineState<MemoryTopology>::InOrderPipelineState(ProgramLocation &pl)
   }
 
   // Make pc available for memory topology to get the first instruction
-  instructionAccessId = memory.accessInstr(this->pc.getPc().first, 1);
+  instructionAccessId = memory.accessInstrWithCtx(this->pc.getPc().first,
+   1, this->pc.getPc().second);
 }
 
 template <class MemoryTopology>
@@ -609,18 +610,19 @@ ConvergenceType InOrderPipelineState<MemoryTopology>::isConvergedAfterCycleFrom(
 }
 #endif
 template <class Mem> void InOrderPipelineState<Mem>::getACL(Context ctx) const {
-  auto result = this->memory.getIaccAdress();
-  if (result) {
+  // auto result = this->memory.getIaccAdress();
+  auto Iresult = this->memory.getIaccAddressWithCtx();
+  if (Iresult) {
     // if (this->inflightInstruction[IF_ID_IND] != boost::none) {
     //   ctx = this->inflightInstruction[IF_ID_IND].get().second;
     // }
-    auto [addr, CL, age] = *result;
-    AddrCL acl(addr, ctx, CL, age);
+    auto [addr, CL, age, tmp_ctx] = *Iresult;
+    AddrCL acl(addr, tmp_ctx, CL, age); // Modified
     cl_info.insert_CL(acl);
   }
-  result = this->memory.getDaccAdress();
-  if (result) {
-    auto [addr, CL, age] = *result;
+  auto Dresult = this->memory.getDaccAdress();
+  if (Dresult) {
+    auto [addr, CL, age] = *Dresult;
     unsigned MIaddr = 0;
     if (this->inflightInstruction[EX_MEM_IND]) {
       MIaddr = this->inflightInstruction[EX_MEM_IND].get().first;
@@ -1212,7 +1214,8 @@ InOrderPipelineState<MemoryTopology>::checkForBranches(
              altSucc != alternativeSucc.end(); ++altSucc) {
           InOrderPipelineState copy(*altSucc);
           copy.instructionAccessId =
-              copy.memory.accessInstr(copy.pc.getPc().first, 1);
+              copy.memory.accessInstrWithCtx(copy.pc.getPc().first,
+               1, copy.pc.getPc().second);
           res.insert(copy);
         }
       } else {
@@ -1290,7 +1293,8 @@ void InOrderPipelineState<MemoryTopology>::processInstructionFetchStage() {
         }
       }
     }
-    instructionAccessId = memory.accessInstr(this->pc.getPc().first, 1);
+    instructionAccessId = memory.accessInstrWithCtx(this->pc.getPc().first
+    , 1, this->pc.getPc().second);
   } else {
     if (instructionAccessId) {
       if (memory.finishedInstrAccess(*instructionAccessId)) {
@@ -1344,7 +1348,8 @@ void InOrderPipelineState<MemoryTopology>::processInstructionFetchStage() {
             return;
           }
         }
-        instructionAccessId = memory.accessInstr(this->pc.getPc().first, 1);
+        instructionAccessId = memory.accessInstrWithCtx(this->pc.getPc().first
+        , 1, this->pc.getPc().second);
       }
     }
   }

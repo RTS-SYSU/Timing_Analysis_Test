@@ -1,6 +1,5 @@
 #include "Util/Zhangmethod.h"
 
-
 Zhangmethod::Zhangmethod(std::vector<std::vector<std::string>> &setc, CL_info &cl_infor,
               std::map<std::string, unsigned> &func2corenum1) {
   this->coreinfo = setc;
@@ -50,6 +49,9 @@ Zhangmethod::Zhangmethod(std::vector<std::vector<std::string>> &setc, CL_info &c
         // CtxMI
         CtxMI tmpCM;
         tmpCM.MI = miptr;
+        if(tmpCM.MI->isCall()){
+          CallSites.pop_back();
+        }
         tmpCM.CallSites = CallSites;
         // DataAccess, exe_cnt is later calculated in run()
         auto itv = tmp_acl.address.getAsInterval();
@@ -69,6 +71,8 @@ Zhangmethod::Zhangmethod(std::vector<std::vector<std::string>> &setc, CL_info &c
             entry2ctxmi2datainfo[tmp_entry][tmpCM].push_back(tmp_ai);
             data_cl_cnt[tmp_entry][tmp_acl.CL] += 1;
           }
+          entry2ctxmi2data_absaddr[tmp_entry]
+            [tmpCM].push_back(tmp_acl.address);
         }else{ // TODO:how can we handle any access with unknown addr?
 
         }
@@ -116,6 +120,9 @@ Zhangmethod::Zhangmethod(std::vector<std::vector<std::string>> &setc, CL_info &c
         }
         CtxMI tmpCM;
         tmpCM.MI = miptr;
+        if(tmpCM.MI->isCall()){
+          CallSites.pop_back();
+        }
         tmpCM.CallSites = CallSites;
         AccessInfo obj;
         obj.age = tmp_acl.age;
@@ -166,8 +173,10 @@ void Zhangmethod::run(CL_info &cl_infor) {
   // === here we handle the PS block ===
   // step1: we calculate stack<loop> for each ctxmi
   for (auto &tmp_scope : cl_infor.AddrPSList) {
-    // loop2ps_scope[tmp_scope.first.loop] =
-    //     tmp_scope.first; 
+    if(ZWDebug){
+      loop2ps_scope[tmp_scope.first.loop] =
+        tmp_scope.first; 
+    }
     std::map<unsigned, bool> tmp_addr2isps;
     for(auto &tmp_ps_acl:tmp_scope.second){
       TimingAnalysisPass::AbstractAddress tmp_abs_addr = tmp_ps_acl.address;
@@ -207,7 +216,8 @@ void Zhangmethod::run(CL_info &cl_infor) {
                 Myfile << "### in function_" << f_name << "\n";
                 Myfile << tmp_cm;
                 for(auto &tmp_pair:tmp_loop_stack){
-                    Myfile << "in loop_" << tmp_pair.first << "isPS?"
+                    Myfile << "in loop_" << 
+                        loop2ps_scope[tmp_pair.first] << "isPS?"
                         << tmp_pair.second << "\n";
                 }
                 Myfile << "## data access of this MI\n";
@@ -220,8 +230,9 @@ void Zhangmethod::run(CL_info &cl_infor) {
                     tmp_loop_stack_d = ctxdata2ps_loop_stack[f_name][tmp_cd];
                     Myfile << "Data Access: " << tmp_cd.data_addr << "\n";
                     for(auto &tmp_pair:tmp_loop_stack_d){
-                        Myfile << "in loop_" << tmp_pair.first << "isPS?"
-                            << tmp_pair.second << "\n"; 
+                        Myfile << "in loop_" << 
+                          loop2ps_scope[tmp_pair.first] << 
+                          "isPS?" << tmp_pair.second << "\n"; 
                     }
                 }
             }
@@ -562,8 +573,10 @@ void Zhangmethod::print_mi_cfg(const std::string &function) {
     File << "More Info of MI:"
           << TimingAnalysisPass::getMachineInstrIdentifier(MI) << "\\l";
     File << "in UR" << mi_ur[CM] << "\\l  ";
+    File << "May Load?" << MI->mayLoad() <<"\\l  ";
+    File << "May Store?" << MI->mayStore() <<"\\l  ";
     File << "data access: [\n";
-    for(AccessInfo tmpai:entry2ctxmi2datainfo[func_name][CM]){
+    for(AccessInfo tmpai:entry2ctxmi2datainfo[function][CM]){
         File << "[addr_0x";
         TimingAnalysisPass::printHex(File, tmpai.data_addr);
         File << 

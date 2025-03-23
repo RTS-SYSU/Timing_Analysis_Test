@@ -43,6 +43,11 @@ class PersistenceScope {
 public:
   explicit PersistenceScope(const llvm::MachineLoop *loop);
   PersistenceScope(const PersistenceScope &scope);
+  PersistenceScope(){
+    loop = nullptr;
+    scopeId = -1;
+    globalScopeId = -1;
+  }
 
   unsigned getId() const;
 

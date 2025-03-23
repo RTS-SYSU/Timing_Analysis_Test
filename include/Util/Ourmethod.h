@@ -88,7 +88,7 @@ private:
   //                   std::vector<std::pair<const llvm::MachineLoop *, bool>>>>
   //     ctxdata2ps_loop_stack;
 
-  std::set<llvm::MachineLoop *> loop_helper(const MachineInstr *MI) {}
+  std::set<llvm::MachineLoop *> loop_helper(UnorderedRegion UR) {}
 
   std::set<AddrPS> getPS(
       const UnorderedRegion ur,

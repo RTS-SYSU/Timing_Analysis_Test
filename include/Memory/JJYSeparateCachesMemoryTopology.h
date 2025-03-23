@@ -204,6 +204,10 @@ public:
   virtual boost::optional<unsigned>
   accessL2(unsigned addr, AccessType load_store, unsigned numWords);
 
+  boost::optional<unsigned> accessInstrWithCtx(unsigned addr,
+                                                unsigned numWords,
+                                                Context ctx);
+
   /**
    * Accesses data at the given address.
    * Returns an id or none if the access cannot be processed.
@@ -269,6 +273,9 @@ public:
   getIaccAdress() const;
   boost::optional<std::tuple<AbstractAddress, Classification, int>>
   getDaccAdress() const;
+
+  boost::optional<std::tuple<AbstractAddress, Classification, int, Context>>
+  getIaccAddressWithCtx() const;
 
   /**
    * Is the memory topology currently performing a data access?
@@ -558,6 +565,26 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
   unsigned resId = currentId;
   instructionComponent.waitingQueue.push_back(
       Access(resId, AbstractAddress(addr), AccessType::LOAD, numWords));
+  incrementCurrentId();
+  return boost::optional<unsigned>(resId);
+}
+
+template <AbstractCache *(*makeInstrCache)(bool),
+          AbstractCache *(*makeDataCache)(bool),
+          AbstractCache *(*makeL2Cache)(bool), class BgMem>
+boost::optional<unsigned>
+JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
+                                BgMem>::accessInstrWithCtx(unsigned addr,
+                                                    unsigned numWords,
+                                                    Context ctx) {
+  // override (delete) previous access
+  if (instructionComponent.waitingQueue.size() > 0) {
+    instructionComponent.waitingQueue.pop_front();
+  }
+  unsigned resId = currentId;
+  instructionComponent.waitingQueue.push_back(
+      Access(resId, AbstractAddress(addr), AccessType::LOAD, numWords
+      , ctx));
   incrementCurrentId();
   return boost::optional<unsigned>(resId);
 }
@@ -1770,6 +1797,30 @@ JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
     }
 
     return std::make_tuple(addr, CL, age);
+  }
+  return boost::none;
+}
+
+template <AbstractCache *(*makeInstrCache)(bool),
+          AbstractCache *(*makeDataCache)(bool),
+          AbstractCache *(*makeL2Cache)(bool), class BgMem>
+boost::optional<std::tuple<AbstractAddress, Classification, int, Context>>
+JJYSeparateCachesMemoryTopology<makeInstrCache, makeDataCache, makeL2Cache,
+                                BgMem>::getIaccAddressWithCtx() const {
+  if (instructionComponent.ongoingAccess) {
+    AbstractAddress addr = instructionComponent.ongoingAccess.get().access.addr;
+    Classification CL = instructionComponent.ongoingAccess.get().cl;
+    int age = -1;
+    if (CL == CL2_MISS) {
+      age = INT_MAX;
+    } else if (CL == CL2_HIT) {
+      age = instructionComponent.ongoingAccess.get().age2;
+    } else if (CL == CL_HIT) {
+      age = instructionComponent.ongoingAccess.get().age1;
+    }
+    Context ctx = instructionComponent.ongoingAccess.get().access.ctx;
+
+    return std::make_tuple(addr, CL, age, ctx);
   }
   return boost::none;
 }
