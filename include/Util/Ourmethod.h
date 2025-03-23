@@ -50,17 +50,11 @@ public:
             for (auto &tmp_pair : tmp_ur.mi2xclass) {
               unsigned addr = TimingAnalysisPass::StaticAddrProvider->getAddr(
                   tmp_pair.first.MI);
-              int CS = INT_MAX;
-              // handling PS access
-              // for (auto &psB : tmp_ps_blocks) {
-              //   if (psB.address.getAsInterval().lower() == addr) {
-              //     CS = psB.CS_size;
-              //     break;
-              //   }
-              // }
+              std::vector<BlockInfo> list =
+                  getPS(tmp_pair.first, zm.ctxmi2ps_loop_stack,
+                        cl_infor.AddrPSList, tmp_pair.second.classification);
               BlockInfo bi_res(addr, tmp_pair.second.x, INT_MAX,
-                               tmp_pair.second.classification, CS);
-
+                               tmp_pair.second.classification);
               ur_res.push_back(bi_res);
             }
             // TODO PS is not handle, data access is not handle
@@ -88,27 +82,59 @@ private:
   //                   std::vector<std::pair<const llvm::MachineLoop *, bool>>>>
   //     ctxdata2ps_loop_stack;
 
-  std::set<llvm::MachineLoop *> loop_helper(const MachineInstr *MI) {}
+  // std::set<llvm::MachineLoop *> loop_helper(const MachineInstr *MI) {}
 
-  std::set<AddrPS> getPS(
-      const UnorderedRegion ur,
-      std::map<TimingAnalysisPass::PersistenceScope, std::set<AddrPS>> PSlist) {
+  std::vector<BlockInfo>
+  getPS(const CtxMI &MI,
+        std::map<
+            std::string,
+            std::map<CtxMI,
+                     std::vector<std::pair<const llvm::MachineLoop *, bool>>>>
+            ctxmi2ps_loop_stack,
+        std::map<TimingAnalysisPass::PersistenceScope, std::set<AddrPS>>
+            &AddrPSList,
+        TimingAnalysisPass::dom::cache::Classification cl) {
+    std::vector<BlockInfo> res;
     // handling PS access
-    std::set<llvm::MachineLoop *> tmp_loop = loop_helper(ur);
-    std::set<AddrPS> tmp_ps_blocks;
-    for (llvm::MachineLoop *loop : tmp_loop) {
-      for (auto &scop : PSlist) {
-        if (scop.first.loop == loop) {
-          for (const AddrPS &ps : scop.second) {
-            if (ps.LEVEL == 2) {
-              tmp_ps_blocks.insert(ps);
-            }
-          }
+    std::vector<std::pair<const llvm::MachineLoop *, bool>> st;
+    for (auto &entry : ctxmi2ps_loop_stack) {
+      for (auto &list : entry.second) {
+        if (entry.second.find(MI) != entry.second.end()) {
+          st = entry.second[MI];
           break;
         }
       }
     }
-    return tmp_ps_blocks;
+    int x = 1;
+    int CS = INT_MAX;
+    unsigned addr = TimingAnalysisPass::StaticAddrProvider->getAddr(MI.MI);
+    // 使用普通索引倒序遍历
+    for (int i = st.size() - 1; i >= 0; --i) {
+      std::pair<const llvm::MachineLoop *, bool> &loop = st[i];
+      if (loop.second) {
+        for (auto &scop : AddrPSList) {
+          if (scop.first.loop == loop.first) {
+            for (const AddrPS &ps : scop.second) {
+              if (ps.address.getAsInterval().lower() == addr && ps.LEVEL == 2) {
+                CS = ps.CS_size; // 在层1上持久的不计
+                break;
+              }
+            }
+            break;
+          }
+        }
+        if (TimingAnalysisPass::LoopBoundInfo->hasUpperLoopBound(
+                loop.first, TimingAnalysisPass::Context())) {
+          int b = TimingAnalysisPass::LoopBoundInfo->getUpperLoopBound(
+              loop.first, TimingAnalysisPass::Context());
+          if (b - 1 > 0) {
+            x *= b - 1;
+          }
+        }
+        res.emplace_back(BlockInfo(addr, x, -1, cl, CS));
+      }
+    }
+    return res;
   }
 };
 
