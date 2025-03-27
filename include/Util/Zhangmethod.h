@@ -29,7 +29,10 @@
 class Zhangmethod {
 public:
   Zhangmethod() {}
-  Zhangmethod(UrGraph urgg) {}
+  Zhangmethod(UrGraph urgg) {
+    this->coreinfo=urgg.coreinfo;
+    this->CEOPs=urgg.CEOPs;
+  }
   // CoreNum -> vector of function
   std::vector<std::vector<std::string>> coreinfo;
   // Must Instr Access

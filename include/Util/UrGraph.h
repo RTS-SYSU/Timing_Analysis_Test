@@ -297,9 +297,8 @@ public:
 
 class UrGraph {
 public:
-  UrGraph(std::vector<std::vector<std::string>> &setc,
-                   CL_info &cl_infor,
-                   std::map<std::string, unsigned> &func2corenum1);
+  UrGraph(std::vector<std::vector<std::string>> &setc, CL_info &cl_infor,
+          std::map<std::string, unsigned> &func2corenum1);
   // Must Instr Access
   std::map<unsigned, std::map<std::string,
                               std::vector<CEOP>>>
@@ -329,10 +328,10 @@ public:
   std::map<std::string, std::map<CtxMI, PSAccessInfo>> ctxmi2ps_ai;
   // PS Data Access(暂时废弃)
   std::map<std::string, std::map<CtxData, PSAccessInfo>> ctxdata2ps_ai;
-
-private:
   // CoreNum -> vector of function
   std::vector<std::vector<std::string>> coreinfo;
+
+private:
   // ===== Persistence analysis =====
   // TODO(仅用于输出)
   std::map<const llvm::MachineLoop *, TimingAnalysisPass::PersistenceScope>
