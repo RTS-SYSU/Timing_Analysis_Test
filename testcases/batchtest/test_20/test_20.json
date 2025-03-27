@@ -1,0 +1,20 @@
+[
+  {
+    "core": 0,
+    "tasks": [
+      {
+        "function": "ndes_start",
+        "lib": "libndes_0.so"
+      }
+    ]
+  },
+  {
+    "core": 1,
+    "tasks": [
+      {
+        "function": "rad2deg_start",
+        "lib": "librad2deg_1.so"
+      }
+    ]
+  }
+]

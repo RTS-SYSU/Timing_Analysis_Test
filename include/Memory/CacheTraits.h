@@ -74,7 +74,7 @@ struct CacheTraits {
   int LEVEL;
 
   //jjy: 把 satic const去掉了
-  unsigned LATENCY = 5; // l1 access
+  unsigned LATENCY = 1; // l1 access
 
   static const unsigned ADDRESS_BITS = 32;
   static const unsigned OFFSET_BITS_DECL = 8;

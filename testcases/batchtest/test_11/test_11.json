@@ -1,0 +1,20 @@
+[
+  {
+    "core": 0,
+    "tasks": [
+      {
+        "function": "ndes_start",
+        "lib": "libndes_0.so"
+      }
+    ]
+  },
+  {
+    "core": 1,
+    "tasks": [
+      {
+        "function": "prime_start",
+        "lib": "libprime_1.so"
+      }
+    ]
+  }
+]

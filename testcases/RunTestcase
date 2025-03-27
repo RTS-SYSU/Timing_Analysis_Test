@@ -1,154 +1,119 @@
-#!/usr/bin/env bash
-
-# This script is a replaica of the original script "runTestcase", but with
-# various cleanups. The changes were large enough that it made more sense to
-# rewrite the script than try to fix it.
-
-# runTestcase is a wrapper script around runllvmta.sh. This script's job is to
-# identify and automatically add all deducable parameters for llvmta to work
-# correctly. Any change to the options should be made here, runllvmta.sh is a
-# dumb shell script which simply executes a bunch of commands to run the
-# analysis
-
-# Set up bash options to ensure no silent failures during executions
+#!/bin/bash
 set -e
 set -o pipefail
 set -u
 
-# Define some constants
+# 定义常量
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# 修改标记
-# BENCHMARK_DIR="$SCRIPT_DIR/Benchmarks"
 BENCHMARK_DIR="$SCRIPT_DIR"
+
+# 检查参数
 if [ $# -lt 1 ]; then
-	echo "Usage: $0 testcase [options]" >&2
-	exit 1
-fi
-readonly TESTCASE="$1"
-shift
-
-# Source the script for handling options. This script exports the $USEROPTS
-# variable which holds the final set of options that should be passed to
-# runllvmta.sh
-source "$SCRIPT_DIR/util_scripts/OptionHandler.sh"
-source "$SCRIPT_DIR/util_scripts/llvmta_utils.sh"
-
-# Initialize the USEROPTS variable with the user input
-init_options $*
-llvmta_defaults
-
-# Search and find the testcase that was requested
-# The testcase may either:
-#   1. Not Exist
-#   2. Exists as part of multiple benchmarks
-#
-# Since the entry point of some tests is the same as the test name, we must
-# prevent any false positives caused by this. Hence, all "build" directories
-# are excluded when trying to search for a valid testcase
-# We need to uniquely identify the testcase that the user requested
-TESTCASE_DIR=$(find "$BENCHMARK_DIR" \
-	-type d \
-	-wholename "*/$TESTCASE" \
-	! -wholename "*/build/*")
-# This check ensures that both the cases mentioned earlier are flagged and the
-# script can make an early exit
-if [ ! -d "$TESTCASE_DIR" ]; then
-	echo "Unable to (uniquely) find testcase \"$TESTCASE\"" >&2
-	echo -e "Potential testcases found: \n${TESTCASE_DIR}" >&2
-	exit 2
+    echo "Usage: $0 [testcase|test] [options]" >&2
+    exit 1
 fi
 
-# At this point, we have uniquely found the testcase that the user requested.
+# # 加载依赖脚本
+# source "$SCRIPT_DIR/util_scripts/OptionHandler.sh"
+# source "$SCRIPT_DIR/util_scripts/llvmta_utils.sh"
 
-# CTX FLAGS are options passed to the script which define the context in which
-# the analysis is run. It is used to determine some of the options which will
-# eventually be passed to llvmta
-CTXFLAGS=$(get_ctx_flags "${USEROPTS[@]}")
+# # 初始化选项
+# init_options "${@:2}"  # 跳过第一个参数（testcase/test）
+# llvmta_defaults
 
-loopanno="${TESTCASE_DIR}/LoopAnnotations_${CTXFLAGS}.csv"
-ctxsensloopanno="${TESTCASE_DIR}/CtxSensLoopAnnotations_${CTXFLAGS}.csv"
-extfuncanno="${TESTCASE_DIR}/ExtFuncAnnotations.csv"
-coreinfo="${TESTCASE_DIR}/CoreInfo.json"
-corenum=2
+# 处理测试目标
+process_testcase() {
+	# 加载依赖脚本
+	source "$SCRIPT_DIR/util_scripts/OptionHandler.sh"
+	source "$SCRIPT_DIR/util_scripts/llvmta_utils.sh"
 
-if [ -z ${CTXSENSFILE+x} ]; then
-	ctxsensitivity="${TESTCASE_DIR}/ContextSensitivity.txt"
-else
-	ctxsensitivity="${TESTCASE_DIR}/${CTXSENSFILE}"
-fi
-spoptions="${TESTCASE_DIR}/SpecialOptions.txt"
+	# 初始化选项
+	init_options "${@:2}"  # 跳过第一个参数（testcase/test）
+	llvmta_defaults
 
-# # Add the CoreInfo.txt file if it exists
-# if [ -f "$coreinfo" ]; then
-# 	add_option "--core-info=$coreinfo"
-# fi
+    local TESTCASE_DIR="$1"
+    echo "正在处理测试用例: $TESTCASE_DIR"
 
-add_option "--core-numbers=$corenum"
+    # 检查必要文件
+    loopanno="${TESTCASE_DIR}/LoopAnnotations.csv"
+	# 修改核心信息文件匹配规则（示例）
+	coreinfo=$(find "$TESTCASE_DIR" -maxdepth 1 -name "test_*.json")
 
-# Add the Annotated Loop Bounds if available
-if [ -f "$loopanno" ]; then
-	add_option_multiple "--ta-loop-bounds-file=$loopanno"
-fi
 
-# If the Context Sensitive Loop Bounds are available, pass those too.
-if [ -f "$ctxsensloopanno" ]; then
-	add_option_multiple "--ta-loop-bounds-file=$ctxsensloopanno"
-fi
+    # 添加核心信息
+    if [ -f "$coreinfo" ]; then
+        add_option "--core-info=$coreinfo"
+    fi
 
-# Add the external function annotations if they are available
-if [ -f "$extfuncanno" ]; then
-	add_option "--ta-restart-after-external"
-	add_option "--ta-extfunc-annotation-file=$extfuncanno"
-fi
+    # 添加循环注解
+    if [ -f "$loopanno" ]; then
+        add_option "--ta-loop-bounds-file=$loopanno"
+    fi
 
-# Use the Context provided by CTX_FLAGS to find the right Context Sensitivity
-# for this analysis.
-if [ -f "$ctxsensitivity" ]; then
-	if ! optIn "--ta-num-callsite-tokens" "${USEROPTS[@]}"; then
-		SHORTCTXFLAGS=$(cut -d "|" -f 2- <<<"${CTXFLAGS}")
-		CTXSENS=$(grep "^$SHORTCTXFLAGS [[:digit:]]" "$ctxsensitivity" | awk '{print $2}' || true)
-		if [ -z $CTXSENS ]; then
-			echo "Context Sensitivity data not found for options: $SHORTCTXFLAGS." >&2
-		else
-			add_option "--ta-num-callsite-tokens=$CTXSENS"
-		fi
-	fi
-fi
+    # 设置固定参数
+    add_option "--core-numbers=2"
+    # add_option "--ta-icache-nsets=1"
+    # add_option "--ta-icache-assoc=1"
+    # add_option "--ta-dcache-linesize=64"
+    # add_option "--ta-dcache-nsets=1"
+    # add_option "--ta-dcache-assoc=1"
+    # add_option "--ta-mem-latency=150"
+    # add_option "--ta-dcache-persistence=none"
+    # add_option "--ta-icache-persistence=none"
 
-# Some tests require special options to be passed to llvmta. These are put in
-# the SpecialOptions.txt file. Read it if available
-if [ -f "$spoptions" ]; then
-	while read -r line; do
-		add_option "$line"
-	done <"$spoptions"
-fi
-
-# runllvmta.sh expects that the command line provided to it does not contain
-# the "--ta-analysis-entry-point" option. This is because it unconditionally
-# adds that option when running the analysis. However, to allow the user to
-# override the analysis, it provides a new option: "--llvmta-entry-point".
-# In this script, we convert any user provided "ta-analysis-entry-point"
-# options to a "--llvmta-entry-point" option for runllvmta.sh
-entry_point="$(get_option "ta-analysis-entry-point")" || true
-if [[ -n $entry_point ]]; then
-	rm_option "ta-analysis-entry-point"
-	add_option "--llvmta-entry-point=${entry_point}"
-fi
-
-# 查找所有的 coreinfo.json 文件
-coreinfo_files=$(find "$TESTCASE_DIR" -type f -name "test_*.json")
-
-# 如果有多个 CoreInfo 文件，逐个执行脚本
-for coreinfo in $coreinfo_files; do
-    echo "正在使用 $coreinfo 执行测试..."
-
-    # 添加 CoreInfo 选项
-    add_option "--core-info=$coreinfo"
-
-    # 生成并执行最终命令
+    # 生成并执行命令
     cmdline=("${SCRIPT_DIR}/runllvmta.sh" "$TESTCASE_DIR" "${USEROPTS[@]}")
     echo "执行命令：${cmdline[@]}"
+    "${cmdline[@]}"
 
-    # 执行命令
-    exec "${cmdline[@]}"
-done
+	input="${TESTCASE_DIR}/build/main/TotalBound.xml"
+	awk '/<bounds>/{c++} c==2' "$input" | sed -n '/<bounds>/,/<\/bounds>/p' >> "${TEST_DIR}/out.xml"
+
+    input2="${TESTCASE_DIR}/build/main/instr_cnt.txt"
+    output="${TEST_DIR}/instr_cnt.txt"
+    # 将 input2 的内容追加到 output 文件末尾
+    cat "$input2" >> "$output"
+
+}
+
+# 主逻辑
+case "$1" in
+    batchtest)
+        # 批量处理test目录下的所有test_*子目录
+        TEST_DIR="${BENCHMARK_DIR}/batchtest"
+        if [ ! -d "$TEST_DIR" ]; then
+            echo "错误：找不到test目录 $TEST_DIR" >&2
+            exit 2
+        fi
+		# 清空旧的输出文件
+		> "$TEST_DIR/out.txt"
+        > "$TEST_DIR/instr_cnt.txt"
+
+        # 查找所有test_开头的子目录
+        find "$TEST_DIR" -maxdepth 1 -type d -name "test_*" | while read -r dir; do
+            # 跳过无效目录
+            [ -d "$dir" ] || continue
+            # 重置用户选项（重要！）
+            USEROPTS=()
+            # 处理每个测试用例
+            process_testcase "$dir"
+        done
+        ;;
+    *)
+        # 单个测试用例处理（原逻辑）
+        TESTCASE="$1"
+        TESTCASE_DIR=$(find "$BENCHMARK_DIR" \
+            -type d \
+            -wholename "*/$TESTCASE" \
+            ! -wholename "*/build/*")
+
+        if [ ! -d "$TESTCASE_DIR" ]; then
+            echo "无法找到测试用例: $TESTCASE" >&2
+            exit 2
+        fi
+
+        process_testcase "$TESTCASE_DIR"
+        ;;
+esac
+
+exit 0

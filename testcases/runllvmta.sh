@@ -79,6 +79,7 @@ while [ $# -gt 0 ]; do
 		fi
 
 		case $opt in
+		    "--ta-loop-bounds-file") llvmta_user_opts+=("--ta-loop-bounds-file=$val");;
 			"--enable-optimizations") enable_optimizations=true;;
 			"--disable-hard-floatingpoint") enable_hard_floatingpoint=false;;
 			"--llvmta-concise-resource-stats") concise_resource_stats=true;;

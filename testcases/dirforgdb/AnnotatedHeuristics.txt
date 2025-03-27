@@ -1,50 +1,26 @@
 ##################################
 ## Directives Machine Functions ##
 ##################################
-Before adpcm_dec_fabs, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_fabs}
-Before adpcm_dec_sin, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_sin}
-Before adpcm_dec_cos, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_cos}
-Before adpcm_dec_decode, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_decode}
-Before adpcm_dec_filtez, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_filtez}
-Before adpcm_dec_filtep, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_filtep}
-Before adpcm_dec_logscl, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_logscl}
-Before adpcm_dec_scalel, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_scalel}
-Before adpcm_dec_upzero, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_upzero}
-Before adpcm_dec_uppol2, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_uppol2}
-Before adpcm_dec_uppol1, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_uppol1}
-Before adpcm_dec_logsch, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_logsch}
-Before adpcm_dec_reset, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_reset}
-Before adpcm_dec_init, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_init}
-Before adpcm_dec_return, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_return}
-Before adpcm_dec_adpcm_dec, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec_adpcm_dec}
-Before adpcm_dec, Directive of Type CREATE for the following tokens:{
-	Call of function adpcm_dec}
 Before bs, Directive of Type CREATE for the following tokens:{
 	Call of function bs}
 Before binary_search, Directive of Type CREATE for the following tokens:{
 	Call of function binary_search}
+Before icrc1, Directive of Type CREATE for the following tokens:{
+	Call of function icrc1}
+Before icrc, Directive of Type CREATE for the following tokens:{
+	Call of function icrc}
+Before crc, Directive of Type CREATE for the following tokens:{
+	Call of function crc}
 Before expint, Directive of Type CREATE for the following tokens:{
 	Call of function expint}
 Before expint_expint, Directive of Type CREATE for the following tokens:{
 	Call of function expint_expint}
 Before foo, Directive of Type CREATE for the following tokens:{
 	Call of function foo}
+Before fdct_fdct, Directive of Type CREATE for the following tokens:{
+	Call of function fdct_fdct}
+Before fdct, Directive of Type CREATE for the following tokens:{
+	Call of function fdct}
 Before lms_sinus, Directive of Type CREATE for the following tokens:{
 	Call of function lms_sinus}
 Before lms_init, Directive of Type CREATE for the following tokens:{
@@ -57,6 +33,14 @@ Before lms_return, Directive of Type CREATE for the following tokens:{
 	Call of function lms_return}
 Before lms, Directive of Type CREATE for the following tokens:{
 	Call of function lms}
+Before exec, Directive of Type CREATE for the following tokens:{
+	Call of function exec}
+Before a, Directive of Type CREATE for the following tokens:{
+	Call of function a}
+Before b, Directive of Type CREATE for the following tokens:{
+	Call of function b}
+Before loop, Directive of Type CREATE for the following tokens:{
+	Call of function loop}
 Before matmult, Directive of Type CREATE for the following tokens:{
 	Call of function matmult}
 Before InitSeed, Directive of Type CREATE for the following tokens:{
@@ -69,6 +53,42 @@ Before Multiply, Directive of Type CREATE for the following tokens:{
 	Call of function Multiply}
 Before RandomInteger, Directive of Type CREATE for the following tokens:{
 	Call of function RandomInteger}
+Before ndes_init, Directive of Type CREATE for the following tokens:{
+	Call of function ndes_init}
+Before ndes_des, Directive of Type CREATE for the following tokens:{
+	Call of function ndes_des}
+Before ndes_getbit, Directive of Type CREATE for the following tokens:{
+	Call of function ndes_getbit}
+Before ndes_ks, Directive of Type CREATE for the following tokens:{
+	Call of function ndes_ks}
+Before ndes_cyfun, Directive of Type CREATE for the following tokens:{
+	Call of function ndes_cyfun}
+Before ndes_return, Directive of Type CREATE for the following tokens:{
+	Call of function ndes_return}
+Before ndes_main, Directive of Type CREATE for the following tokens:{
+	Call of function ndes_main}
+Before ndes, Directive of Type CREATE for the following tokens:{
+	Call of function ndes}
+Before prime_initSeed, Directive of Type CREATE for the following tokens:{
+	Call of function prime_initSeed}
+Before prime_randomInteger, Directive of Type CREATE for the following tokens:{
+	Call of function prime_randomInteger}
+Before prime_init, Directive of Type CREATE for the following tokens:{
+	Call of function prime_init}
+Before prime_return, Directive of Type CREATE for the following tokens:{
+	Call of function prime_return}
+Before prime_divides, Directive of Type CREATE for the following tokens:{
+	Call of function prime_divides}
+Before prime_even, Directive of Type CREATE for the following tokens:{
+	Call of function prime_even}
+Before prime_prime, Directive of Type CREATE for the following tokens:{
+	Call of function prime_prime}
+Before prime_swap, Directive of Type CREATE for the following tokens:{
+	Call of function prime_swap}
+Before prime_main, Directive of Type CREATE for the following tokens:{
+	Call of function prime_main}
+Before prime, Directive of Type CREATE for the following tokens:{
+	Call of function prime}
 Before rad2deg_init, Directive of Type CREATE for the following tokens:{
 	Call of function rad2deg_init}
 Before rad2deg_return, Directive of Type CREATE for the following tokens:{
@@ -157,50 +177,26 @@ Before memcpy, Directive of Type CREATE for the following tokens:{
 	Call of function memcpy}
 Before memset, Directive of Type CREATE for the following tokens:{
 	Call of function memset}
-After adpcm_dec_fabs, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_fabs}
-After adpcm_dec_sin, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_sin}
-After adpcm_dec_cos, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_cos}
-After adpcm_dec_decode, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_decode}
-After adpcm_dec_filtez, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_filtez}
-After adpcm_dec_filtep, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_filtep}
-After adpcm_dec_logscl, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_logscl}
-After adpcm_dec_scalel, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_scalel}
-After adpcm_dec_upzero, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_upzero}
-After adpcm_dec_uppol2, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_uppol2}
-After adpcm_dec_uppol1, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_uppol1}
-After adpcm_dec_logsch, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_logsch}
-After adpcm_dec_reset, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_reset}
-After adpcm_dec_init, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_init}
-After adpcm_dec_return, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_return}
-After adpcm_dec_adpcm_dec, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec_adpcm_dec}
-After adpcm_dec, Directive of Type MERGE for the following tokens:{
-	Call of function adpcm_dec}
 After bs, Directive of Type MERGE for the following tokens:{
 	Call of function bs}
 After binary_search, Directive of Type MERGE for the following tokens:{
 	Call of function binary_search}
+After icrc1, Directive of Type MERGE for the following tokens:{
+	Call of function icrc1}
+After icrc, Directive of Type MERGE for the following tokens:{
+	Call of function icrc}
+After crc, Directive of Type MERGE for the following tokens:{
+	Call of function crc}
 After expint, Directive of Type MERGE for the following tokens:{
 	Call of function expint}
 After expint_expint, Directive of Type MERGE for the following tokens:{
 	Call of function expint_expint}
 After foo, Directive of Type MERGE for the following tokens:{
 	Call of function foo}
+After fdct_fdct, Directive of Type MERGE for the following tokens:{
+	Call of function fdct_fdct}
+After fdct, Directive of Type MERGE for the following tokens:{
+	Call of function fdct}
 After lms_sinus, Directive of Type MERGE for the following tokens:{
 	Call of function lms_sinus}
 After lms_init, Directive of Type MERGE for the following tokens:{
@@ -213,6 +209,14 @@ After lms_return, Directive of Type MERGE for the following tokens:{
 	Call of function lms_return}
 After lms, Directive of Type MERGE for the following tokens:{
 	Call of function lms}
+After exec, Directive of Type MERGE for the following tokens:{
+	Call of function exec}
+After a, Directive of Type MERGE for the following tokens:{
+	Call of function a}
+After b, Directive of Type MERGE for the following tokens:{
+	Call of function b}
+After loop, Directive of Type MERGE for the following tokens:{
+	Call of function loop}
 After matmult, Directive of Type MERGE for the following tokens:{
 	Call of function matmult}
 After InitSeed, Directive of Type MERGE for the following tokens:{
@@ -225,6 +229,42 @@ After Multiply, Directive of Type MERGE for the following tokens:{
 	Call of function Multiply}
 After RandomInteger, Directive of Type MERGE for the following tokens:{
 	Call of function RandomInteger}
+After ndes_init, Directive of Type MERGE for the following tokens:{
+	Call of function ndes_init}
+After ndes_des, Directive of Type MERGE for the following tokens:{
+	Call of function ndes_des}
+After ndes_getbit, Directive of Type MERGE for the following tokens:{
+	Call of function ndes_getbit}
+After ndes_ks, Directive of Type MERGE for the following tokens:{
+	Call of function ndes_ks}
+After ndes_cyfun, Directive of Type MERGE for the following tokens:{
+	Call of function ndes_cyfun}
+After ndes_return, Directive of Type MERGE for the following tokens:{
+	Call of function ndes_return}
+After ndes_main, Directive of Type MERGE for the following tokens:{
+	Call of function ndes_main}
+After ndes, Directive of Type MERGE for the following tokens:{
+	Call of function ndes}
+After prime_initSeed, Directive of Type MERGE for the following tokens:{
+	Call of function prime_initSeed}
+After prime_randomInteger, Directive of Type MERGE for the following tokens:{
+	Call of function prime_randomInteger}
+After prime_init, Directive of Type MERGE for the following tokens:{
+	Call of function prime_init}
+After prime_return, Directive of Type MERGE for the following tokens:{
+	Call of function prime_return}
+After prime_divides, Directive of Type MERGE for the following tokens:{
+	Call of function prime_divides}
+After prime_even, Directive of Type MERGE for the following tokens:{
+	Call of function prime_even}
+After prime_prime, Directive of Type MERGE for the following tokens:{
+	Call of function prime_prime}
+After prime_swap, Directive of Type MERGE for the following tokens:{
+	Call of function prime_swap}
+After prime_main, Directive of Type MERGE for the following tokens:{
+	Call of function prime_main}
+After prime, Directive of Type MERGE for the following tokens:{
+	Call of function prime}
 After rad2deg_init, Directive of Type MERGE for the following tokens:{
 	Call of function rad2deg_init}
 After rad2deg_return, Directive of Type MERGE for the following tokens:{
@@ -316,282 +356,17 @@ After memset, Directive of Type MERGE for the following tokens:{
 #############################
 ## Directives Basic Blocks ##
 #############################
-Enter (adpcm_dec_sin_BB1, adpcm_dec_sin_BB3), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB2, BB1)} in function adpcm_dec_sin taken at least 1 times,
-	Loop Peeling: Backedges {(BB2, BB1)} in function adpcm_dec_sin taken 0 times}]
-Enter (adpcm_dec_sin_BB4, adpcm_dec_sin_BB6), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB5, BB4)} in function adpcm_dec_sin taken at least 1 times,
-	Loop Peeling: Backedges {(BB5, BB4)} in function adpcm_dec_sin taken 0 times}]
-Enter (adpcm_dec_sin_BB7, adpcm_dec_sin_BB9), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB8, BB7)} in function adpcm_dec_sin taken at least 1 times,
-	Loop Peeling: Backedges {(BB8, BB7)} in function adpcm_dec_sin taken 0 times}]
-Enter (adpcm_dec_decode_BB1, adpcm_dec_decode_BB4), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function adpcm_dec_decode taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function adpcm_dec_decode taken 0 times}]
-Enter (adpcm_dec_decode_BB5, adpcm_dec_decode_BB8), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB7, BB5)} in function adpcm_dec_decode taken at least 1 times,
-	Loop Peeling: Backedges {(BB7, BB5)} in function adpcm_dec_decode taken 0 times}]
-Enter (adpcm_dec_filtez_BB1, adpcm_dec_filtez_BB4), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function adpcm_dec_filtez taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function adpcm_dec_filtez taken 0 times}]
-Enter (adpcm_dec_upzero_BB2, adpcm_dec_upzero_BB5), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB4, BB2)} in function adpcm_dec_upzero taken at least 1 times,
-	Loop Peeling: Backedges {(BB4, BB2)} in function adpcm_dec_upzero taken 0 times}]
-Enter (adpcm_dec_upzero_BB7, adpcm_dec_upzero_BB13), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB12, BB7)} in function adpcm_dec_upzero taken at least 1 times,
-	Loop Peeling: Backedges {(BB12, BB7)} in function adpcm_dec_upzero taken 0 times}]
-Enter (adpcm_dec_reset_BB1, adpcm_dec_reset_BB4), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function adpcm_dec_reset taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function adpcm_dec_reset taken 0 times}]
-Enter (adpcm_dec_reset_BB5, adpcm_dec_reset_BB8), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB7, BB5)} in function adpcm_dec_reset taken at least 1 times,
-	Loop Peeling: Backedges {(BB7, BB5)} in function adpcm_dec_reset taken 0 times}]
-Enter (adpcm_dec_reset_BB9, adpcm_dec_reset_BB12), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB11, BB9)} in function adpcm_dec_reset taken at least 1 times,
-	Loop Peeling: Backedges {(BB11, BB9)} in function adpcm_dec_reset taken 0 times}]
-Enter (adpcm_dec_init_BB1, adpcm_dec_init_BB4), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function adpcm_dec_init taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function adpcm_dec_init taken 0 times}]
-Enter (adpcm_dec_return_BB1, adpcm_dec_return_BB4), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function adpcm_dec_return taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function adpcm_dec_return taken 0 times}]
-Enter (adpcm_dec_adpcm_dec_BB1, adpcm_dec_adpcm_dec_BB4), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function adpcm_dec_adpcm_dec taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function adpcm_dec_adpcm_dec taken 0 times}]
-Enter (binary_search_BB1, binary_search_BB9), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB8, BB1)} in function binary_search taken at least 1 times,
-	Loop Peeling: Backedges {(BB8, BB1)} in function binary_search taken 0 times}]
-Enter (expint_expint_BB2, expint_expint_BB7), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times,
-	Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times}]
-Enter (expint_expint_BB3, expint_expint_BB4), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times,
-	Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times}]
-Enter (expint_expint_BB9, expint_expint_BB19), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times,
-	Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times}]
-Enter (expint_expint_BB13, expint_expint_BB16), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB15, BB13)} in function expint_expint taken at least 1 times,
-	Loop Peeling: Backedges {(BB15, BB13)} in function expint_expint taken 0 times}]
-Enter (lms_init_BB2, lms_init_BB3), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB2, BB1)} in function lms_init taken at least 1 times,
-	Loop Peeling: Backedges {(BB2, BB1)} in function lms_init taken 0 times}]
-Enter (lms_init_BB4, lms_init_BB10), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB9, BB4)} in function lms_init taken at least 1 times,
-	Loop Peeling: Backedges {(BB9, BB4)} in function lms_init taken 0 times}]
-Enter (lms_init_BB7, lms_init_BB8), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB7, BB6)} in function lms_init taken at least 1 times,
-	Loop Peeling: Backedges {(BB7, BB6)} in function lms_init taken 0 times}]
-Enter (lms_calc_BB1, lms_calc_BB4), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function lms_calc taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function lms_calc taken 0 times}]
-Enter (lms_calc_BB5, lms_calc_BB8), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB7, BB5)} in function lms_calc taken at least 1 times,
-	Loop Peeling: Backedges {(BB7, BB5)} in function lms_calc taken 0 times}]
-Enter (lms_calc_BB9, lms_calc_BB12), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB11, BB9)} in function lms_calc taken at least 1 times,
-	Loop Peeling: Backedges {(BB11, BB9)} in function lms_calc taken 0 times}]
-Enter (lms_main_BB1, lms_main_BB4), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function lms_main taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function lms_main taken 0 times}]
-Enter (lms_main_BB5, lms_main_BB8), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB7, BB5)} in function lms_main taken at least 1 times,
-	Loop Peeling: Backedges {(BB7, BB5)} in function lms_main taken 0 times}]
-Enter (lms_return_BB1, lms_return_BB4), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function lms_return taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function lms_return taken 0 times}]
-Enter (Initialize_BB1, Initialize_BB8), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times,
-	Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times}]
-Enter (Initialize_BB3, Initialize_BB6), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times,
-	Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times}]
-Enter (Multiply_BB1, Multiply_BB12), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times,
-	Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times}]
-Enter (Multiply_BB3, Multiply_BB10), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times,
-	Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times}]
-Enter (Multiply_BB5, Multiply_BB8), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times,
-	Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times}]
-Enter (rad2deg_main_BB1, rad2deg_main_BB4), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function rad2deg_main taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function rad2deg_main taken 0 times}]
-Enter (__udivmoddi4_BB50, __udivmoddi4_BB53), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB52, BB50)} in function __udivmoddi4 taken at least 1 times,
-	Loop Peeling: Backedges {(BB52, BB50)} in function __udivmoddi4 taken 0 times}]
-Enter (__udivsi3_BB9, __udivsi3_BB12), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times,
-	Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times}]
-Enter (memcpy_BB1, memcpy_BB4), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function memcpy taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function memcpy taken 0 times}]
-Enter (memset_BB1, memset_BB4), [Directive of Type MERGE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function memset taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function memset taken 0 times}]
-Leave (adpcm_dec_sin_BB0, adpcm_dec_sin_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB2, BB1)} in function adpcm_dec_sin taken at least 1 times,
-	Loop Peeling: Backedges {(BB2, BB1)} in function adpcm_dec_sin taken 0 times}]
-Leave (adpcm_dec_sin_BB3, adpcm_dec_sin_BB4), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB5, BB4)} in function adpcm_dec_sin taken at least 1 times,
-	Loop Peeling: Backedges {(BB5, BB4)} in function adpcm_dec_sin taken 0 times}]
-Leave (adpcm_dec_sin_BB6, adpcm_dec_sin_BB7), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB8, BB7)} in function adpcm_dec_sin taken at least 1 times,
-	Loop Peeling: Backedges {(BB8, BB7)} in function adpcm_dec_sin taken 0 times}]
-Leave (adpcm_dec_decode_BB0, adpcm_dec_decode_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function adpcm_dec_decode taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function adpcm_dec_decode taken 0 times}]
-Leave (adpcm_dec_decode_BB4, adpcm_dec_decode_BB5), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB7, BB5)} in function adpcm_dec_decode taken at least 1 times,
-	Loop Peeling: Backedges {(BB7, BB5)} in function adpcm_dec_decode taken 0 times}]
-Leave (adpcm_dec_filtez_BB0, adpcm_dec_filtez_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function adpcm_dec_filtez taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function adpcm_dec_filtez taken 0 times}]
-Leave (adpcm_dec_upzero_BB1, adpcm_dec_upzero_BB2), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB4, BB2)} in function adpcm_dec_upzero taken at least 1 times,
-	Loop Peeling: Backedges {(BB4, BB2)} in function adpcm_dec_upzero taken 0 times}]
-Leave (adpcm_dec_upzero_BB6, adpcm_dec_upzero_BB7), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB12, BB7)} in function adpcm_dec_upzero taken at least 1 times,
-	Loop Peeling: Backedges {(BB12, BB7)} in function adpcm_dec_upzero taken 0 times}]
-Leave (adpcm_dec_reset_BB0, adpcm_dec_reset_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function adpcm_dec_reset taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function adpcm_dec_reset taken 0 times}]
-Leave (adpcm_dec_reset_BB4, adpcm_dec_reset_BB5), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB7, BB5)} in function adpcm_dec_reset taken at least 1 times,
-	Loop Peeling: Backedges {(BB7, BB5)} in function adpcm_dec_reset taken 0 times}]
-Leave (adpcm_dec_reset_BB8, adpcm_dec_reset_BB9), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB11, BB9)} in function adpcm_dec_reset taken at least 1 times,
-	Loop Peeling: Backedges {(BB11, BB9)} in function adpcm_dec_reset taken 0 times}]
-Leave (adpcm_dec_init_BB0, adpcm_dec_init_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function adpcm_dec_init taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function adpcm_dec_init taken 0 times}]
-Leave (adpcm_dec_return_BB0, adpcm_dec_return_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function adpcm_dec_return taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function adpcm_dec_return taken 0 times}]
-Leave (adpcm_dec_adpcm_dec_BB0, adpcm_dec_adpcm_dec_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function adpcm_dec_adpcm_dec taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function adpcm_dec_adpcm_dec taken 0 times}]
-Leave (binary_search_BB0, binary_search_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB8, BB1)} in function binary_search taken at least 1 times,
-	Loop Peeling: Backedges {(BB8, BB1)} in function binary_search taken 0 times}]
-Leave (expint_expint_BB1, expint_expint_BB2), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB6, BB2)} in function expint_expint taken at least 1 times,
-	Loop Peeling: Backedges {(BB6, BB2)} in function expint_expint taken 0 times}]
-Leave (expint_expint_BB8, expint_expint_BB9), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB18, BB9)} in function expint_expint taken at least 1 times,
-	Loop Peeling: Backedges {(BB18, BB9)} in function expint_expint taken 0 times}]
-Leave (expint_expint_BB12, expint_expint_BB13), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB15, BB13)} in function expint_expint taken at least 1 times,
-	Loop Peeling: Backedges {(BB15, BB13)} in function expint_expint taken 0 times}]
-Leave (lms_init_BB0, lms_init_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB2, BB1)} in function lms_init taken at least 1 times,
-	Loop Peeling: Backedges {(BB2, BB1)} in function lms_init taken 0 times}]
-Leave (lms_init_BB3, lms_init_BB4), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB9, BB4)} in function lms_init taken at least 1 times,
-	Loop Peeling: Backedges {(BB9, BB4)} in function lms_init taken 0 times}]
-Leave (lms_init_BB5, lms_init_BB6), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB7, BB6)} in function lms_init taken at least 1 times,
-	Loop Peeling: Backedges {(BB7, BB6)} in function lms_init taken 0 times}]
-Leave (lms_calc_BB0, lms_calc_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function lms_calc taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function lms_calc taken 0 times}]
-Leave (lms_calc_BB4, lms_calc_BB5), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB7, BB5)} in function lms_calc taken at least 1 times,
-	Loop Peeling: Backedges {(BB7, BB5)} in function lms_calc taken 0 times}]
-Leave (lms_calc_BB8, lms_calc_BB9), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB11, BB9)} in function lms_calc taken at least 1 times,
-	Loop Peeling: Backedges {(BB11, BB9)} in function lms_calc taken 0 times}]
-Leave (lms_main_BB0, lms_main_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function lms_main taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function lms_main taken 0 times}]
-Leave (lms_main_BB4, lms_main_BB5), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB7, BB5)} in function lms_main taken at least 1 times,
-	Loop Peeling: Backedges {(BB7, BB5)} in function lms_main taken 0 times}]
-Leave (lms_return_BB0, lms_return_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function lms_return taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function lms_return taken 0 times}]
-Leave (Initialize_BB0, Initialize_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB7, BB1)} in function Initialize taken at least 1 times,
-	Loop Peeling: Backedges {(BB7, BB1)} in function Initialize taken 0 times}]
-Leave (Initialize_BB2, Initialize_BB3), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB5, BB3)} in function Initialize taken at least 1 times,
-	Loop Peeling: Backedges {(BB5, BB3)} in function Initialize taken 0 times}]
-Leave (Multiply_BB0, Multiply_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB11, BB1)} in function Multiply taken at least 1 times,
-	Loop Peeling: Backedges {(BB11, BB1)} in function Multiply taken 0 times}]
-Leave (Multiply_BB2, Multiply_BB3), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB9, BB3)} in function Multiply taken at least 1 times,
-	Loop Peeling: Backedges {(BB9, BB3)} in function Multiply taken 0 times}]
-Leave (Multiply_BB4, Multiply_BB5), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB7, BB5)} in function Multiply taken at least 1 times,
-	Loop Peeling: Backedges {(BB7, BB5)} in function Multiply taken 0 times}]
-Leave (rad2deg_main_BB0, rad2deg_main_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function rad2deg_main taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function rad2deg_main taken 0 times}]
-Leave (__udivmoddi4_BB49, __udivmoddi4_BB50), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB52, BB50)} in function __udivmoddi4 taken at least 1 times,
-	Loop Peeling: Backedges {(BB52, BB50)} in function __udivmoddi4 taken 0 times}]
-Leave (__udivsi3_BB8, __udivsi3_BB9), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB11, BB9)} in function __udivsi3 taken at least 1 times,
-	Loop Peeling: Backedges {(BB11, BB9)} in function __udivsi3 taken 0 times}]
-Leave (memcpy_BB0, memcpy_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function memcpy taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function memcpy taken 0 times}]
-Leave (memset_BB0, memset_BB1), [Directive of Type CREATE for the following tokens:{
-	Loop Iteration: Backedges {(BB3, BB1)} in function memset taken at least 1 times,
-	Loop Peeling: Backedges {(BB3, BB1)} in function memset taken 0 times}]
 #############################
 ## Directives Instructions ##
 #############################
-Before adpcm_dec_sin_BB7_I6, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_sin_BB7_I6}
-Before adpcm_dec_sin_BB8_I10, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_sin_BB8_I10}
-Before adpcm_dec_cos_BB0_I10, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_cos_BB0_I10}
-Before adpcm_dec_decode_BB0_I23, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I23}
-Before adpcm_dec_decode_BB0_I37, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I37}
-Before adpcm_dec_decode_BB0_I78, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I78}
-Before adpcm_dec_decode_BB0_I82, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I82}
-Before adpcm_dec_decode_BB0_I96, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I96}
-Before adpcm_dec_decode_BB0_I110, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I110}
-Before adpcm_dec_decode_BB0_I119, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I119}
-Before adpcm_dec_decode_BB0_I144, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I144}
-Before adpcm_dec_decode_BB0_I157, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I157}
-Before adpcm_dec_decode_BB0_I182, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I182}
-Before adpcm_dec_decode_BB0_I186, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I186}
-Before adpcm_dec_decode_BB0_I200, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I200}
-Before adpcm_dec_decode_BB0_I214, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I214}
-Before adpcm_dec_decode_BB0_I223, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I223}
-Before adpcm_dec_init_BB0_I10, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_init_BB0_I10}
-Before adpcm_dec_init_BB2_I3, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_init_BB2_I3}
-Before adpcm_dec_adpcm_dec_BB2_I3, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_adpcm_dec_BB2_I3}
-Before adpcm_dec_BB0_I6, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_BB0_I6}
-Before adpcm_dec_BB0_I7, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_BB0_I7}
-Before adpcm_dec_BB0_I8, Directive of Type CREATE for the following tokens:{
-	Function call at location adpcm_dec_BB0_I8}
 Before bs_BB0_I7, Directive of Type CREATE for the following tokens:{
 	Function call at location bs_BB0_I7}
+Before icrc_BB3_I6, Directive of Type CREATE for the following tokens:{
+	Function call at location icrc_BB3_I6}
+Before crc_BB0_I16, Directive of Type CREATE for the following tokens:{
+	Function call at location crc_BB0_I16}
+Before crc_BB0_I24, Directive of Type CREATE for the following tokens:{
+	Function call at location crc_BB0_I24}
 Before expint_BB0_I8, Directive of Type CREATE for the following tokens:{
 	Function call at location expint_BB0_I8}
 Before expint_expint_BB3_I14, Directive of Type CREATE for the following tokens:{
@@ -602,6 +377,8 @@ Before expint_expint_BB11_I4, Directive of Type CREATE for the following tokens:
 	Function call at location expint_expint_BB11_I4}
 Before expint_expint_BB16_I1, Directive of Type CREATE for the following tokens:{
 	Function call at location expint_expint_BB16_I1}
+Before fdct_BB0_I10, Directive of Type CREATE for the following tokens:{
+	Function call at location fdct_BB0_I10}
 Before lms_init_BB3_I1, Directive of Type CREATE for the following tokens:{
 	Function call at location lms_init_BB3_I1}
 Before lms_init_BB8_I5, Directive of Type CREATE for the following tokens:{
@@ -616,6 +393,14 @@ Before lms_BB0_I7, Directive of Type CREATE for the following tokens:{
 	Function call at location lms_BB0_I7}
 Before lms_BB0_I8, Directive of Type CREATE for the following tokens:{
 	Function call at location lms_BB0_I8}
+Before a_BB2_I0, Directive of Type CREATE for the following tokens:{
+	Function call at location a_BB2_I0}
+Before b_BB2_I0, Directive of Type CREATE for the following tokens:{
+	Function call at location b_BB2_I0}
+Before loop_BB2_I0, Directive of Type CREATE for the following tokens:{
+	Function call at location loop_BB2_I0}
+Before loop_BB2_I1, Directive of Type CREATE for the following tokens:{
+	Function call at location loop_BB2_I1}
 Before matmult_BB0_I6, Directive of Type CREATE for the following tokens:{
 	Function call at location matmult_BB0_I6}
 Before matmult_BB0_I10, Directive of Type CREATE for the following tokens:{
@@ -628,6 +413,62 @@ Before Test_BB0_I16, Directive of Type CREATE for the following tokens:{
 	Function call at location Test_BB0_I16}
 Before Initialize_BB4_I0, Directive of Type CREATE for the following tokens:{
 	Function call at location Initialize_BB4_I0}
+Before ndes_des_BB9_I12, Directive of Type CREATE for the following tokens:{
+	Function call at location ndes_des_BB9_I12}
+Before ndes_des_BB9_I28, Directive of Type CREATE for the following tokens:{
+	Function call at location ndes_des_BB9_I28}
+Before ndes_des_BB13_I11, Directive of Type CREATE for the following tokens:{
+	Function call at location ndes_des_BB13_I11}
+Before ndes_des_BB18_I12, Directive of Type CREATE for the following tokens:{
+	Function call at location ndes_des_BB18_I12}
+Before ndes_des_BB18_I27, Directive of Type CREATE for the following tokens:{
+	Function call at location ndes_des_BB18_I27}
+Before ndes_des_BB25_I10, Directive of Type CREATE for the following tokens:{
+	Function call at location ndes_des_BB25_I10}
+Before ndes_des_BB29_I13, Directive of Type CREATE for the following tokens:{
+	Function call at location ndes_des_BB29_I13}
+Before ndes_des_BB29_I29, Directive of Type CREATE for the following tokens:{
+	Function call at location ndes_des_BB29_I29}
+Before ndes_ks_BB12_I14, Directive of Type CREATE for the following tokens:{
+	Function call at location ndes_ks_BB12_I14}
+Before ndes_ks_BB12_I33, Directive of Type CREATE for the following tokens:{
+	Function call at location ndes_ks_BB12_I33}
+Before ndes_ks_BB12_I50, Directive of Type CREATE for the following tokens:{
+	Function call at location ndes_ks_BB12_I50}
+Before ndes_main_BB0_I23, Directive of Type CREATE for the following tokens:{
+	Function call at location ndes_main_BB0_I23}
+Before ndes_BB0_I6, Directive of Type CREATE for the following tokens:{
+	Function call at location ndes_BB0_I6}
+Before ndes_BB0_I7, Directive of Type CREATE for the following tokens:{
+	Function call at location ndes_BB0_I7}
+Before ndes_BB0_I8, Directive of Type CREATE for the following tokens:{
+	Function call at location ndes_BB0_I8}
+Before prime_init_BB0_I6, Directive of Type CREATE for the following tokens:{
+	Function call at location prime_init_BB0_I6}
+Before prime_init_BB0_I7, Directive of Type CREATE for the following tokens:{
+	Function call at location prime_init_BB0_I7}
+Before prime_init_BB0_I10, Directive of Type CREATE for the following tokens:{
+	Function call at location prime_init_BB0_I10}
+Before prime_divides_BB0_I10, Directive of Type CREATE for the following tokens:{
+	Function call at location prime_divides_BB0_I10}
+Before prime_even_BB0_I8, Directive of Type CREATE for the following tokens:{
+	Function call at location prime_even_BB0_I8}
+Before prime_prime_BB0_I8, Directive of Type CREATE for the following tokens:{
+	Function call at location prime_prime_BB0_I8}
+Before prime_prime_BB4_I2, Directive of Type CREATE for the following tokens:{
+	Function call at location prime_prime_BB4_I2}
+Before prime_main_BB0_I10, Directive of Type CREATE for the following tokens:{
+	Function call at location prime_main_BB0_I10}
+Before prime_main_BB0_I13, Directive of Type CREATE for the following tokens:{
+	Function call at location prime_main_BB0_I13}
+Before prime_main_BB1_I2, Directive of Type CREATE for the following tokens:{
+	Function call at location prime_main_BB1_I2}
+Before prime_BB0_I6, Directive of Type CREATE for the following tokens:{
+	Function call at location prime_BB0_I6}
+Before prime_BB0_I7, Directive of Type CREATE for the following tokens:{
+	Function call at location prime_BB0_I7}
+Before prime_BB0_I8, Directive of Type CREATE for the following tokens:{
+	Function call at location prime_BB0_I8}
 Before rad2deg_BB0_I6, Directive of Type CREATE for the following tokens:{
 	Function call at location rad2deg_BB0_I6}
 Before rad2deg_BB0_I7, Directive of Type CREATE for the following tokens:{
@@ -720,54 +561,14 @@ Before __umoddi3_BB0_I14, Directive of Type CREATE for the following tokens:{
 	Function call at location __umoddi3_BB0_I14}
 Before __umodsi3_BB0_I9, Directive of Type CREATE for the following tokens:{
 	Function call at location __umodsi3_BB0_I9}
-After adpcm_dec_sin_BB7_I6, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_sin_BB7_I6}
-After adpcm_dec_sin_BB8_I10, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_sin_BB8_I10}
-After adpcm_dec_cos_BB0_I10, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_cos_BB0_I10}
-After adpcm_dec_decode_BB0_I23, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I23}
-After adpcm_dec_decode_BB0_I37, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I37}
-After adpcm_dec_decode_BB0_I78, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I78}
-After adpcm_dec_decode_BB0_I82, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I82}
-After adpcm_dec_decode_BB0_I96, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I96}
-After adpcm_dec_decode_BB0_I110, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I110}
-After adpcm_dec_decode_BB0_I119, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I119}
-After adpcm_dec_decode_BB0_I144, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I144}
-After adpcm_dec_decode_BB0_I157, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I157}
-After adpcm_dec_decode_BB0_I182, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I182}
-After adpcm_dec_decode_BB0_I186, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I186}
-After adpcm_dec_decode_BB0_I200, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I200}
-After adpcm_dec_decode_BB0_I214, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I214}
-After adpcm_dec_decode_BB0_I223, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_decode_BB0_I223}
-After adpcm_dec_init_BB0_I10, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_init_BB0_I10}
-After adpcm_dec_init_BB2_I3, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_init_BB2_I3}
-After adpcm_dec_adpcm_dec_BB2_I3, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_adpcm_dec_BB2_I3}
-After adpcm_dec_BB0_I6, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_BB0_I6}
-After adpcm_dec_BB0_I7, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_BB0_I7}
-After adpcm_dec_BB0_I8, Directive of Type MERGE for the following tokens:{
-	Function call at location adpcm_dec_BB0_I8}
 After bs_BB0_I7, Directive of Type MERGE for the following tokens:{
 	Function call at location bs_BB0_I7}
+After icrc_BB3_I6, Directive of Type MERGE for the following tokens:{
+	Function call at location icrc_BB3_I6}
+After crc_BB0_I16, Directive of Type MERGE for the following tokens:{
+	Function call at location crc_BB0_I16}
+After crc_BB0_I24, Directive of Type MERGE for the following tokens:{
+	Function call at location crc_BB0_I24}
 After expint_BB0_I8, Directive of Type MERGE for the following tokens:{
 	Function call at location expint_BB0_I8}
 After expint_expint_BB3_I14, Directive of Type MERGE for the following tokens:{
@@ -778,6 +579,8 @@ After expint_expint_BB11_I4, Directive of Type MERGE for the following tokens:{
 	Function call at location expint_expint_BB11_I4}
 After expint_expint_BB16_I1, Directive of Type MERGE for the following tokens:{
 	Function call at location expint_expint_BB16_I1}
+After fdct_BB0_I10, Directive of Type MERGE for the following tokens:{
+	Function call at location fdct_BB0_I10}
 After lms_init_BB3_I1, Directive of Type MERGE for the following tokens:{
 	Function call at location lms_init_BB3_I1}
 After lms_init_BB8_I5, Directive of Type MERGE for the following tokens:{
@@ -792,6 +595,14 @@ After lms_BB0_I7, Directive of Type MERGE for the following tokens:{
 	Function call at location lms_BB0_I7}
 After lms_BB0_I8, Directive of Type MERGE for the following tokens:{
 	Function call at location lms_BB0_I8}
+After a_BB2_I0, Directive of Type MERGE for the following tokens:{
+	Function call at location a_BB2_I0}
+After b_BB2_I0, Directive of Type MERGE for the following tokens:{
+	Function call at location b_BB2_I0}
+After loop_BB2_I0, Directive of Type MERGE for the following tokens:{
+	Function call at location loop_BB2_I0}
+After loop_BB2_I1, Directive of Type MERGE for the following tokens:{
+	Function call at location loop_BB2_I1}
 After matmult_BB0_I6, Directive of Type MERGE for the following tokens:{
 	Function call at location matmult_BB0_I6}
 After matmult_BB0_I10, Directive of Type MERGE for the following tokens:{
@@ -804,6 +615,62 @@ After Test_BB0_I16, Directive of Type MERGE for the following tokens:{
 	Function call at location Test_BB0_I16}
 After Initialize_BB4_I0, Directive of Type MERGE for the following tokens:{
 	Function call at location Initialize_BB4_I0}
+After ndes_des_BB9_I12, Directive of Type MERGE for the following tokens:{
+	Function call at location ndes_des_BB9_I12}
+After ndes_des_BB9_I28, Directive of Type MERGE for the following tokens:{
+	Function call at location ndes_des_BB9_I28}
+After ndes_des_BB13_I11, Directive of Type MERGE for the following tokens:{
+	Function call at location ndes_des_BB13_I11}
+After ndes_des_BB18_I12, Directive of Type MERGE for the following tokens:{
+	Function call at location ndes_des_BB18_I12}
+After ndes_des_BB18_I27, Directive of Type MERGE for the following tokens:{
+	Function call at location ndes_des_BB18_I27}
+After ndes_des_BB25_I10, Directive of Type MERGE for the following tokens:{
+	Function call at location ndes_des_BB25_I10}
+After ndes_des_BB29_I13, Directive of Type MERGE for the following tokens:{
+	Function call at location ndes_des_BB29_I13}
+After ndes_des_BB29_I29, Directive of Type MERGE for the following tokens:{
+	Function call at location ndes_des_BB29_I29}
+After ndes_ks_BB12_I14, Directive of Type MERGE for the following tokens:{
+	Function call at location ndes_ks_BB12_I14}
+After ndes_ks_BB12_I33, Directive of Type MERGE for the following tokens:{
+	Function call at location ndes_ks_BB12_I33}
+After ndes_ks_BB12_I50, Directive of Type MERGE for the following tokens:{
+	Function call at location ndes_ks_BB12_I50}
+After ndes_main_BB0_I23, Directive of Type MERGE for the following tokens:{
+	Function call at location ndes_main_BB0_I23}
+After ndes_BB0_I6, Directive of Type MERGE for the following tokens:{
+	Function call at location ndes_BB0_I6}
+After ndes_BB0_I7, Directive of Type MERGE for the following tokens:{
+	Function call at location ndes_BB0_I7}
+After ndes_BB0_I8, Directive of Type MERGE for the following tokens:{
+	Function call at location ndes_BB0_I8}
+After prime_init_BB0_I6, Directive of Type MERGE for the following tokens:{
+	Function call at location prime_init_BB0_I6}
+After prime_init_BB0_I7, Directive of Type MERGE for the following tokens:{
+	Function call at location prime_init_BB0_I7}
+After prime_init_BB0_I10, Directive of Type MERGE for the following tokens:{
+	Function call at location prime_init_BB0_I10}
+After prime_divides_BB0_I10, Directive of Type MERGE for the following tokens:{
+	Function call at location prime_divides_BB0_I10}
+After prime_even_BB0_I8, Directive of Type MERGE for the following tokens:{
+	Function call at location prime_even_BB0_I8}
+After prime_prime_BB0_I8, Directive of Type MERGE for the following tokens:{
+	Function call at location prime_prime_BB0_I8}
+After prime_prime_BB4_I2, Directive of Type MERGE for the following tokens:{
+	Function call at location prime_prime_BB4_I2}
+After prime_main_BB0_I10, Directive of Type MERGE for the following tokens:{
+	Function call at location prime_main_BB0_I10}
+After prime_main_BB0_I13, Directive of Type MERGE for the following tokens:{
+	Function call at location prime_main_BB0_I13}
+After prime_main_BB1_I2, Directive of Type MERGE for the following tokens:{
+	Function call at location prime_main_BB1_I2}
+After prime_BB0_I6, Directive of Type MERGE for the following tokens:{
+	Function call at location prime_BB0_I6}
+After prime_BB0_I7, Directive of Type MERGE for the following tokens:{
+	Function call at location prime_BB0_I7}
+After prime_BB0_I8, Directive of Type MERGE for the following tokens:{
+	Function call at location prime_BB0_I8}
 After rad2deg_BB0_I6, Directive of Type MERGE for the following tokens:{
 	Function call at location rad2deg_BB0_I6}
 After rad2deg_BB0_I7, Directive of Type MERGE for the following tokens:{

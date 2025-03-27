@@ -1,35 +1,16 @@
 Call Graph for analysed program
 -------------------------------
 
-From callsite adpcm_dec_sin_BB7_I6 potentially calling {adpcm_dec_fabs}
-From callsite adpcm_dec_sin_BB8_I10 potentially calling {__divsi3}
-From callsite adpcm_dec_cos_BB0_I10 potentially calling {adpcm_dec_sin}
-From callsite adpcm_dec_decode_BB0_I23 potentially calling {adpcm_dec_filtez}
-From callsite adpcm_dec_decode_BB0_I37 potentially calling {adpcm_dec_filtep}
-From callsite adpcm_dec_decode_BB0_I78 potentially calling {adpcm_dec_logscl}
-From callsite adpcm_dec_decode_BB0_I82 potentially calling {adpcm_dec_scalel}
-From callsite adpcm_dec_decode_BB0_I96 potentially calling {adpcm_dec_upzero}
-From callsite adpcm_dec_decode_BB0_I110 potentially calling {adpcm_dec_uppol2}
-From callsite adpcm_dec_decode_BB0_I119 potentially calling {adpcm_dec_uppol1}
-From callsite adpcm_dec_decode_BB0_I144 potentially calling {adpcm_dec_filtez}
-From callsite adpcm_dec_decode_BB0_I157 potentially calling {adpcm_dec_filtep}
-From callsite adpcm_dec_decode_BB0_I182 potentially calling {adpcm_dec_logsch}
-From callsite adpcm_dec_decode_BB0_I186 potentially calling {adpcm_dec_scalel}
-From callsite adpcm_dec_decode_BB0_I200 potentially calling {adpcm_dec_upzero}
-From callsite adpcm_dec_decode_BB0_I214 potentially calling {adpcm_dec_uppol2}
-From callsite adpcm_dec_decode_BB0_I223 potentially calling {adpcm_dec_uppol1}
-From callsite adpcm_dec_init_BB0_I10 potentially calling {adpcm_dec_reset}
-From callsite adpcm_dec_init_BB2_I3 potentially calling {adpcm_dec_cos}
-From callsite adpcm_dec_adpcm_dec_BB2_I3 potentially calling {adpcm_dec_decode}
-From callsite adpcm_dec_BB0_I6 potentially calling {adpcm_dec_init}
-From callsite adpcm_dec_BB0_I7 potentially calling {adpcm_dec_adpcm_dec}
-From callsite adpcm_dec_BB0_I8 potentially calling {adpcm_dec_return}
 From callsite bs_BB0_I7 potentially calling {binary_search}
+From callsite icrc_BB3_I6 potentially calling {icrc1}
+From callsite crc_BB0_I16 potentially calling {icrc}
+From callsite crc_BB0_I24 potentially calling {icrc}
 From callsite expint_BB0_I8 potentially calling {expint_expint}
 From callsite expint_expint_BB3_I14 potentially calling {__divsi3}
 From callsite expint_expint_BB10_I2 potentially calling {__divsi3}
 From callsite expint_expint_BB11_I4 potentially calling {__divsi3}
 From callsite expint_expint_BB16_I1 potentially calling {foo}
+From callsite fdct_BB0_I10 potentially calling {fdct_fdct}
 From callsite lms_init_BB3_I1 potentially calling {lms_sinus}
 From callsite lms_init_BB8_I5 potentially calling {lms_sinus}
 From callsite lms_init_BB8_I17 potentially calling {lms_sinus}
@@ -37,12 +18,44 @@ From callsite lms_main_BB6_I11 potentially calling {lms_calc}
 From callsite lms_BB0_I6 potentially calling {lms_init}
 From callsite lms_BB0_I7 potentially calling {lms_main}
 From callsite lms_BB0_I8 potentially calling {lms_return}
+From callsite a_BB2_I0 potentially calling {exec}
+From callsite b_BB2_I0 potentially calling {exec}
+From callsite loop_BB2_I0 potentially calling {a}
+From callsite loop_BB2_I1 potentially calling {b}
 From callsite matmult_BB0_I6 potentially calling {InitSeed}
 From callsite matmult_BB0_I10 potentially calling {Test}
 From callsite Test_BB0_I10 potentially calling {Initialize}
 From callsite Test_BB0_I12 potentially calling {Initialize}
 From callsite Test_BB0_I16 potentially calling {Multiply}
 From callsite Initialize_BB4_I0 potentially calling {RandomInteger}
+From callsite ndes_des_BB9_I12 potentially calling {ndes_getbit}
+From callsite ndes_des_BB9_I28 potentially calling {ndes_getbit}
+From callsite ndes_des_BB13_I11 potentially calling {ndes_ks}
+From callsite ndes_des_BB18_I12 potentially calling {ndes_getbit}
+From callsite ndes_des_BB18_I27 potentially calling {ndes_getbit}
+From callsite ndes_des_BB25_I10 potentially calling {ndes_cyfun}
+From callsite ndes_des_BB29_I13 potentially calling {ndes_getbit}
+From callsite ndes_des_BB29_I29 potentially calling {ndes_getbit}
+From callsite ndes_ks_BB12_I14 potentially calling {ndes_getbit}
+From callsite ndes_ks_BB12_I33 potentially calling {ndes_getbit}
+From callsite ndes_ks_BB12_I50 potentially calling {ndes_getbit}
+From callsite ndes_main_BB0_I23 potentially calling {ndes_des}
+From callsite ndes_BB0_I6 potentially calling {ndes_init}
+From callsite ndes_BB0_I7 potentially calling {ndes_main}
+From callsite ndes_BB0_I8 potentially calling {ndes_return}
+From callsite prime_init_BB0_I6 potentially calling {prime_initSeed}
+From callsite prime_init_BB0_I7 potentially calling {prime_randomInteger}
+From callsite prime_init_BB0_I10 potentially calling {prime_randomInteger}
+From callsite prime_divides_BB0_I10 potentially calling {__umodsi3}
+From callsite prime_even_BB0_I8 potentially calling {prime_divides}
+From callsite prime_prime_BB0_I8 potentially calling {prime_even}
+From callsite prime_prime_BB4_I2 potentially calling {prime_divides}
+From callsite prime_main_BB0_I10 potentially calling {prime_swap}
+From callsite prime_main_BB0_I13 potentially calling {prime_prime}
+From callsite prime_main_BB1_I2 potentially calling {prime_prime}
+From callsite prime_BB0_I6 potentially calling {prime_init}
+From callsite prime_BB0_I7 potentially calling {prime_main}
+From callsite prime_BB0_I8 potentially calling {prime_return}
 From callsite rad2deg_BB0_I6 potentially calling {rad2deg_init}
 From callsite rad2deg_BB0_I7 potentially calling {rad2deg_main}
 From callsite rad2deg_BB0_I8 potentially calling {rad2deg_return}
@@ -90,35 +103,41 @@ From callsite __udivsi3_BB4_I5 potentially calling {__clzsi2}
 From callsite __umoddi3_BB0_I14 potentially calling {__udivmoddi4}
 From callsite __umodsi3_BB0_I9 potentially calling {__udivsi3}
 
-Callee adpcm_dec_fabs can be called from (and return to) {adpcm_dec_sin_BB7_I6}
-Callee adpcm_dec_sin can be called from (and return to) {adpcm_dec_cos_BB0_I10}
-Callee adpcm_dec_cos can be called from (and return to) {adpcm_dec_init_BB2_I3}
-Callee adpcm_dec_decode can be called from (and return to) {adpcm_dec_adpcm_dec_BB2_I3}
-Callee adpcm_dec_filtez can be called from (and return to) {adpcm_dec_decode_BB0_I23, adpcm_dec_decode_BB0_I144}
-Callee adpcm_dec_filtep can be called from (and return to) {adpcm_dec_decode_BB0_I37, adpcm_dec_decode_BB0_I157}
-Callee adpcm_dec_logscl can be called from (and return to) {adpcm_dec_decode_BB0_I78}
-Callee adpcm_dec_scalel can be called from (and return to) {adpcm_dec_decode_BB0_I82, adpcm_dec_decode_BB0_I186}
-Callee adpcm_dec_upzero can be called from (and return to) {adpcm_dec_decode_BB0_I96, adpcm_dec_decode_BB0_I200}
-Callee adpcm_dec_uppol2 can be called from (and return to) {adpcm_dec_decode_BB0_I110, adpcm_dec_decode_BB0_I214}
-Callee adpcm_dec_uppol1 can be called from (and return to) {adpcm_dec_decode_BB0_I119, adpcm_dec_decode_BB0_I223}
-Callee adpcm_dec_logsch can be called from (and return to) {adpcm_dec_decode_BB0_I182}
-Callee adpcm_dec_reset can be called from (and return to) {adpcm_dec_init_BB0_I10}
-Callee adpcm_dec_init can be called from (and return to) {adpcm_dec_BB0_I6}
-Callee adpcm_dec_return can be called from (and return to) {adpcm_dec_BB0_I8}
-Callee adpcm_dec_adpcm_dec can be called from (and return to) {adpcm_dec_BB0_I7}
 Callee binary_search can be called from (and return to) {bs_BB0_I7}
+Callee icrc1 can be called from (and return to) {icrc_BB3_I6}
+Callee icrc can be called from (and return to) {crc_BB0_I16, crc_BB0_I24}
 Callee expint_expint can be called from (and return to) {expint_BB0_I8}
 Callee foo can be called from (and return to) {expint_expint_BB16_I1}
+Callee fdct_fdct can be called from (and return to) {fdct_BB0_I10}
 Callee lms_sinus can be called from (and return to) {lms_init_BB3_I1, lms_init_BB8_I5, lms_init_BB8_I17}
 Callee lms_init can be called from (and return to) {lms_BB0_I6}
 Callee lms_calc can be called from (and return to) {lms_main_BB6_I11}
 Callee lms_main can be called from (and return to) {lms_BB0_I7}
 Callee lms_return can be called from (and return to) {lms_BB0_I8}
+Callee exec can be called from (and return to) {a_BB2_I0, b_BB2_I0}
+Callee a can be called from (and return to) {loop_BB2_I0}
+Callee b can be called from (and return to) {loop_BB2_I1}
 Callee InitSeed can be called from (and return to) {matmult_BB0_I6}
 Callee Test can be called from (and return to) {matmult_BB0_I10}
 Callee Initialize can be called from (and return to) {Test_BB0_I10, Test_BB0_I12}
 Callee Multiply can be called from (and return to) {Test_BB0_I16}
 Callee RandomInteger can be called from (and return to) {Initialize_BB4_I0}
+Callee ndes_init can be called from (and return to) {ndes_BB0_I6}
+Callee ndes_des can be called from (and return to) {ndes_main_BB0_I23}
+Callee ndes_getbit can be called from (and return to) {ndes_des_BB9_I12, ndes_des_BB9_I28, ndes_des_BB18_I12, ndes_des_BB18_I27, ndes_des_BB29_I13, ndes_des_BB29_I29, ndes_ks_BB12_I14, ndes_ks_BB12_I33, ndes_ks_BB12_I50}
+Callee ndes_ks can be called from (and return to) {ndes_des_BB13_I11}
+Callee ndes_cyfun can be called from (and return to) {ndes_des_BB25_I10}
+Callee ndes_return can be called from (and return to) {ndes_BB0_I8}
+Callee ndes_main can be called from (and return to) {ndes_BB0_I7}
+Callee prime_initSeed can be called from (and return to) {prime_init_BB0_I6}
+Callee prime_randomInteger can be called from (and return to) {prime_init_BB0_I7, prime_init_BB0_I10}
+Callee prime_init can be called from (and return to) {prime_BB0_I6}
+Callee prime_return can be called from (and return to) {prime_BB0_I8}
+Callee prime_divides can be called from (and return to) {prime_even_BB0_I8, prime_prime_BB4_I2}
+Callee prime_even can be called from (and return to) {prime_prime_BB0_I8}
+Callee prime_prime can be called from (and return to) {prime_main_BB0_I13, prime_main_BB1_I2}
+Callee prime_swap can be called from (and return to) {prime_main_BB0_I10}
+Callee prime_main can be called from (and return to) {prime_BB0_I7}
 Callee rad2deg_init can be called from (and return to) {rad2deg_BB0_I6}
 Callee rad2deg_return can be called from (and return to) {rad2deg_BB0_I8}
 Callee rad2deg_main can be called from (and return to) {rad2deg_BB0_I7}
@@ -127,9 +146,9 @@ Callee __clzsi2 can be called from (and return to) {__udivsi3_BB4_I1, __udivsi3_
 Callee __cmpdi2 can be called from (and return to) {__aeabi_lcmp_BB0_I10}
 Callee __divdi3 can be called from (and return to) {__divmoddi4_BB0_I22, __mulvdi3_BB14_I4, __mulvdi3_BB17_I6}
 Callee __udivmoddi4 can be called from (and return to) {__divdi3_BB0_I27, __moddi3_BB0_I24, __udivdi3_BB0_I14, __umoddi3_BB0_I14}
-Callee __divsi3 can be called from (and return to) {__divmodsi4_BB0_I10, __modsi3_BB0_I9, __mulvsi3_BB14_I2, __mulvsi3_BB17_I3, adpcm_dec_sin_BB8_I10, expint_expint_BB3_I14, expint_expint_BB10_I2, expint_expint_BB11_I4}
+Callee __divsi3 can be called from (and return to) {__divmodsi4_BB0_I10, __modsi3_BB0_I9, __mulvsi3_BB14_I2, __mulvsi3_BB17_I3, expint_expint_BB3_I14, expint_expint_BB10_I2, expint_expint_BB11_I4}
 Callee __paritysi2 can be called from (and return to) {__paritydi2_BB0_I14}
 Callee __ucmpdi2 can be called from (and return to) {__aeabi_ulcmp_BB0_I10}
 Callee __udivsi3 can be called from (and return to) {__divsi3_BB0_I16, __udivmoddi4_BB4_I2, __udivmoddi4_BB12_I2, __udivmoddi4_BB16_I2, __udivmodsi4_BB0_I10, __umodsi3_BB0_I9}
-Callee __umodsi3 can be called from (and return to) {__udivmoddi4_BB3_I2, __udivmoddi4_BB11_I2, __udivmoddi4_BB15_I2}
+Callee __umodsi3 can be called from (and return to) {__udivmoddi4_BB3_I2, __udivmoddi4_BB11_I2, __udivmoddi4_BB15_I2, prime_divides_BB0_I10}
 

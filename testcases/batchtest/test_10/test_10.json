@@ -1,0 +1,20 @@
+[
+  {
+    "core": 0,
+    "tasks": [
+      {
+        "function": "ndes_start",
+        "lib": "libndes_0.so"
+      }
+    ]
+  },
+  {
+    "core": 1,
+    "tasks": [
+      {
+        "function": "h264_dec_start",
+        "lib": "libh264_dec_1.so"
+      }
+    ]
+  }
+]

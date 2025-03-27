@@ -39,8 +39,12 @@ llvm-link *.ll /workspaces/llvmta/testcases/libraries/arm/builtininteger.ll \
 opt -S unoptimized.ll \
     -mem2reg -indvars -loop-simplify -instcombine -globaldce -dce \
     -o optimized.ll
+# clang -w -S -gline-tables-only -O0 -Xclang -disable-O0-optnone -fno-builtin \
+#     -mfloat-abi=hard -emit-llvm \
+#     /workspaces/llvmta/testcases/"$testcases"/*.c
+# llc optimized.ll -filetype=obj -o optimized.o
 
-
+# clang optimized.o -o my_executable
 
 # gdb -tui --args llvmta -disable-tail-calls -float-abi=hard -mattr=-neon,+vfp2 -O0 \
 # --ta-analysis-entry-point=main --ta-muarch-type=inorder \

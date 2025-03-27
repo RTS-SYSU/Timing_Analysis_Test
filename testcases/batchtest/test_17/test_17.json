@@ -1,0 +1,20 @@
+[
+  {
+    "core": 0,
+    "tasks": [
+      {
+        "function": "ndes_start",
+        "lib": "libndes_0.so"
+      }
+    ]
+  },
+  {
+    "core": 1,
+    "tasks": [
+      {
+        "function": "g723_enc_start",
+        "lib": "libg723_enc_1.so"
+      }
+    ]
+  }
+]

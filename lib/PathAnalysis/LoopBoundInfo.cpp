@@ -625,7 +625,7 @@ bool LoopBoundInfoPass::hasLoopBoundNoCtx(
         &ManualLoopBoundsNoCtx) const {
 
   bool HasBound = true;
-    // //jjy: 这里或许有问题
+  // //jjy: 这里或许有问题
   if (LoopContextMap.count(Loop) == 0) {
     return false;
   }
@@ -762,14 +762,14 @@ unsigned LoopBoundInfoPass::getLoopBound(
     if (CtxBounds.count(Ctx) > 0) {
       auto AutoBound = CtxBounds.at(Ctx);
       if (FoundBoundManual && (AutoBound != Bound)) {
-        //找到了以注释优先
+        // 找到了以注释优先
         errs() << "Warnings Both automatic and manual loop bounds were found "
                   "and bounds differ! (Manual used) for:\n"
                << Loop->getHeader()->getParent()->getName().str() << " | "
                << *Loop << "| AutoBound: " << AutoBound << ", Bound: " << Bound
                << "\n";
       } else {
-      Bound = AutoBound;
+        Bound = AutoBound;
       }
     }
   }
@@ -1007,8 +1007,8 @@ void LoopBoundInfoPass::parseNormalManualLoopBounds(
           const MachineLoop *Maloop = Loop;
           ManualLoopBounds.insert(std::make_pair(Maloop, Bound));
           DEBUG_WITH_TYPE("loopbound", dbgs() << "Add bound for " << Maloop
-                                              << "(" << *Maloop << ")"
-                                              << " as " << Bound << "\n");
+                                              << "(" << *Maloop << ")" << " as "
+                                              << Bound << "\n");
           goto end_loop;
         }
       }
@@ -1099,10 +1099,12 @@ void LoopBoundInfoPass::parseManualLoopBounds(
   }
   std::string Line;
   getline(File, Line);
-
+  if (!Line.empty() && Line.back() == '\r') {
+    Line.pop_back(); // 删除末尾的 \r
+  }
   if (Line == "# Type: ContextSensitive") {
     LoopBoundInfoPass::parseCtxSensManualLoopBounds(File, ManualLoopBounds);
-  } else if (Line.compare("# Type: Normal") == 0) {
+  } else if (Line == "# Type: Normal") {
     LoopBoundInfoPass::parseNormalManualLoopBounds(File, ManualLoopBoundsNoCtx);
   } else {
     assert(

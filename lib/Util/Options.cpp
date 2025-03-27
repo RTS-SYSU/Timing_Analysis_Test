@@ -82,7 +82,7 @@ cl::opt<MultiCoreType> MulCType(
                clEnumValN(MultiCoreType::NONE, "none", "no analysis")),
     cl::cat(MultiCoreCat));
 extern llvm::cl::opt<bool> TimingAnomalyAnalysis(
-    "time-anomaly", cl::init(true),
+    "time-anomaly", cl::init(false),
     cl::desc("Timing anomaly analysis, state splitting (default 'T')"),
     cl::cat(MultiCoreCat)
 
@@ -96,8 +96,8 @@ cl::opt<bool>
               cl::cat(LLVMTACat));
 cl::opt<bool>
     ZWDebug("ta-zw-debug", cl::init(true),
-              cl::desc("Get some debug infomation about Zhangwei's DAC2022 "),
-              cl::cat(MultiCoreCat));
+            cl::desc("Get some debug infomation about Zhangwei's DAC2022 "),
+            cl::cat(MultiCoreCat));
 
 cl::opt<bool>
     DumpVcgGraph("ta-dumpb-vcg-graph",
@@ -220,7 +220,7 @@ cl::opt<CacheReplPolicyType> InstrCacheReplPolType(
     "ta-icache-replpol",
     cl::desc("Choose which replacement policy should be used for the "
              "instruction cache. (Default: LRU)"),
-    cl::init(CacheReplPolicyType::LRU),
+    cl::init(CacheReplPolicyType::ALHIT),
     cl::values(clEnumValN(CacheReplPolicyType::LRU, "lru",
                           "Least-recently-used policy"),
                clEnumValN(CacheReplPolicyType::FIFO, "fifo",
