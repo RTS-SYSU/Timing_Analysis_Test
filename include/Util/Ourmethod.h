@@ -4,6 +4,7 @@
 #include "Options.h"
 #include "Util/CLinfo.h"
 #include "Util/PersistenceScope.h"
+#include "Util/UrGraph.h"
 #include "Util/Zhangmethod.h"
 #include "llvm/CodeGen/MachineInstr.h"
 #include "llvm/CodeGen/MachineLoopInfo.h"
@@ -244,8 +245,8 @@ public:
   };
 
 
-  OurM(Zhangmethod zm, CL_info &cl_infor) {
-    for (auto &tmp_core : zm.CEOPs) {
+  OurM(UrGraph urgg, CL_info &cl_infor) {
+    for (auto &tmp_core : urgg.CEOPs) {
       unsigned core_num = tmp_core.first;
       // FIXME, core_num is nor used now
       for (auto &tmp_task : tmp_core.second) {
@@ -259,7 +260,7 @@ public:
               unsigned addr = TimingAnalysisPass::StaticAddrProvider->getAddr(
                   tmp_pair.first.MI);
               std::vector<BlockInfo> list =
-                  getPS(tmp_pair.first, zm.ctxmi2ps_loop_stack,
+                  getPS(tmp_pair.first, urgg.ctxmi2ps_loop_stack,
                         cl_infor.AddrPSList, tmp_pair.second.classification);
               BlockInfo bi_res(addr, tmp_pair.second.x, INT_MAX,
                                tmp_pair.second.classification);

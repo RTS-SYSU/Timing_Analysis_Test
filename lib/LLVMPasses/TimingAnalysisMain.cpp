@@ -201,11 +201,6 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
         ly_info.run(entry);
       }
     }
-    // liang分析的CCN收集
-    // for (const auto &entry : getfunctionaddr) {
-    //   std::cout << "Entry: " << entry.first << "\n";
-    //   entry.second->print(); // 调用 functionaddr 类的 print 函数
-    // }
     ofstream Myfile;
     Myfile.open("LY_Contention.txt", ios_base::app);
     ly_info.print(Myfile);
@@ -284,8 +279,9 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     myfile.close();
     // 清理一下数据
     cl_info.CL_clean();
-    Zhangmethod ZW_mth = Zhangmethod(mcif.coreinfo, cl_info, func2corenum);
-    ZW_mth.run(cl_info);
+    UrGraph urg(mcif.coreinfo, cl_info, func2corenum);
+    Zhangmethod ZW_mth = Zhangmethod(urg);
+    ZW_mth.run();
   }
   return false;
 }

@@ -1,7 +1,7 @@
 #include "Util/Zhangmethod.h"
 
 
-void Zhangmethod::run(CL_info &cl_infor) {
+void Zhangmethod::run() {
   // 现在先不实现生命周期迭代
   outs() << " -> WCET Inter Analysis start\n";
   for (unsigned local = 0; local < CoreNums; ++local) {

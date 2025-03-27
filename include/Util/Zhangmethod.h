@@ -41,7 +41,7 @@ public:
   std::vector<std::string> getInitConflictFunction(unsigned core,
                                                    const std::string &function);
   /// 计算UR，计算张伟WCEET
-  void run(CL_info &cl_infor);
+  void run();
 
 private:
   // 注意从0还是1开始计数,目前0,见main; FIXME这里参数有点冗余;
