@@ -67,7 +67,7 @@ entry:
 for.cond:                                         ; preds = %for.inc, %entry
   %storemerge = phi float [ 0.000000e+00, %entry ], [ %add1, %for.inc ], !dbg !156
   store float %storemerge, float* @deg2rad_X, align 4, !dbg !156
-  %cmp = fcmp ugt float %storemerge, 3.600000e+02, !dbg !157
+  %cmp = fcmp ugt float %storemerge, 1.000000e+00, !dbg !157
   br i1 %cmp, label %for.end, label %for.body, !dbg !159
 
 for.body:                                         ; preds = %for.cond
@@ -2039,7 +2039,7 @@ attributes #5 = { nobuiltin noreturn "no-builtins" }
 !160 = !DILocation(line: 81, column: 18, scope: !158)
 !161 = !DILocation(line: 81, column: 15, scope: !158)
 !162 = !DILocation(line: 81, column: 5, scope: !158)
-!163 = !DILocation(line: 80, column: 58, scope: !158)
+!163 = !DILocation(line: 80, column: 56, scope: !158)
 !164 = !DILocation(line: 80, column: 3, scope: !158)
 !165 = distinct !{!165, !159, !166, !167}
 !166 = !DILocation(line: 81, column: 18, scope: !155)

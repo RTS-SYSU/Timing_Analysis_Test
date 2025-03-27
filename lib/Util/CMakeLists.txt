@@ -12,6 +12,7 @@ AbstractAddress.cpp
 GlobalVars.cpp
 Zhangmethod.cpp
 Ourmethod.cpp
+UrGraph.cpp
 DEPENDS LLVMAnalysis LLVMCodeGen LLVMCore LLVMSupport LLVMTarget
 )
 
