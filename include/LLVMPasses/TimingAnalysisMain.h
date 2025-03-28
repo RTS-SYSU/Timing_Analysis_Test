@@ -38,7 +38,6 @@
 
 #include "AnalysisFramework/AnalysisResults.h"
 #include "Util/Options.h"
-#include "Util/ZhangGraph.h"
 #include "Util/OurGraph.h"
 
 #include <iostream>

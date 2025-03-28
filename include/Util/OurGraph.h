@@ -39,11 +39,12 @@ public:
   // PS Data Access(暂时废弃)
   std::map<std::string, std::map<CtxData, PSAccessInfo>> ctxdata2ps_ai;
 private:
+  // TODO delete
   // 暂存ctxmi的access info，这里几个函数用于计算执行次数
   std::map<unsigned, std::map<std::string, // core, function, ctxmi -> xclass
                               std::map<CtxMI, AccessInfo>>>
       ctxmi_miai;
-  void getExeCntMust();
+  void getDataExeCntMust();
   /*
       搞不了自底向上，搞自顶向下也是ok，在一个函数的所有loop里搜，搜到此BB在此loop里即可取
     优先取更深层的loop；一个函数多个循环是可以的，一个Basic

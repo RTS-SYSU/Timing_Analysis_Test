@@ -306,21 +306,19 @@ public:
                               std::vector<CEOP>>>
       CEOPs; // 各个task的CEOP集合(别set了，比较函数不好写)
   std::vector<std::vector<std::string>> coreinfo;
+protected:
+  // === 执行次数相关信息 ===
+  // core, function, ctxmi -> xclass
+  std::map<unsigned, std::map<std::string, 
+                              std::map<CtxMI, AccessInfo>>>
+      ctxmi_miai;
 private:
-  // TODO 将PS delete
-  // ===== Persistence analysis =====
-  // TODO(仅用于输出)
-  std::map<const llvm::MachineLoop *, TimingAnalysisPass::PersistenceScope>
-      loop2ps_scope;
-  /// helper: PS Scope内有哪些持久性块地址？(AbsAddr版) 在get loop
-  /// stack之前需要构建 此处包含了Instr和Data
-  std::map<const llvm::MachineLoop *,
-           std::map<TimingAnalysisPass::AbstractAddress, bool>>
-      loop2addr_isps;
-  // ===== end Persistence analysis =====
-  // TODO: 需要初始化
-  std::vector<std::map<std::string, std::pair<unsigned, unsigned>>>
-      intraBWtime; // 单核BW
+  void getExeCntMust();
+  unsigned getGlobalUpBd(CtxMI CM);
+  unsigned bd_helper1(const llvm::MachineBasicBlock *MBB,
+                      const llvm::MachineLoop *Loop);
+  unsigned bd_helper2(const llvm::MachineLoop *Loop);
+  // === tarjan强联通算法相关信息 ===
   // 拿到MachineLoop的信息，这样我就可以通过MBB直接得到其外层循环，然后得到执行次数；
   // 需要先从LoopBoundInfoPass偷到这个信息
   // std::map<std::string, MachineLoopInfo> f2MLI; //
@@ -332,12 +330,6 @@ private:
   std::map<unsigned, CtxMI> ur_stack;
   std::map<CtxMI, unsigned> in_stack;
   unsigned stack_pt;
-  unsigned getGlobalUpBd(CtxMI CM);
-
-  unsigned bd_helper1(const llvm::MachineBasicBlock *MBB,
-                      const llvm::MachineLoop *Loop);
-
-  unsigned bd_helper2(const llvm::MachineLoop *Loop);
 protected:
   std::map<CtxMI, unsigned> mi_ur;      // MI所在ur_id
 private:
@@ -353,9 +345,6 @@ private:
                     std::map<const llvm::MachineInstr *,
                              TimingAnalysisPass::dom::cache::Classification>>>
       mi_class; // aborted
-  std::map<unsigned, std::map<std::string, // core, function, ctxmi -> xclass
-                              std::map<CtxMI, AccessInfo>>>
-      ctxmi_miai;
   // module: CEOP
   std::vector<UnorderedRegion> tmpPath; // 暂存UR图DFS的PATH
   std::vector<CEOP> tmpCEOPs;           // 暂存本task上所有路径

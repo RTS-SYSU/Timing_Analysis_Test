@@ -128,6 +128,7 @@ OurGraph::OurGraph(std::vector<std::vector<std::string>> &setc,
         AccessInfo obj;
         obj.age = tmp_acl.age;
         obj.classification = tmp_acl.CL;
+        obj.x = ctxmi_miai[tmp_entry_corenum][tmp_entry][tmpCM].x;
         ctxmi_miai[tmp_entry_corenum][tmp_entry][tmpCM] = obj;
         instr_cl_cnt[tmp_entry][tmp_acl.CL] += 1; // for gdb
       } else {
@@ -135,8 +136,8 @@ OurGraph::OurGraph(std::vector<std::vector<std::string>> &setc,
       }
     }
   }
-  // 从CtxMI->MI AccessInfo中构建出带信息的UR-CFG
-  getExeCntMust();
+  // 构建data access相关信息
+  getDataExeCntMust();
 
   // === here we handle the PS block ===
   // 从AddrPSList读入信息
@@ -235,8 +236,7 @@ OurGraph::OurGraph(std::vector<std::vector<std::string>> &setc,
   }
 }
 
-// TODO 重写，之前是每个函数都分别get exe cnt，现在要所有函数一块get
-void OurGraph::getExeCntMust() {
+void OurGraph::getDataExeCntMust() {
   for(auto &tmp_core:CEOPs){
     unsigned core_num = tmp_core.first;
     for(auto &tmp_task:tmp_core.second){
@@ -257,9 +257,11 @@ void OurGraph::getExeCntMust() {
                       << " MI:" << tmp_cm << " is uncollected\n";
                 myfile.close();
               }
-            } else {
-              ctxmi_miai[core_num][enrty_name][tmp_cm].x = getGlobalUpBd(tmp_cm);
-            }
+            } 
+            // 不需要在这里计算指令的执行次数，因为UrGraph已经计算
+            // else {
+            //   ctxmi_miai[core_num][enrty_name][tmp_cm].x = getGlobalUpBd(tmp_cm);
+            // }
             // handle data access
             std::vector<AccessInfo> tmp_ais = entry2ctxmi2datainfo[enrty_name][tmp_cm];
             for (int i = 0; i < tmp_ais.size(); i++) {

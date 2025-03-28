@@ -13,7 +13,6 @@ GlobalVars.cpp
 Zhangmethod.cpp
 Ourmethod.cpp
 UrGraph.cpp
-ZhangGraph.cpp
 OurGraph.cpp
 DEPENDS LLVMAnalysis LLVMCodeGen LLVMCore LLVMSupport LLVMTarget
 )

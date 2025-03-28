@@ -45,6 +45,7 @@ void UrGraph::URCalculation(unsigned core, const std::string &function) {
   collectUrInfo(); // module2: 建立UR图和ur为键的信息映射
   collectCEOPInfo(firstCM, core, function); // module4: dfs遍历图，并同时建立起CEOP的数据结构
   CEOPs[core][function] = tmpCEOPs;
+  getExeCntMust(); // 计算执行次数
 
   if (ZWDebug) {
     std::ofstream myfile;
@@ -155,7 +156,9 @@ void UrGraph::print_mi_cfg(unsigned cur_core, const std::string &function) {
     File << "\\l  ";
     std::string tmp_flag = (MI->isTransient()) ? "True" : "False";
     File << "isTransient:" << tmp_flag << "\\l  ";
-    // 纯UrGraph无ExeCnt即CL信息, ZhangGraph需要
+    // 纯UrGraph无CL信息
+    File << "ExeCnt:" << ctxmi_miai[cur_core][function][CM].x 
+      << "\\l  ";
     // File << "ExeCnt:" << ctxmi_miai[cur_core][function][CM].x << " "
     //      << "CHMC:" << ctxmi_miai[cur_core][function][CM].classification
     //      << "\\l  ";
@@ -219,6 +222,52 @@ void UrGraph::tarjan(CtxMI CM) {
       in_stack[ur_stack[stack_pt]] = 0;
     } while (ur_stack[stack_pt--] != CM);
   }
+}
+
+void UrGraph::getExeCntMust() {
+  for(auto &tmp_core:CEOPs){
+    unsigned core_num = tmp_core.first;
+    for(auto &tmp_task:tmp_core.second){
+      std::string enrty_name = tmp_task.first;
+      for(CEOP &tmp_ceop:tmp_task.second){
+        for(UnorderedRegion &tmp_ur:tmp_ceop.URs){
+          for(auto &tmp_pair:tmp_ur.mi2xclass){
+            CtxMI tmp_cm = tmp_pair.first;
+            ctxmi_miai[core_num][enrty_name][tmp_cm].x 
+              = getGlobalUpBd(tmp_cm);
+          }
+        }
+      }
+    }
+  }
+//   // assert(mi_class[cur_core][cur_func].size() > 0 &&
+//   //   "We must collect CHMC first");
+//   for (auto tmp_pair : mi_ur) {
+//     CtxMI tmp_cm = tmp_pair.first;
+//     // handle mi access
+//     // FIXME: for CL that we don't collect
+//     if (ctxmi_miai[cur_core][cur_func].find(tmp_cm) ==
+//         ctxmi_miai[cur_core][cur_func].end()) {
+//       AccessInfo obj;
+//       obj.classification = TimingAnalysisPass::dom::cache::CL_BOT;
+//       if (ZWDebug) {
+//         std::ofstream myfile;
+//         std::string fileName = "ZW_Uncollected.txt";
+//         myfile.open(fileName, std::ios_base::app);
+//         myfile << "Core:" << cur_core << " Func:" << cur_func
+//                << " MI:" << tmp_cm << " is uncollected\n";
+//         myfile.close();
+//       }
+//     } else {
+//       ctxmi_miai[cur_core][cur_func][tmp_cm].x = getGlobalUpBd(tmp_cm);
+//     }
+//     // handle data access
+//     std::vector<AccessInfo> tmp_ais = entry2ctxmi2datainfo[cur_func][tmp_cm];
+//     for (int i = 0; i < tmp_ais.size(); i++) {
+//       entry2ctxmi2datainfo[cur_func][tmp_cm][i].x =
+//           ctxmi_miai[cur_core][cur_func][tmp_cm].x;
+//     }
+//   }
 }
 
 unsigned UrGraph::getGlobalUpBd(CtxMI CM) {
