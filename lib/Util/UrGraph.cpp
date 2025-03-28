@@ -1,135 +1,7 @@
 #include "Util/UrGraph.h"
 
-UrGraph::UrGraph(std::vector<std::vector<std::string>> &setc, CL_info &cl_infor,
-                 std::map<std::string, unsigned> &func2corenum1) {
-  this->coreinfo = setc;
-  // handling data & instr access for must anlysis
-  std::map<std::string,
-           std::map<TimingAnalysisPass::dom::cache::Classification, unsigned>>
-      instr_cl_cnt;
-  std::map<std::string,
-           std::map<TimingAnalysisPass::dom::cache::Classification, unsigned>>
-      data_cl_cnt;
-  for (const auto &tmp_acl : cl_infor.AddrCList) {
-    if (tmp_acl.MIAddr != 0) { // data access
-      unsigned tmp_addr = tmp_acl.MIAddr;
-      if (TimingAnalysisPass::StaticAddrProvider->hasMachineInstrByAddr(
-              tmp_addr)) {
-        const llvm::MachineInstr *miptr = // got mi
-            TimingAnalysisPass::StaticAddrProvider->getMachineInstrByAddr(
-                tmp_addr);
-        auto tokenlist = tmp_acl.ctx.getTokenList();
-        std::vector<const llvm::MachineInstr *> CallSites;
-        std::string tmp_entry = "";
-        unsigned tmp_entry_corenum = -1;
-        // ctx
-        for (const auto &tmptoken : tokenlist) { // got callsites
-          if (tmptoken->getType() ==
-              TimingAnalysisPass::PartitionTokenType::CALLSITE) {
-            TimingAnalysisPass::PartitionTokenCallSite *cstoken =
-                dynamic_cast<TimingAnalysisPass::PartitionTokenCallSite *>(
-                    tmptoken);
-            if (!cstoken) {
-              assert(0 && "fail to convert token into callsite token");
-            }
-            const llvm::MachineInstr *callsite = cstoken->getCallSite();
-            CallSites.push_back(callsite);
-          } else if (tmptoken->getType() ==
-                     TimingAnalysisPass::PartitionTokenType::FUNCALLEE) {
-            if (tmp_entry == "") {
-              TimingAnalysisPass::PartitionTokenFunCallee *cetoken =
-                  dynamic_cast<TimingAnalysisPass::PartitionTokenFunCallee *>(
-                      tmptoken);
-              tmp_entry = cetoken->getCallee()->getName().str();
-              tmp_entry_corenum =
-                  func2corenum1[tmp_entry]; // got corenum & entry
-            }
-          }
-        }
-        // CtxMI
-        CtxMI tmpCM;
-        tmpCM.MI = miptr;
-        if (tmpCM.MI->isCall()) {
-          CallSites.pop_back();
-        }
-        tmpCM.CallSites = CallSites;
-        // DataAccess, exe_cnt is later calculated in run()
-        auto itv = tmp_acl.address.getAsInterval();
-        if (!(tmp_acl.address == tmp_acl.address.getUnknownAddress())) {
-          unsigned tmp_upper_line = itv.upper() & ~(L2linesize - 1);
-          unsigned tmp_lower_line = itv.lower() & ~(L2linesize - 1);
-          ;
-          // We access a **cache line** every time
-          for (int tmp_a = tmp_lower_line; tmp_a < tmp_upper_line;
-               tmp_a += L2linesize) {
-            AccessInfo tmp_ai;
-            tmp_ai.classification = tmp_acl.CL;
-            tmp_ai.age = tmp_acl.age;
-            tmp_ai.data_addr = tmp_a;
-            entry2ctxmi2datainfo[tmp_entry][tmpCM].push_back(tmp_ai);
-            data_cl_cnt[tmp_entry][tmp_acl.CL] += 1;
-          }
-          entry2ctxmi2data_absaddr[tmp_entry][tmpCM].push_back(tmp_acl.address);
-        } else { // TODO:how can we handle any access with unknown addr?
-        }
-      } else {
-        assert(tmp_addr == 0 && "why we have an addr without mi?");
-      }
-    } else { // instruction access
-      auto itv = tmp_acl.address.getAsInterval();
-      const TimingAnalysisPass::Address tmp_upper_cache_line =
-          itv.upper() & ~(L2linesize - 1);
-      const TimingAnalysisPass::Address tmp_lower_cache_line =
-          itv.lower() & ~(L2linesize - 1);
-      assert(tmp_lower_cache_line == tmp_upper_cache_line);
-      if (TimingAnalysisPass::StaticAddrProvider->hasMachineInstrByAddr(
-              itv.lower())) {
-        const llvm::MachineInstr *miptr = // got mi
-            TimingAnalysisPass::StaticAddrProvider->getMachineInstrByAddr(
-                itv.lower());
-        auto tokenlist = tmp_acl.ctx.getTokenList();
-        std::vector<const llvm::MachineInstr *> CallSites;
-        std::string tmp_entry = "";
-        unsigned tmp_entry_corenum = -1;
-        for (const auto &tmptoken : tokenlist) { // got callsites
-          if (tmptoken->getType() ==
-              TimingAnalysisPass::PartitionTokenType::CALLSITE) {
-            TimingAnalysisPass::PartitionTokenCallSite *cstoken =
-                dynamic_cast<TimingAnalysisPass::PartitionTokenCallSite *>(
-                    tmptoken);
-            if (!cstoken) {
-              assert(0 && "fail to convert token into callsite token");
-            }
-            const llvm::MachineInstr *callsite = cstoken->getCallSite();
-            CallSites.push_back(callsite);
-          } else if (tmptoken->getType() ==
-                     TimingAnalysisPass::PartitionTokenType::FUNCALLEE) {
-            if (tmp_entry == "") {
-              TimingAnalysisPass::PartitionTokenFunCallee *cetoken =
-                  dynamic_cast<TimingAnalysisPass::PartitionTokenFunCallee *>(
-                      tmptoken);
-              tmp_entry = cetoken->getCallee()->getName().str();
-              tmp_entry_corenum =
-                  func2corenum1[tmp_entry]; // got corenum & entry
-            }
-          }
-        }
-        CtxMI tmpCM;
-        tmpCM.MI = miptr;
-        if (tmpCM.MI->isCall()) {
-          CallSites.pop_back();
-        }
-        tmpCM.CallSites = CallSites;
-        AccessInfo obj;
-        obj.age = tmp_acl.age;
-        obj.classification = tmp_acl.CL;
-        ctxmi_miai[tmp_entry_corenum][tmp_entry][tmpCM] = obj;
-        instr_cl_cnt[tmp_entry][tmp_acl.CL] += 1; // for gdb
-      } else {
-        assert(itv.lower() == 0 && "why we have an addr without mi?");
-      }
-    }
-  }
+UrGraph::UrGraph(std::vector<std::vector<std::string>> &setc) {
+  this->coreinfo = setc; // in base
   // 进行UR和CEOP的获取
   for (unsigned i = 0; i < CoreNums; ++i) {
     outs() << " -> UR Analysis for core: " << i;
@@ -141,136 +13,8 @@ UrGraph::UrGraph(std::vector<std::vector<std::string>> &setc, CL_info &cl_infor,
              << CEOPs[i][functionName].size() << " CEOP(s)" << '\n';
     }
   }
-
-  // === here we handle the PS block ===
-  // step1: we calculate stack<loop> for each ctxmi
-  for (auto &tmp_scope : cl_infor.AddrPSList) {
-    if (ZWDebug) {
-      loop2ps_scope[tmp_scope.first.loop] = tmp_scope.first;
-    }
-    std::map<unsigned, bool> tmp_addr2isps;
-    for (auto &tmp_ps_acl : tmp_scope.second) {
-      TimingAnalysisPass::AbstractAddress tmp_abs_addr = tmp_ps_acl.address;
-      loop2addr_isps[tmp_scope.first.loop][tmp_abs_addr] = true;
-      // we make loop public
-    }
-  }
-  for (auto &tmp_core : CEOPs) {
-    for (auto &tmp_task : tmp_core.second) {
-      std::string f_name = tmp_task.first;
-      for (auto &tmp_ceop : tmp_task.second) {
-        for (UnorderedRegion &tmp_ur : tmp_ceop.URs) {
-          for (auto &tmp_mi2xclass : tmp_ur.mi2xclass) {
-            CtxMI tmp_cm = tmp_mi2xclass.first;
-            // 构建ctxmi -> loop stack
-            std::vector<std::pair<const llvm::MachineLoop *, bool>>
-                tmp_loop_stack = getGlobalLoop(tmp_cm, tmp_cm);
-            ctxmi2ps_loop_stack[f_name][tmp_cm] = tmp_loop_stack;
-            // 构建ctxdata -> loop stack
-            for (TimingAnalysisPass::AbstractAddress tmp_aa :
-                 entry2ctxmi2data_absaddr[f_name][tmp_cm]) {
-              CtxData tmp_cd;
-              tmp_cd.ctx_mi = tmp_cm;
-              tmp_cd.data_addr = tmp_aa;
-              std::vector<std::pair<const llvm::MachineLoop *, bool>>
-                  tmp_loop_stack_d = getGlobalLoopData(tmp_cd);
-              ctxdata2ps_loop_stack[f_name][tmp_cd] = tmp_loop_stack_d;
-            }
-          }
-          if (ZWDebug) { // just for output
-            std::ofstream Myfile;
-            Myfile.open("JJY_loop_stack.txt", std::ios_base::app);
-            for (auto &tmp_mi2xclass : tmp_ur.mi2xclass) {
-              CtxMI tmp_cm = tmp_mi2xclass.first;
-              std::vector<std::pair<const llvm::MachineLoop *, bool>>
-                  tmp_loop_stack = ctxmi2ps_loop_stack[f_name][tmp_cm];
-              Myfile << "### in function_" << f_name << "\n";
-              Myfile << tmp_cm;
-              for (auto &tmp_pair : tmp_loop_stack) {
-                Myfile << "in loop_" << loop2ps_scope[tmp_pair.first] << "isPS?"
-                       << tmp_pair.second << "\n";
-              }
-              Myfile << "## data access of this MI\n";
-              for (TimingAnalysisPass::AbstractAddress tmp_aa :
-                   entry2ctxmi2data_absaddr[f_name][tmp_cm]) {
-                CtxData tmp_cd;
-                tmp_cd.ctx_mi = tmp_cm;
-                tmp_cd.data_addr = tmp_aa;
-                std::vector<std::pair<const llvm::MachineLoop *, bool>>
-                    tmp_loop_stack_d = ctxdata2ps_loop_stack[f_name][tmp_cd];
-                Myfile << "Data Access: " << tmp_cd.data_addr << "\n";
-                for (auto &tmp_pair : tmp_loop_stack_d) {
-                  Myfile << "in loop_" << loop2ps_scope[tmp_pair.first]
-                         << "isPS?" << tmp_pair.second << "\n";
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-  // step2: we calculate exe cnt for each PS CtxMI & CtxData
-  // and build ctxmi2ps_ai & ctxdata2ps_ai
-  // we currently do this in Ourmethod.h
-
-  if (ZWDebug) { // 查看收集的CL信息
-    std::ofstream Myfile;
-    Myfile.open("ZW_ACL_Summary.txt", std::ios_base::app);
-    Myfile << "###Instr's CL Information###\n";
-    for (const auto &clmap : instr_cl_cnt) {
-      Myfile << " ##EntryPoint: " << clmap.first << "\n";
-      for (const auto &cl_pair : clmap.second) {
-        Myfile << "  #CL: " << cl_pair.first << " cnt is " << cl_pair.second
-               << "\n";
-      }
-    }
-    Myfile << "###Data's CL Information###\n";
-    for (const auto &clmap : data_cl_cnt) {
-      Myfile << " ##EntryPoint: " << clmap.first << "\n";
-      for (const auto &cl_pair : clmap.second) {
-        Myfile << "  #CL: " << cl_pair.first << " cnt is " << cl_pair.second
-               << "\n";
-      }
-    }
-    Myfile.close();
-  }
 }
 
-void UrGraph::getExeCntMust() {
-  // assert(mi_class[cur_core][cur_func].size() > 0 &&
-  //   "We must collect CHMC first");
-  for (auto tmp_pair : mi_ur) {
-    CtxMI tmp_cm = tmp_pair.first;
-    // handle mi access
-    // FIXME: for CL that we don't collect
-    if (ctxmi_miai[cur_core][cur_func].find(tmp_cm) ==
-        ctxmi_miai[cur_core][cur_func].end()) {
-      AccessInfo obj;
-      obj.classification = TimingAnalysisPass::dom::cache::CL_BOT;
-      if (ZWDebug) {
-        std::ofstream myfile;
-        std::string fileName = "ZW_Uncollected.txt";
-        myfile.open(fileName, std::ios_base::app);
-        myfile << "Core:" << cur_core << " Func:" << cur_func
-               << " MI:" << tmp_cm << " is uncollected\n";
-        myfile.close();
-      }
-    } else {
-      ctxmi_miai[cur_core][cur_func][tmp_cm].x = getGlobalUpBd(tmp_cm);
-    }
-    // handle data access
-    std::vector<AccessInfo> tmp_ais = entry2ctxmi2datainfo[cur_func][tmp_cm];
-    for (int i = 0; i < tmp_ais.size(); i++) {
-      entry2ctxmi2datainfo[cur_func][tmp_cm][i].x =
-          ctxmi_miai[cur_core][cur_func][tmp_cm].x;
-    }
-  }
-}
-
-unsigned UrGraph::getExeCntPSI(CtxMI CM) {}
-
-unsigned UrGraph::getExeCntPSD(CtxData CD) {}
 
 void UrGraph::URCalculation(unsigned core, const std::string &function) {
   // 参照analysisDriver.h
@@ -292,19 +36,14 @@ void UrGraph::URCalculation(unsigned core, const std::string &function) {
   tmpCEOPs.clear();
   mi_cfg.clear();
 
-  cur_core = core;
-  cur_func = function;
-
   CtxMI firstCM;
   firstCM.MI = firstMI;
   tarjan(firstCM); // module1: 在CFG上获取UR
-  getExeCntMust(); // module3:
-                   // 需要先收集AccessInfo信息，这样下一步得到的信息才完整
   if (ZWDebug) {
-    print_mi_cfg(function); // debug
+    print_mi_cfg(core, function); // debug
   }
   collectUrInfo(); // module2: 建立UR图和ur为键的信息映射
-  collectCEOPInfo(firstCM); // module4: dfs遍历图，并同时建立起CEOP的数据结构
+  collectCEOPInfo(firstCM, core, function); // module4: dfs遍历图，并同时建立起CEOP的数据结构
   CEOPs[core][function] = tmpCEOPs;
 
   if (ZWDebug) {
@@ -321,7 +60,7 @@ void UrGraph::URCalculation(unsigned core, const std::string &function) {
   }
 }
 
-void UrGraph::ceopDfs(unsigned u) {
+void UrGraph::ceopDfs(unsigned u, unsigned& cur_core, std::string& cur_func) {
   UnorderedRegion curUR{};
   std::vector<CtxMI> curMIs = ur_mi[u];
   for (int i = 0; i < curMIs.size(); i++) {
@@ -343,15 +82,16 @@ void UrGraph::ceopDfs(unsigned u) {
 
   for (int i = 0; i < vs.size(); i++) {
     unsigned v = vs[i];
-    ceopDfs(v);
+    ceopDfs(v, cur_core, cur_func);
   }
   tmpPath.pop_back();
   return;
 }
 
-void UrGraph::collectCEOPInfo(CtxMI firstCM) {
+void UrGraph::collectCEOPInfo(CtxMI firstCM, unsigned core
+    , std::string function) {
   unsigned s = mi_ur[firstCM];
-  ceopDfs(s);
+  ceopDfs(s, core, function);
 }
 
 void UrGraph::collectUrInfo() { // 改为 ur_ctxmi
@@ -378,13 +118,14 @@ void UrGraph::collectUrInfo() { // 改为 ur_ctxmi
   }
 }
 
-void UrGraph::print_mi_cfg(const std::string &function) {
+
+void UrGraph::print_mi_cfg(unsigned cur_core, const std::string &function) {
   const std::vector<std::string> colors = {
       "turquoise", "lightblue", "lightgreen", "lightyellow", "white"};
   std::unordered_map<std::string, std::string> func_color_map;
   int color_index = 0;
   std::error_code EC;
-  raw_fd_ostream File("ZW_" + function + "_ur_cfg.dot", EC,
+  raw_fd_ostream File("UrGraph_" + function + ".dot", EC,
                       sys::fs::OpenFlags::OF_Text);
   if (EC) {
     errs() << "Error opening file: " << EC.message() << "\n";
@@ -414,9 +155,10 @@ void UrGraph::print_mi_cfg(const std::string &function) {
     File << "\\l  ";
     std::string tmp_flag = (MI->isTransient()) ? "True" : "False";
     File << "isTransient:" << tmp_flag << "\\l  ";
-    File << "ExeCnt:" << ctxmi_miai[cur_core][function][CM].x << " "
-         << "CHMC:" << ctxmi_miai[cur_core][function][CM].classification
-         << "\\l  ";
+    // 纯UrGraph无ExeCnt即CL信息, ZhangGraph需要
+    // File << "ExeCnt:" << ctxmi_miai[cur_core][function][CM].x << " "
+    //      << "CHMC:" << ctxmi_miai[cur_core][function][CM].classification
+    //      << "\\l  ";
     unsigned tmp_addr = TimingAnalysisPass::StaticAddrProvider->getAddr(MI);
     unsigned tmp_line = tmp_addr / L2linesize;
     unsigned tmp_index = tmp_line % NN_SET;
@@ -429,13 +171,14 @@ void UrGraph::print_mi_cfg(const std::string &function) {
     File << "in UR" << mi_ur[CM] << "\\l  ";
     File << "May Load?" << MI->mayLoad() << "\\l  ";
     File << "May Store?" << MI->mayStore() << "\\l  ";
-    File << "data access: [\n";
-    for (AccessInfo tmpai : entry2ctxmi2datainfo[function][CM]) {
-      File << "[addr_0x";
-      TimingAnalysisPass::printHex(File, tmpai.data_addr);
-      File << "_cl_" << tmpai.classification << "_age_" << tmpai.age
-           << "_execnt_" << tmpai.x << "]\n";
-    }
+    // 纯UrGraph无data access的ExeCnt和CL信息，OurGraph需要
+    // File << "data access: [\n";
+    // for (AccessInfo tmpai : entry2ctxmi2datainfo[function][CM]) {
+    //   File << "[addr_0x";
+    //   TimingAnalysisPass::printHex(File, tmpai.data_addr);
+    //   // File << "_cl_" << tmpai.classification << "_age_" << tmpai.age
+    //   //      << "_execnt_" << tmpai.x << "]\n";
+    // }
     File << "]\\l  ";
     File << "\" fillcolor=\"" << color << "\" style=\"filled\"];\n";
     // 边

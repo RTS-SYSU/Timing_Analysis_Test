@@ -279,8 +279,9 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     myfile.close();
     // 清理一下数据
     cl_info.CL_clean();
-    UrGraph urg(mcif.coreinfo, cl_info, func2corenum);
-    Zhangmethod ZW_mth = Zhangmethod(urg);
+    UrGraph urg(mcif.coreinfo);
+    OurGraph ourg(mcif.coreinfo, cl_info, func2corenum);
+    Zhangmethod ZW_mth = Zhangmethod(ourg);
     ZW_mth.run();
   }
   return false;

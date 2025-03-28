@@ -1,4 +1,5 @@
 int exec() {
+	_Pragma( "loopbound min 5 max 5" )
 	for(int i=0;i < 5; ++i){
 		i += 1;
 		i -= 1;
@@ -7,6 +8,7 @@ int exec() {
 }
 
 int a() {
+	_Pragma( "loopbound min 12 max 12" )
 	for (int i = 0; i < 12; ++i) {
 		exec();
 	}
@@ -14,6 +16,7 @@ int a() {
 }
 
 int b() {
+	_Pragma( "loopbound min 3 max 3" )
 	for (int i = 2; i < 5; ++i) {
 		exec();
 	}
@@ -21,6 +24,7 @@ int b() {
 }
 
 int loop() {
+	_Pragma( "loopbound min 3 max 3" )
 	for(int i=0;i<3;i++){
 		a();
 		b();

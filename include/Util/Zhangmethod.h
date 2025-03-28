@@ -4,6 +4,7 @@
 #include "Util/CLinfo.h"
 #include "Util/Options.h"
 #include "Util/UrGraph.h"
+#include "Util/OurGraph.h"
 #include "llvm/Analysis/LoopInfo.h"
 #include "llvm/CodeGen/MachineBasicBlock.h"
 #include "llvm/CodeGen/MachineInstr.h"
@@ -29,7 +30,7 @@
 class Zhangmethod {
 public:
   Zhangmethod() {}
-  Zhangmethod(UrGraph urgg) {
+  Zhangmethod(OurGraph urgg) {
     this->coreinfo=urgg.coreinfo;
     this->CEOPs=urgg.CEOPs;
   }

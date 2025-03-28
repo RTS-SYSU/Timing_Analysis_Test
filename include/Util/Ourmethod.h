@@ -245,7 +245,7 @@ public:
   };
 
 
-  OurM(UrGraph urgg, CL_info &cl_infor) {
+  OurM(OurGraph urgg, CL_info &cl_infor) {
     for (auto &tmp_core : urgg.CEOPs) {
       unsigned core_num = tmp_core.first;
       // FIXME, core_num is nor used now

@@ -295,43 +295,19 @@ public:
   // 这里已经包含了排序信息，即UR编号
 };
 
+// TODO: 加exe_cnt
+// 设个接口：更新图中CL
+/// 存储UR-CFG，由CEOPs组成，各节点为MI，不包括AccessInfo
 class UrGraph {
 public:
-  UrGraph(std::vector<std::vector<std::string>> &setc, CL_info &cl_infor,
-          std::map<std::string, unsigned> &func2corenum1);
+  UrGraph(std::vector<std::vector<std::string>> &setc);
   // Must Instr Access
   std::map<unsigned, std::map<std::string,
                               std::vector<CEOP>>>
       CEOPs; // 各个task的CEOP集合(别set了，比较函数不好写)
-  // Must Data Access
-  /// @brief  helper：存储ctxmi有哪些关联data访存(unsigned格式)
-  /// 可供Ourmethod使用
-  std::map<std::string, // 初始化时记录了除exe_cnt外信息
-           std::map<CtxMI, std::vector<AccessInfo>>>
-      entry2ctxmi2datainfo;
-  /// @brief  helper：存储ctxmi有哪些关联data访存(AbstractAddress格式)
-  /// 可供Ourmethod使用
-  std::map<std::string,
-           std::map<CtxMI, std::vector<TimingAnalysisPass::AbstractAddress>>>
-      entry2ctxmi2data_absaddr;
-  /// ctxmi的loop栈，最靠近的loop在vector头部
-  std::map<
-      std::string,
-      std::map<CtxMI, std::vector<std::pair<const llvm::MachineLoop *, bool>>>>
-      ctxmi2ps_loop_stack;
-  /// ctxdata的loop栈
-  std::map<std::string,
-           std::map<CtxData,
-                    std::vector<std::pair<const llvm::MachineLoop *, bool>>>>
-      ctxdata2ps_loop_stack;
-  // PS Instr Access(暂时废弃)
-  std::map<std::string, std::map<CtxMI, PSAccessInfo>> ctxmi2ps_ai;
-  // PS Data Access(暂时废弃)
-  std::map<std::string, std::map<CtxData, PSAccessInfo>> ctxdata2ps_ai;
-  // CoreNum -> vector of function
   std::vector<std::vector<std::string>> coreinfo;
-
 private:
+  // TODO 将PS delete
   // ===== Persistence analysis =====
   // TODO(仅用于输出)
   std::map<const llvm::MachineLoop *, TimingAnalysisPass::PersistenceScope>
@@ -356,12 +332,19 @@ private:
   std::map<unsigned, CtxMI> ur_stack;
   std::map<CtxMI, unsigned> in_stack;
   unsigned stack_pt;
+  unsigned getGlobalUpBd(CtxMI CM);
+
+  unsigned bd_helper1(const llvm::MachineBasicBlock *MBB,
+                      const llvm::MachineLoop *Loop);
+
+  unsigned bd_helper2(const llvm::MachineLoop *Loop);
+protected:
   std::map<CtxMI, unsigned> mi_ur;      // MI所在ur_id
+private:
   std::map<unsigned, unsigned> ur_size; // 指含有多少条MI
   unsigned ur_id; // 强连通分量号，这个序号应该没有什么含义
-
   // module2: 新图，UR的出入边包含原来属于UR的MI的所有出入边
-  std::map<unsigned, std::vector<unsigned>> ur_graph;
+  std::map<unsigned, std::vector<unsigned>> ur_graph; // 给子类访问
   std::map<unsigned, std::vector<CtxMI>> ur_mi; // ur内部的MI没有顺序
 
   // module3： 除了这个module其它3个module都是暂存的
@@ -370,176 +353,29 @@ private:
                     std::map<const llvm::MachineInstr *,
                              TimingAnalysisPass::dom::cache::Classification>>>
       mi_class; // aborted
-  // std::map<
-  //     unsigned,
-  //     std::map<std::string, // 先存下分类信息
-  //              std::map<CtxMI,
-  //              TimingAnalysisPass::dom::cache::Classification>>>
-  //     ctxmi_class;
   std::map<unsigned, std::map<std::string, // core, function, ctxmi -> xclass
                               std::map<CtxMI, AccessInfo>>>
       ctxmi_miai;
-  unsigned cur_core;
-  std::string cur_func;
-
   // module: CEOP
   std::vector<UnorderedRegion> tmpPath; // 暂存UR图DFS的PATH
   std::vector<CEOP> tmpCEOPs;           // 暂存本task上所有路径
-
+protected:
   // 显式收集MI-CFG，用于debug
   std::map<CtxMI, std::vector<CtxMI>> mi_cfg; // TODO 输出修改
-
+private:
   /// UR于CEOP的计算函数
   void URCalculation(unsigned core, const std::string &function);
   // helper, 在此将所有CEOP所需数据存入tmpCEOPs
-  void ceopDfs(unsigned u);
+  void ceopDfs(unsigned u, unsigned& cur_core, std::string& cur_func);
   // 构造之前定义的CEOP和UR对象，UR中的AccessInfo内容先设置为空
-  void collectCEOPInfo(CtxMI firstCM);
+  void collectCEOPInfo(CtxMI firstCM, unsigned core
+    , std::string function);
   // 反过来获取UR -> (出边、 MI);也即包含了建立UR图
   void collectUrInfo();
-  void print_mi_cfg(const std::string &function);
+  void print_mi_cfg(unsigned core, const std::string &function);
 
-  /// 在拥有Class之后，此函数计算X(即执行次数)，需要cur_core core_func.
-  /// 这里只计算Must的I/D Access, PS不在这里算
-  void getExeCntMust();
-  /// @brief 计算PS块的执行次数
-  unsigned getExeCntPSI(CtxMI CM);
-  /// @brief 计算PS块的执行次数
-  unsigned getExeCntPSD(CtxData CD);
   // 遍历MI-CFG
   void tarjan(CtxMI CM);
-
-  /// @brief 用于给run()写ctxmi2ps_loop_stack，返回一条CtxMI的loop stack
-  /// @param CM
-  /// @return
-  std::vector<std::pair<const llvm::MachineLoop *, bool>>
-  getGlobalLoop(CtxMI CM, const CtxMI topCM) {
-    // 首先拿到同function的最入loop，使用动态的CM
-    const llvm::MachineInstr *MI = CM.MI;
-    const llvm::MachineBasicBlock *MBB = MI->getParent();
-    const llvm::MachineFunction *MF = MBB->getParent();
-    const llvm::MachineLoop *targetLoop = nullptr;
-    std::vector<const llvm::MachineLoop *> tmp_loops;
-    for (const llvm::MachineLoop *loop :
-         TimingAnalysisPass::LoopBoundInfo->getAllLoops()) {
-      if (MF == loop->getHeader()->getParent() && loop->contains(MBB)) {
-        tmp_loops.push_back(loop);
-      }
-    }
-    for (auto &tmp_loop : tmp_loops) {
-      bool tmp_flag = false;
-      for (auto *Subloop : tmp_loop->getSubLoops()) {
-        if (Subloop->contains(MBB)) {
-          tmp_flag = true;
-          break;
-        }
-      }
-      if (!tmp_flag) {
-        targetLoop = tmp_loop;
-      }
-    }
-    // 入栈所有同function的loop，key须为原分析topCM
-    std::vector<std::pair<const llvm::MachineLoop *, bool>> res_loop_stack;
-    const llvm::MachineLoop *tmp_loop = targetLoop;
-    while (tmp_loop != nullptr) {
-      TimingAnalysisPass::AbstractAddress tmp_aa =
-          TimingAnalysisPass::AbstractAddress(
-              TimingAnalysisPass::StaticAddrProvider->getAddr(topCM.MI));
-      std::pair<const llvm::MachineLoop *, bool> tmp_pair =
-          std::make_pair(tmp_loop, loop2addr_isps[tmp_loop][tmp_aa]);
-      res_loop_stack.push_back(tmp_pair);
-      tmp_loop = tmp_loop->getParentLoop();
-    }
-    // 递归, 使用动态的CM
-    if (CM.CallSites.size() != 0) {
-      const llvm::MachineInstr *tmp_callsite = CM.CallSites.back();
-      std::vector<const llvm::MachineInstr *> tmpCS = CM.CallSites;
-      tmpCS.pop_back();
-      CtxMI tmpCM;
-      tmpCM.MI = tmp_callsite;
-      tmpCM.CallSites = tmpCS;
-      std::vector<std::pair<const llvm::MachineLoop *, bool>> callers_ls =
-          getGlobalLoop(tmpCM, topCM);
-      for (int i = 0; i < callers_ls.size(); i++) {
-        res_loop_stack.push_back(callers_ls[i]);
-      }
-    }
-    return res_loop_stack;
-  }
-
-  /// @brief 用于给run()写ctxdata2ps_loop_stack，
-  /// 返回一条CtxMI的对应访存的loop stack
-  /// @param CM
-  /// @return
-  std::vector<std::pair<const llvm::MachineLoop *, bool>>
-  getGlobalLoopData(CtxData CD) {
-    // 首先拿到同function的最入loop(same as getGlobalLoop)
-    const llvm::MachineInstr *MI = CD.ctx_mi.MI;
-    const llvm::MachineBasicBlock *MBB = MI->getParent();
-    const llvm::MachineFunction *MF = MBB->getParent();
-    const llvm::MachineLoop *targetLoop = nullptr;
-    std::vector<const llvm::MachineLoop *> tmp_loops;
-    for (const llvm::MachineLoop *loop :
-         TimingAnalysisPass::LoopBoundInfo->getAllLoops()) {
-      if (MF == loop->getHeader()->getParent() && loop->contains(MBB)) {
-        tmp_loops.push_back(loop);
-      }
-    }
-    for (auto &tmp_loop : tmp_loops) {
-      bool tmp_flag = false;
-      for (auto *Subloop : tmp_loop->getSubLoops()) {
-        if (Subloop->contains(MBB)) {
-          tmp_flag = true;
-          break;
-        }
-      }
-      if (!tmp_flag) {
-        targetLoop = tmp_loop;
-      }
-    }
-    // 入栈所有同function的loop
-    std::vector<std::pair<const llvm::MachineLoop *, bool>> res_loop_stack;
-    const llvm::MachineLoop *tmp_loop = targetLoop;
-    while (tmp_loop != nullptr) {
-      TimingAnalysisPass::AbstractAddress tmp_aa = CD.data_addr; // diff
-      std::pair<const llvm::MachineLoop *, bool> tmp_pair =
-          std::make_pair(tmp_loop, loop2addr_isps[tmp_loop][tmp_aa]);
-      res_loop_stack.push_back(tmp_pair);
-      tmp_loop = tmp_loop->getParentLoop();
-    }
-    // 递归
-    if (CD.ctx_mi.CallSites.size() != 0) {
-      const llvm::MachineInstr *tmp_callsite = CD.ctx_mi.CallSites.back();
-      std::vector<const llvm::MachineInstr *> tmpCS = CD.ctx_mi.CallSites;
-      tmpCS.pop_back();
-      CtxData tmpCD;
-      CtxMI tmpCM; // diff
-      tmpCM.MI = tmp_callsite;
-      tmpCM.CallSites = tmpCS;
-      tmpCD.ctx_mi = tmpCM;
-      tmpCD.data_addr = CD.data_addr; // this is not changed
-      std::vector<std::pair<const llvm::MachineLoop *, bool>> callers_ls =
-          getGlobalLoopData(tmpCD);
-      for (int i = 0; i < callers_ls.size(); i++) {
-        res_loop_stack.push_back(callers_ls[i]);
-      }
-    }
-    return res_loop_stack;
-  }
-  /*
-      搞不了自底向上，搞自顶向下也是ok，在一个函数的所有loop里搜，搜到此BB在此loop里即可取
-    优先取更深层的loop；一个函数多个循环是可以的，一个Basic
-    Block足以定位哪个循环
-      递归函数：一个CM负责处理自己所在函数的循环，即处理一层token，如果多层，外层交给callsite
-    处理。于是我们可以处理任意层函数和任意层循环。
-      一个local函数中，loop再多也就是个森林，通向我们要寻找的那个BB路径是唯一的。
-  */
-  unsigned getGlobalUpBd(CtxMI CM);
-
-  unsigned bd_helper1(const llvm::MachineBasicBlock *MBB,
-                      const llvm::MachineLoop *Loop);
-
-  unsigned bd_helper2(const llvm::MachineLoop *Loop);
 };
 
 #endif

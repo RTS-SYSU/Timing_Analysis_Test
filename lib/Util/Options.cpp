@@ -220,7 +220,7 @@ cl::opt<CacheReplPolicyType> InstrCacheReplPolType(
     "ta-icache-replpol",
     cl::desc("Choose which replacement policy should be used for the "
              "instruction cache. (Default: LRU)"),
-    cl::init(CacheReplPolicyType::ALHIT),
+    cl::init(CacheReplPolicyType::LRU),
     cl::values(clEnumValN(CacheReplPolicyType::LRU, "lru",
                           "Least-recently-used policy"),
                clEnumValN(CacheReplPolicyType::FIFO, "fifo",
