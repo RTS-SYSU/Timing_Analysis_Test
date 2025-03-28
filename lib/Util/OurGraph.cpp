@@ -376,71 +376,71 @@ void OurGraph::print_our_cfg(unsigned cur_core, const std::string &function) {
 }
 
 
-unsigned OurGraph::getGlobalUpBd(CtxMI CM) {
-  const llvm::MachineInstr *MI = CM.MI;
-  const llvm::MachineBasicBlock *MBB = MI->getParent();
-  const llvm::MachineFunction *MF = MBB->getParent();
-  unsigned x_local = 1;
-  // local execute times
-  for (const MachineLoop *loop :
-       TimingAnalysisPass::LoopBoundInfo->getAllLoops()) {
-    if (MF == loop->getHeader()->getParent() &&
-        loop->contains(
-            MBB)) { // 这里得到的就是路径上的一层loop，需要向下、向上搜
-      x_local *= bd_helper1(MBB, loop);
-      if (loop->getParentLoop() != nullptr) {
-        x_local *= bd_helper2(loop->getParentLoop());
-      }
-      break;
-    }
-  }
-  if (CM.CallSites.size() != 0) { // 非最外层函数
-    const llvm::MachineInstr *callsite = CM.CallSites.back();
-    std::vector<const llvm::MachineInstr *> tmpCS = CM.CallSites;
-    tmpCS.pop_back();
-    CtxMI tmpCM;
-    tmpCM.MI = callsite;
-    tmpCM.CallSites = tmpCS;
-    x_local *= getGlobalUpBd(tmpCM);
-  }
-  return x_local;
-}
+// unsigned OurGraph::getGlobalUpBd(CtxMI CM) {
+//   const llvm::MachineInstr *MI = CM.MI;
+//   const llvm::MachineBasicBlock *MBB = MI->getParent();
+//   const llvm::MachineFunction *MF = MBB->getParent();
+//   unsigned x_local = 1;
+//   // local execute times
+//   for (const MachineLoop *loop :
+//        TimingAnalysisPass::LoopBoundInfo->getAllLoops()) {
+//     if (MF == loop->getHeader()->getParent() &&
+//         loop->contains(
+//             MBB)) { // 这里得到的就是路径上的一层loop，需要向下、向上搜
+//       x_local *= bd_helper1(MBB, loop);
+//       if (loop->getParentLoop() != nullptr) {
+//         x_local *= bd_helper2(loop->getParentLoop());
+//       }
+//       break;
+//     }
+//   }
+//   if (CM.CallSites.size() != 0) { // 非最外层函数
+//     const llvm::MachineInstr *callsite = CM.CallSites.back();
+//     std::vector<const llvm::MachineInstr *> tmpCS = CM.CallSites;
+//     tmpCS.pop_back();
+//     CtxMI tmpCM;
+//     tmpCM.MI = callsite;
+//     tmpCM.CallSites = tmpCS;
+//     x_local *= getGlobalUpBd(tmpCM);
+//   }
+//   return x_local;
+// }
 
-unsigned OurGraph::bd_helper1(const llvm::MachineBasicBlock *MBB,
-                                 const llvm::MachineLoop *Loop) {
-  unsigned x_local = 1;
-  if (TimingAnalysisPass::LoopBoundInfo->hasUpperLoopBound(
-          Loop, TimingAnalysisPass::Context())) {
-    x_local *= TimingAnalysisPass::LoopBoundInfo->getUpperLoopBound(
-        Loop, TimingAnalysisPass::Context());
-    // 此函数加了个else已经是以manual而非SCEV优先
-  }
-  for (auto *Subloop : Loop->getSubLoops()) {
-    if (Subloop->getParentLoop() == Loop // 必须是直接儿子，不能是孙子等
-        && Subloop->contains(MBB)) {
-      x_local *= bd_helper1(MBB, Subloop);
-      break; // 不会有两个同时包含的
-    }
-  }
-  return x_local;
-}
+// unsigned OurGraph::bd_helper1(const llvm::MachineBasicBlock *MBB,
+//                                  const llvm::MachineLoop *Loop) {
+//   unsigned x_local = 1;
+//   if (TimingAnalysisPass::LoopBoundInfo->hasUpperLoopBound(
+//           Loop, TimingAnalysisPass::Context())) {
+//     x_local *= TimingAnalysisPass::LoopBoundInfo->getUpperLoopBound(
+//         Loop, TimingAnalysisPass::Context());
+//     // 此函数加了个else已经是以manual而非SCEV优先
+//   }
+//   for (auto *Subloop : Loop->getSubLoops()) {
+//     if (Subloop->getParentLoop() == Loop // 必须是直接儿子，不能是孙子等
+//         && Subloop->contains(MBB)) {
+//       x_local *= bd_helper1(MBB, Subloop);
+//       break; // 不会有两个同时包含的
+//     }
+//   }
+//   return x_local;
+// }
 
-unsigned OurGraph::bd_helper2(const llvm::MachineLoop *Loop) {
-  unsigned scalar = 1;
-  if (TimingAnalysisPass::LoopBoundInfo->hasUpperLoopBound(
-          Loop, TimingAnalysisPass::Context())) {
-    scalar *= TimingAnalysisPass::LoopBoundInfo->getUpperLoopBound(
-        Loop, TimingAnalysisPass::Context());
-  } else {
-    assert(0 && "why we have a loop but no LoopBound?");
-  }
-  if (Loop->getParentLoop() == nullptr) { // 已经是最外层
-    return scalar;
-  } else {
-    scalar *= bd_helper2(Loop->getParentLoop());
-  }
-  return scalar;
-}
+// unsigned OurGraph::bd_helper2(const llvm::MachineLoop *Loop) {
+//   unsigned scalar = 1;
+//   if (TimingAnalysisPass::LoopBoundInfo->hasUpperLoopBound(
+//           Loop, TimingAnalysisPass::Context())) {
+//     scalar *= TimingAnalysisPass::LoopBoundInfo->getUpperLoopBound(
+//         Loop, TimingAnalysisPass::Context());
+//   } else {
+//     assert(0 && "why we have a loop but no LoopBound?");
+//   }
+//   if (Loop->getParentLoop() == nullptr) { // 已经是最外层
+//     return scalar;
+//   } else {
+//     scalar *= bd_helper2(Loop->getParentLoop());
+//   }
+//   return scalar;
+// }
 
 std::vector<std::pair<const llvm::MachineLoop *, bool>>
   OurGraph::getGlobalLoop(CtxMI CM, const CtxMI topCM) {

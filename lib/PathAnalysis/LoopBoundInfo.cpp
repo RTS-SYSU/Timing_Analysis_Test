@@ -630,8 +630,9 @@ bool LoopBoundInfoPass::hasLoopBoundNoCtx(
     return false;
   }
   for (auto Ctx : LoopContextMap.at(Loop)) {
-    HasBound &= hasLoopBound(Loop, LoopBounds, ManualLoopBounds,
-                             ManualLoopBoundsNoCtx, Ctx);
+    HasBound &=
+        hasLoopBound(Loop, LoopBounds, ManualLoopBounds, ManualLoopBoundsNoCtx,
+                     TimingAnalysisPass::Context());
   }
   return HasBound;
 }
@@ -696,9 +697,18 @@ unsigned LoopBoundInfoPass::getLoopBoundNoCtx(
   for (auto Ctx : LoopContextMap.at(Loop)) {
     MaxBound =
         std::max(MaxBound, getLoopBound(Loop, LoopBounds, ManualLoopBounds,
-                                        ManualLoopBoundsNoCtx, Ctx));
+                                        ManualLoopBoundsNoCtx,
+                                        TimingAnalysisPass::Context()));
   }
   return MaxBound;
+}
+unsigned
+LoopBoundInfoPass::GgetUpperLoopBound(const llvm::MachineLoop *Loop) const {
+  unsigned Bound = 1;
+  if (ManualUpperLoopBoundsNoCtx.count(Loop) > 0) {
+    Bound = ManualUpperLoopBoundsNoCtx.at(Loop);
+  }
+  return Bound;
 }
 
 unsigned LoopBoundInfoPass::getUpperLoopBound(const llvm::MachineLoop *Loop,

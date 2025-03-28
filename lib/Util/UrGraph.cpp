@@ -1,4 +1,5 @@
 #include "Util/UrGraph.h"
+#include "Util/GlobalVars.h"
 
 UrGraph::UrGraph(std::vector<std::vector<std::string>> &setc) {
   this->coreinfo = setc; // in base
@@ -14,7 +15,6 @@ UrGraph::UrGraph(std::vector<std::vector<std::string>> &setc) {
     }
   }
 }
-
 
 void UrGraph::URCalculation(unsigned core, const std::string &function) {
   // 参照analysisDriver.h
@@ -43,7 +43,8 @@ void UrGraph::URCalculation(unsigned core, const std::string &function) {
     print_mi_cfg(core, function); // debug
   }
   collectUrInfo(); // module2: 建立UR图和ur为键的信息映射
-  collectCEOPInfo(firstCM, core, function); // module4: dfs遍历图，并同时建立起CEOP的数据结构
+  collectCEOPInfo(firstCM, core,
+                  function); // module4: dfs遍历图，并同时建立起CEOP的数据结构
   CEOPs[core][function] = tmpCEOPs;
   getExeCntMust(); // 计算执行次数
 
@@ -61,7 +62,7 @@ void UrGraph::URCalculation(unsigned core, const std::string &function) {
   }
 }
 
-void UrGraph::ceopDfs(unsigned u, unsigned& cur_core, std::string& cur_func) {
+void UrGraph::ceopDfs(unsigned u, unsigned &cur_core, std::string &cur_func) {
   UnorderedRegion curUR{};
   std::vector<CtxMI> curMIs = ur_mi[u];
   for (int i = 0; i < curMIs.size(); i++) {
@@ -89,8 +90,8 @@ void UrGraph::ceopDfs(unsigned u, unsigned& cur_core, std::string& cur_func) {
   return;
 }
 
-void UrGraph::collectCEOPInfo(CtxMI firstCM, unsigned core
-    , std::string function) {
+void UrGraph::collectCEOPInfo(CtxMI firstCM, unsigned core,
+                              std::string function) {
   unsigned s = mi_ur[firstCM];
   ceopDfs(s, core, function);
 }
@@ -118,7 +119,6 @@ void UrGraph::collectUrInfo() { // 改为 ur_ctxmi
     }
   }
 }
-
 
 void UrGraph::print_mi_cfg(unsigned cur_core, const std::string &function) {
   const std::vector<std::string> colors = {
@@ -157,8 +157,7 @@ void UrGraph::print_mi_cfg(unsigned cur_core, const std::string &function) {
     std::string tmp_flag = (MI->isTransient()) ? "True" : "False";
     File << "isTransient:" << tmp_flag << "\\l  ";
     // 纯UrGraph无CL信息
-    File << "ExeCnt:" << ctxmi_miai[cur_core][function][CM].x 
-      << "\\l  ";
+    File << "ExeCnt:" << ctxmi_miai[cur_core][function][CM].x << "\\l  ";
     // File << "ExeCnt:" << ctxmi_miai[cur_core][function][CM].x << " "
     //      << "CHMC:" << ctxmi_miai[cur_core][function][CM].classification
     //      << "\\l  ";
@@ -225,52 +224,55 @@ void UrGraph::tarjan(CtxMI CM) {
 }
 
 void UrGraph::getExeCntMust() {
-  for(auto &tmp_core:CEOPs){
+  for (auto &tmp_core : CEOPs) {
     unsigned core_num = tmp_core.first;
-    for(auto &tmp_task:tmp_core.second){
+    for (auto &tmp_task : tmp_core.second) {
       std::string enrty_name = tmp_task.first;
-      for(CEOP &tmp_ceop:tmp_task.second){
-        for(UnorderedRegion &tmp_ur:tmp_ceop.URs){
-          for(auto &tmp_pair:tmp_ur.mi2xclass){
-            CtxMI tmp_cm = tmp_pair.first;
-            ctxmi_miai[core_num][enrty_name][tmp_cm].x 
-              = getGlobalUpBd(tmp_cm);
+      for (CEOP &tmp_ceop : tmp_task.second) {
+        for (UnorderedRegion &tmp_ur : tmp_ceop.URs) {
+          for (auto &tmp_pair : tmp_ur.mi2xclass) {
+            const CtxMI &tmp_cm = tmp_pair.first;
+            unsigned a = getGlobalUpBd(enrty_name, tmp_cm);
+            unsigned b = ctxmi_miai[core_num][enrty_name][tmp_cm].x;
+            tmp_pair.second.x = a > b ? a : b;
+            ctxmi_miai[core_num][enrty_name][tmp_cm].x = tmp_pair.second.x;
           }
         }
       }
     }
   }
-//   // assert(mi_class[cur_core][cur_func].size() > 0 &&
-//   //   "We must collect CHMC first");
-//   for (auto tmp_pair : mi_ur) {
-//     CtxMI tmp_cm = tmp_pair.first;
-//     // handle mi access
-//     // FIXME: for CL that we don't collect
-//     if (ctxmi_miai[cur_core][cur_func].find(tmp_cm) ==
-//         ctxmi_miai[cur_core][cur_func].end()) {
-//       AccessInfo obj;
-//       obj.classification = TimingAnalysisPass::dom::cache::CL_BOT;
-//       if (ZWDebug) {
-//         std::ofstream myfile;
-//         std::string fileName = "ZW_Uncollected.txt";
-//         myfile.open(fileName, std::ios_base::app);
-//         myfile << "Core:" << cur_core << " Func:" << cur_func
-//                << " MI:" << tmp_cm << " is uncollected\n";
-//         myfile.close();
-//       }
-//     } else {
-//       ctxmi_miai[cur_core][cur_func][tmp_cm].x = getGlobalUpBd(tmp_cm);
-//     }
-//     // handle data access
-//     std::vector<AccessInfo> tmp_ais = entry2ctxmi2datainfo[cur_func][tmp_cm];
-//     for (int i = 0; i < tmp_ais.size(); i++) {
-//       entry2ctxmi2datainfo[cur_func][tmp_cm][i].x =
-//           ctxmi_miai[cur_core][cur_func][tmp_cm].x;
-//     }
-//   }
+  //   // assert(mi_class[cur_core][cur_func].size() > 0 &&
+  //   //   "We must collect CHMC first");
+  //   for (auto tmp_pair : mi_ur) {
+  //     CtxMI tmp_cm = tmp_pair.first;
+  //     // handle mi access
+  //     // FIXME: for CL that we don't collect
+  //     if (ctxmi_miai[cur_core][cur_func].find(tmp_cm) ==
+  //         ctxmi_miai[cur_core][cur_func].end()) {
+  //       AccessInfo obj;
+  //       obj.classification = TimingAnalysisPass::dom::cache::CL_BOT;
+  //       if (ZWDebug) {
+  //         std::ofstream myfile;
+  //         std::string fileName = "ZW_Uncollected.txt";
+  //         myfile.open(fileName, std::ios_base::app);
+  //         myfile << "Core:" << cur_core << " Func:" << cur_func
+  //                << " MI:" << tmp_cm << " is uncollected\n";
+  //         myfile.close();
+  //       }
+  //     } else {
+  //       ctxmi_miai[cur_core][cur_func][tmp_cm].x = getGlobalUpBd(tmp_cm);
+  //     }
+  //     // handle data access
+  //     std::vector<AccessInfo> tmp_ais =
+  //     entry2ctxmi2datainfo[cur_func][tmp_cm]; for (int i = 0; i <
+  //     tmp_ais.size(); i++) {
+  //       entry2ctxmi2datainfo[cur_func][tmp_cm][i].x =
+  //           ctxmi_miai[cur_core][cur_func][tmp_cm].x;
+  //     }
+  //   }
 }
 
-unsigned UrGraph::getGlobalUpBd(CtxMI CM) {
+unsigned UrGraph::getGlobalUpBd(std::string entry, CtxMI CM) {
   const llvm::MachineInstr *MI = CM.MI;
   const llvm::MachineBasicBlock *MBB = MI->getParent();
   const llvm::MachineFunction *MF = MBB->getParent();
@@ -281,9 +283,9 @@ unsigned UrGraph::getGlobalUpBd(CtxMI CM) {
     if (MF == loop->getHeader()->getParent() &&
         loop->contains(
             MBB)) { // 这里得到的就是路径上的一层loop，需要向下、向上搜
-      x_local *= bd_helper1(MBB, loop);
+      x_local *= bd_helper1(entry, MBB, loop);
       if (loop->getParentLoop() != nullptr) {
-        x_local *= bd_helper2(loop->getParentLoop());
+        x_local *= bd_helper2(entry, loop->getParentLoop());
       }
       break;
     }
@@ -295,43 +297,40 @@ unsigned UrGraph::getGlobalUpBd(CtxMI CM) {
     CtxMI tmpCM;
     tmpCM.MI = callsite;
     tmpCM.CallSites = tmpCS;
-    x_local *= getGlobalUpBd(tmpCM);
+    x_local *= getGlobalUpBd(entry, tmpCM);
   }
   return x_local;
 }
 
-unsigned UrGraph::bd_helper1(const llvm::MachineBasicBlock *MBB,
-                                 const llvm::MachineLoop *Loop) {
+unsigned UrGraph::bd_helper1(std::string entry,
+                             const llvm::MachineBasicBlock *MBB,
+                             const llvm::MachineLoop *Loop) {
   unsigned x_local = 1;
-  if (TimingAnalysisPass::LoopBoundInfo->hasUpperLoopBound(
-          Loop, TimingAnalysisPass::Context())) {
-    x_local *= TimingAnalysisPass::LoopBoundInfo->getUpperLoopBound(
-        Loop, TimingAnalysisPass::Context());
-    // 此函数加了个else已经是以manual而非SCEV优先
-  }
+  x_local *= ALLLoopBoundInfo[entry]->GgetUpperLoopBound(Loop);
   for (auto *Subloop : Loop->getSubLoops()) {
     if (Subloop->getParentLoop() == Loop // 必须是直接儿子，不能是孙子等
         && Subloop->contains(MBB)) {
-      x_local *= bd_helper1(MBB, Subloop);
+      x_local *= bd_helper1(entry, MBB, Subloop);
       break; // 不会有两个同时包含的
     }
   }
   return x_local;
 }
 
-unsigned UrGraph::bd_helper2(const llvm::MachineLoop *Loop) {
+unsigned UrGraph::bd_helper2(std::string entry, const llvm::MachineLoop *Loop) {
   unsigned scalar = 1;
-  if (TimingAnalysisPass::LoopBoundInfo->hasUpperLoopBound(
-          Loop, TimingAnalysisPass::Context())) {
-    scalar *= TimingAnalysisPass::LoopBoundInfo->getUpperLoopBound(
-        Loop, TimingAnalysisPass::Context());
-  } else {
-    assert(0 && "why we have a loop but no LoopBound?");
-  }
+  // if (ALLLoopBoundInfo[entry]->hasUpperLoopBound(
+  //         Loop, TimingAnalysisPass::Context())) {
+  //   scalar *= ALLLoopBoundInfo[entry]->getUpperLoopBound(
+  //       Loop, TimingAnalysisPass::Context());
+  // } else {
+  //   assert(0 && "why we have a loop but no LoopBound?");
+  // }
+  scalar *= ALLLoopBoundInfo[entry]->GgetUpperLoopBound(Loop);
   if (Loop->getParentLoop() == nullptr) { // 已经是最外层
     return scalar;
   } else {
-    scalar *= bd_helper2(Loop->getParentLoop());
+    scalar *= bd_helper2(entry, Loop->getParentLoop());
   }
   return scalar;
 }

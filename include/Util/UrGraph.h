@@ -314,10 +314,10 @@ protected:
       ctxmi_miai;
 private:
   void getExeCntMust();
-  unsigned getGlobalUpBd(CtxMI CM);
-  unsigned bd_helper1(const llvm::MachineBasicBlock *MBB,
+  unsigned getGlobalUpBd(std::string entry, CtxMI CM);
+  unsigned bd_helper1(std::string entry, const llvm::MachineBasicBlock *MBB,
                       const llvm::MachineLoop *Loop);
-  unsigned bd_helper2(const llvm::MachineLoop *Loop);
+  unsigned bd_helper2(std::string entry, const llvm::MachineLoop *Loop);
   // === tarjan强联通算法相关信息 ===
   // 拿到MachineLoop的信息，这样我就可以通过MBB直接得到其外层循环，然后得到执行次数；
   // 需要先从LoopBoundInfoPass偷到这个信息

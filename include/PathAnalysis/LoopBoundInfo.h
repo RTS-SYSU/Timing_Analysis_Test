@@ -54,6 +54,20 @@ class LoopBoundInfoPass : public llvm::MachineFunctionPass {
 public:
   static char ID;
   LoopBoundInfoPass();
+  void copy(LoopBoundInfoPass *other) {
+    this->LowerLoopBoundsCtx = other->LowerLoopBoundsCtx;
+    this->LowerLoopBoundsSCEV = other->LowerLoopBoundsSCEV;
+    this->ManualLowerLoopBounds = other->ManualLowerLoopBounds;
+    this->ManualLowerLoopBoundsNoCtx = other->ManualLowerLoopBoundsNoCtx;
+    this->ManualUpperLoopBounds = other->ManualUpperLoopBounds;
+    this->ManualUpperLoopBoundsNoCtx = other->ManualUpperLoopBoundsNoCtx;
+    this->UpperLoopBoundsCtx = other->UpperLoopBoundsCtx;
+    this->UpperLoopBoundsSCEV = other->UpperLoopBoundsSCEV;
+    this->IrLoops = other->IrLoops;
+    this->MaLoops = other->MaLoops;
+    this->LoopContextMap = other->LoopContextMap;
+    this->LoopMapping = other->LoopMapping;
+  }
 
   /**
    * This is a dummy function.
@@ -129,6 +143,7 @@ public:
    */
   unsigned getUpperLoopBound(const llvm::MachineLoop *Loop,
                              const Context &Ctx) const;
+  unsigned GgetUpperLoopBound(const llvm::MachineLoop *Loop) const;
   unsigned getLowerLoopBound(const llvm::MachineLoop *Loop,
                              const Context &Ctx) const;
 
@@ -337,6 +352,7 @@ private:
       std::unordered_map<const llvm::MachineLoop *, unsigned>
           &ManualLoopBounds);
 
+public:
   // USING LOOPS AND MACHINELOOPS SHOULD BE SAFE AS WE MODIFIED LLVM
   // ACCORDINGLY.
   /**

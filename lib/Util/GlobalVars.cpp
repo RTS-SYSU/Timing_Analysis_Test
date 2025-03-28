@@ -2,6 +2,7 @@
 #include "PathAnalysis/LoopBoundInfo.h"
 #include "PreprocessingAnalysis/AddressInformation.h"
 #include "Util/muticoreinfo.h"
+#include <map>
 #include <string>
 #include <vector>
 
@@ -14,6 +15,8 @@ int L2MISS = 0;
 int STBUS = 0;
 int BOUND = 0;
 
+std::map<std::string, TimingAnalysisPass::LoopBoundInfoPass *> ALLLoopBoundInfo;
+// std::map<const llvm::MachineLoop *, unsigned> ALLLoopBoundInfo;
 
 CL_info cl_info;
 Liangy_info ly_info;

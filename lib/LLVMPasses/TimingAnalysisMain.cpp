@@ -327,6 +327,12 @@ void TimingAnalysisMain::dispatchValueAnalysis() {
     CvAnaInfo->dump(Myfile);
     Myfile.close();
   }
+  if (MulCType == MultiCoreType::ZhangW) {
+    if (ALLLoopBoundInfo.count(AnalysisEntryPoint) == 0) {
+      ALLLoopBoundInfo[AnalysisEntryPoint] = new LoopBoundInfoPass();
+      ALLLoopBoundInfo[AnalysisEntryPoint]->copy(LoopBoundInfo);
+    }
+  }
 
   AddressInformationImpl<ConstantValueDomain<ISA>> AddrInfo(*CvAnaInfo);
 
@@ -363,7 +369,9 @@ void TimingAnalysisMain::dispatchValueAnalysis() {
 
   // WCET
   // Select the analysis to execute
-  dispatchAnalysisType(AddrInfo);
+  if (0) {
+    dispatchAnalysisType(AddrInfo);
+  }
 
   // No need for constant value information
   delete CvAnaInfo;
