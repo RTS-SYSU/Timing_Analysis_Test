@@ -306,6 +306,8 @@ public:
                               std::vector<CEOP>>>
       CEOPs; // 各个task的CEOP集合(别set了，比较函数不好写)
   std::vector<std::vector<std::string>> coreinfo;
+  // 输出每条ceop有多少指令
+  void handsome_ceop_instr();
 protected:
   // === 执行次数相关信息 ===
   // core, function, ctxmi -> xclass
@@ -313,7 +315,16 @@ protected:
                               std::map<CtxMI, AccessInfo>>>
       ctxmi_miai;
 private:
+  /// 将执行次数写到ctxmi_miai
   void getExeCntMust();
+  /*
+      搞不了自底向上，搞自顶向下也是ok，在一个函数的所有loop里搜，搜到此BB在此loop里即可取
+    优先取更深层的loop；一个函数多个循环是可以的，一个Basic
+    Block足以定位哪个循环
+      递归函数：一个CM负责处理自己所在函数的循环，即处理一层token，如果多层，外层交给callsite
+    处理。于是我们可以处理任意层函数和任意层循环。
+      一个local函数中，loop再多也就是个森林，通向我们要寻找的那个BB路径是唯一的。
+  */
   unsigned getGlobalUpBd(std::string entry, CtxMI CM);
   unsigned bd_helper1(std::string entry, const llvm::MachineBasicBlock *MBB,
                       const llvm::MachineLoop *Loop);
@@ -350,7 +361,7 @@ private:
   std::vector<CEOP> tmpCEOPs;           // 暂存本task上所有路径
 protected:
   // 显式收集MI-CFG，用于debug
-  std::map<CtxMI, std::vector<CtxMI>> mi_cfg; // TODO 输出修改
+  std::map<CtxMI, std::vector<CtxMI>> mi_cfg;
 private:
   /// UR于CEOP的计算函数
   void URCalculation(unsigned core, const std::string &function);

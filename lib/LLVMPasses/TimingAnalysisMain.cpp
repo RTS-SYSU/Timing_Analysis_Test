@@ -280,6 +280,7 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     // 清理一下数据
     cl_info.CL_clean();
     UrGraph urg(mcif.coreinfo);
+    urg.handsome_ceop_instr(); // 获取各CEOP的instr数
     OurGraph ourg(mcif.coreinfo, cl_info, func2corenum);
     Zhangmethod ZW_mth = Zhangmethod(ourg);
     ZW_mth.run();
@@ -369,7 +370,7 @@ void TimingAnalysisMain::dispatchValueAnalysis() {
 
   // WCET
   // Select the analysis to execute
-  if (0) {
+  if (1) {
     dispatchAnalysisType(AddrInfo);
   }
 

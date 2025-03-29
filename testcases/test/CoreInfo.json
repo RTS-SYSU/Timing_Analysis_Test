@@ -6,13 +6,5 @@
                 "function": "rad2deg"
             }
         ]
-    },
-    {
-        "core": 1,
-        "tasks": [
-            {
-                "function": "fdct"
-            }
-        ]
     }
 ]

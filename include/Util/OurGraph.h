@@ -39,26 +39,7 @@ public:
   // PS Data Access(暂时废弃)
   std::map<std::string, std::map<CtxData, PSAccessInfo>> ctxdata2ps_ai;
 private:
-  // TODO delete
-  // 暂存ctxmi的access info，这里几个函数用于计算执行次数
-  std::map<unsigned, std::map<std::string, // core, function, ctxmi -> xclass
-                              std::map<CtxMI, AccessInfo>>>
-      ctxmi_miai;
   void getDataExeCntMust();
-  /*
-      搞不了自底向上，搞自顶向下也是ok，在一个函数的所有loop里搜，搜到此BB在此loop里即可取
-    优先取更深层的loop；一个函数多个循环是可以的，一个Basic
-    Block足以定位哪个循环
-      递归函数：一个CM负责处理自己所在函数的循环，即处理一层token，如果多层，外层交给callsite
-    处理。于是我们可以处理任意层函数和任意层循环。
-      一个local函数中，loop再多也就是个森林，通向我们要寻找的那个BB路径是唯一的。
-  */
-  unsigned getGlobalUpBd(CtxMI CM);
-
-  unsigned bd_helper1(const llvm::MachineBasicBlock *MBB,
-                      const llvm::MachineLoop *Loop);
-
-  unsigned bd_helper2(const llvm::MachineLoop *Loop);
   // ===== Persistence analysis =====
   // TODO(仅用于输出)
   std::map<const llvm::MachineLoop *, TimingAnalysisPass::PersistenceScope>

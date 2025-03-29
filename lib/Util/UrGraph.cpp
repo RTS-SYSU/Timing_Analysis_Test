@@ -14,6 +14,34 @@ UrGraph::UrGraph(std::vector<std::vector<std::string>> &setc) {
              << CEOPs[i][functionName].size() << " CEOP(s)" << '\n';
     }
   }
+  // handsome_ceop_instr();
+}
+
+void UrGraph::handsome_ceop_instr(){
+  std::ofstream myfile;
+  std::string fileName = "Zhao_Output.txt";
+  myfile.open(fileName, std::ios_base::app);
+  for(auto &tmp_core:CEOPs){
+    unsigned core_num = tmp_core.first;
+    for(auto &tmp_task:tmp_core.second){
+      std::string enrty_name = tmp_task.first;
+      unsigned num_ceop = 0;
+      for(CEOP &tmp_ceop:tmp_task.second){
+        num_ceop++;
+        unsigned sum_of_instr = 0;
+        for(UnorderedRegion &tmp_ur:tmp_ceop.URs){
+          for(auto &tmp_pair:tmp_ur.mi2xclass){
+            CtxMI tmp_cm = tmp_pair.first;
+            sum_of_instr +=
+            ctxmi_miai[core_num][enrty_name][tmp_cm].x;
+          }
+        }
+        myfile<< enrty_name << "_" << "_CEOP_" << num_ceop 
+          << " have " << sum_of_instr << " instructions\n";
+      }
+    }
+  }
+  myfile.close();
 }
 
 void UrGraph::URCalculation(unsigned core, const std::string &function) {
@@ -39,14 +67,14 @@ void UrGraph::URCalculation(unsigned core, const std::string &function) {
   CtxMI firstCM;
   firstCM.MI = firstMI;
   tarjan(firstCM); // module1: 在CFG上获取UR
-  if (ZWDebug) {
-    print_mi_cfg(core, function); // debug
-  }
   collectUrInfo(); // module2: 建立UR图和ur为键的信息映射
   collectCEOPInfo(firstCM, core,
                   function); // module4: dfs遍历图，并同时建立起CEOP的数据结构
   CEOPs[core][function] = tmpCEOPs;
   getExeCntMust(); // 计算执行次数
+  if (ZWDebug) {
+    print_mi_cfg(core, function); // debug
+  }
 
   if (ZWDebug) {
     std::ofstream myfile;
