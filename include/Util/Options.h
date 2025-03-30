@@ -273,6 +273,8 @@ extern llvm::cl::opt<bool> QuietMode;
 
 extern llvm::cl::opt<bool> ZWDebug;
 
+extern llvm::cl::opt<bool> ZSTask;
+
 /**
  * Dumps the state graph in .vcg instead of .dot
  */

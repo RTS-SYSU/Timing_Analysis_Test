@@ -101,6 +101,11 @@ cl::opt<bool>
             cl::cat(MultiCoreCat));
 
 cl::opt<bool>
+    ZSTask("ta-zs-task", cl::init(false),
+            cl::desc("for mr zhao's requirements "),
+            cl::cat(MultiCoreCat));
+
+cl::opt<bool>
     DumpVcgGraph("ta-dumpb-vcg-graph",
                  cl::desc("Dumps the StateGraph in .vcg format (default:.dot)"),
                  cl::init(false), cl::cat(LLVMTACat));
