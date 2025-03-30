@@ -268,22 +268,27 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
     }
   }
 
-  if (MulCType == MultiCoreType::ZhangW) {
-    assert((MuArchType == MicroArchitecturalType::INORDER ||
-            MuArchType == MicroArchitecturalType::STRICTINORDER) &&
-           "Currently do not support other arch, because of timing anomaly");
-    // 打印 cl_info 内容
-    std::ofstream myfile;
-    myfile.open("ZW_Clist.txt", ios_base::trunc);
-    cl_info.print(myfile);
-    myfile.close();
-    // 清理一下数据
-    cl_info.CL_clean();
+  if(ZSTask){
     UrGraph urg(mcif.coreinfo);
     urg.handsome_ceop_instr(); // 获取各CEOP的instr数
-    OurGraph ourg(mcif.coreinfo, cl_info, func2corenum);
-    Zhangmethod ZW_mth = Zhangmethod(ourg);
-    ZW_mth.run();
+  }else{
+    if (MulCType == MultiCoreType::ZhangW) {
+      assert((MuArchType == MicroArchitecturalType::INORDER ||
+              MuArchType == MicroArchitecturalType::STRICTINORDER) &&
+            "Currently do not support other arch, because of timing anomaly");
+      // 打印 cl_info 内容
+      std::ofstream myfile;
+      myfile.open("ZW_Clist.txt", ios_base::trunc);
+      cl_info.print(myfile);
+      myfile.close();
+      // 清理一下数据
+      cl_info.CL_clean();
+      UrGraph urg(mcif.coreinfo);
+      urg.handsome_ceop_instr(); // 获取各CEOP的instr数
+      OurGraph ourg(mcif.coreinfo, cl_info, func2corenum);
+      Zhangmethod ZW_mth = Zhangmethod(ourg);
+      ZW_mth.run();
+    }
   }
   return false;
 }
@@ -370,7 +375,7 @@ void TimingAnalysisMain::dispatchValueAnalysis() {
 
   // WCET
   // Select the analysis to execute
-  if (1) {
+  if (!ZSTask) {
     dispatchAnalysisType(AddrInfo);
   }
 

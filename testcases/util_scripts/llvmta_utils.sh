@@ -6,7 +6,7 @@ set -u
 
 source "util_scripts/OptionHandler.sh" || true
 
-readonly ALL_OPTS=( ""
+ALL_OPTS=( ""
 	"--enable-optimizations"
 	"--disable-hard-floatingpoint"
 	"--enable-optimizations --disable-hard-floatingpoint"

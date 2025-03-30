@@ -52,6 +52,8 @@ process_testcase() {
 
     # 设置固定参数
     add_option "--core-numbers=2"
+    add_option "--ta-multicore-type=zhangw" 
+    add_option "--ta-zs-task=true" 
     # add_option "--ta-icache-nsets=1"
     # add_option "--ta-icache-assoc=1"
     # add_option "--ta-dcache-linesize=64"
@@ -69,8 +71,8 @@ process_testcase() {
 	input="${TESTCASE_DIR}/build/main/TotalBound.xml"
 	awk '/<bounds>/{c++} c==2' "$input" | sed -n '/<bounds>/,/<\/bounds>/p' >> "${TEST_DIR}/out.xml"
 
-    input2="${TESTCASE_DIR}/build/main/instr_cnt.txt"
-    output="${TEST_DIR}/instr_cnt.txt"
+    input2="${TESTCASE_DIR}/build/main/Zhao_Output.txt"
+    output="${TEST_DIR}/Zhao_Output.txt"
     # 将 input2 的内容追加到 output 文件末尾
     cat "$input2" >> "$output"
 
@@ -87,7 +89,7 @@ case "$1" in
         fi
 		# 清空旧的输出文件
 		> "$TEST_DIR/out.txt"
-        > "$TEST_DIR/instr_cnt.txt"
+        > "$TEST_DIR/Zhao_Output.txt"
 
         # 查找所有test_开头的子目录
         find "$TEST_DIR" -maxdepth 1 -type d -name "test_*" | while read -r dir; do
