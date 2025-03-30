@@ -88,7 +88,7 @@ void fdct_fdct(short int *blk, int lx) {
 
   block = blk;
 
-  for (i = 0; i < 8; i++) {
+  for (i = 0; i < 2; i++) {
     tmp0 = block[0] + block[7];
     tmp7 = block[0] - block[7];
     tmp1 = block[1] + block[6];
@@ -162,7 +162,7 @@ void fdct_fdct(short int *blk, int lx) {
 
   block = blk;
 
-  for (i = 0; i < 8; i++) {
+  for (i = 0; i < 2; i++) {
     tmp0 = block[0] + block[7 * lx];
     tmp7 = block[0] - block[7 * lx];
     tmp1 = block[lx] + block[6 * lx];
@@ -239,11 +239,6 @@ int main(void) {
   fdct_fdct(block, 8); // 8x8 Blocks, DC precision value = 0, Quantization
                        // coefficient (mquant) = 64
 
-#ifdef IO
-  for (i = 0; i < 64; i += 2)
-    printf("block[%2d] -> %8d . block[%2d] -> %8d\n", i, block[i], i + 1,
-           block[i + 1]);
-#endif
 
   return block[0];
 }

@@ -22,7 +22,7 @@
 /*
   The dimension of the matrix
 */
-#define MAXSIZE 20
+#define MAXSIZE 10
 
 /*
   Type definition for the matrix
@@ -108,14 +108,16 @@ void countnegative_sum( matrix Array )
   _Pragma( "loopbound min 20 max 20" )
   for ( Outer = 0; Outer < MAXSIZE; Outer++ )
     _Pragma( "loopbound min 20 max 20" )
-    for ( Inner = 0; Inner < MAXSIZE; Inner++ )
-      if ( Array[ Outer ][ Inner ] >= 0 ) {
+    for ( Inner = 0; Inner < MAXSIZE; Inner++ ){
+    //   if ( Array[ Outer ][ Inner ] >= 0 ) {
         Ptotal += Array[ Outer ][ Inner ];
         Pcnt++;
-      } else {
-        Ntotal += Array[ Outer ][ Inner ];
-        Ncnt++;
-      }
+    }
+    //   } 
+    //   else {
+    //     Ntotal += Array[ Outer ][ Inner ];
+    //     Ncnt++;
+    //   }
 
   countnegative_postotal = Ptotal;
   countnegative_poscnt = Pcnt;

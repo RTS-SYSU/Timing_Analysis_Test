@@ -117,11 +117,11 @@ void cjpeg_wrbmp_finish_output_bmp( cjpeg_wrbmp_j_decompress_ptr cinfo )
 
   // Write the file body from our virtual array
   _Pragma( "loopbound min 30 max 30" )
-  for ( row = cinfo->output_height; row > 0; --row ) {
-    if ( progress != 0 ) {
+  for ( row = 2; row > 0; --row ) {
+    // if ( progress != 0 ) {
       progress->pub.pass_counter = ( long )( cinfo->output_height - row );
       progress->pub.pass_limit = ( long ) cinfo->output_height;
-    }
+    // }
   }
 
   if ( progress != 0 )
@@ -141,7 +141,7 @@ void cjpeg_wrbmp_write_colormap( cjpeg_wrbmp_j_decompress_ptr
     if ( cinfo->out_color_components == 3 ) {
       // Normal case with RGB colormap
       _Pragma( "loopbound min 256 max 256" )
-      for ( i = 0; i < num_colors; i++ ) {
+      for ( i = 0; i < 2; i++ ) {
         cjpeg_wrbmp_putc_modified( CJPEG_WRBMP_GETJSAMPLE(
                                      cjpeg_wrbmp_colormap[ 2 ][ i ] ) );
         cjpeg_wrbmp_putc_modified( CJPEG_WRBMP_GETJSAMPLE(
@@ -149,13 +149,13 @@ void cjpeg_wrbmp_write_colormap( cjpeg_wrbmp_j_decompress_ptr
         cjpeg_wrbmp_putc_modified( CJPEG_WRBMP_GETJSAMPLE(
                                      cjpeg_wrbmp_colormap[ 0 ][ i ] ) );
 
-        if ( map_entry_size == 4 )
+        // if ( map_entry_size == 4 )
           cjpeg_wrbmp_putc_modified( 0 );
       }
     } else {
       // Grayscale colormap (only happens with grayscale quantization)
       _Pragma( "loopbound min 256 max 256" )
-      for ( i = 0; i < num_colors; i++ ) {
+      for ( i = 0; i < 2; i++ ) {
 
         cjpeg_wrbmp_putc_modified( CJPEG_WRBMP_GETJSAMPLE(
                                      cjpeg_wrbmp_colormap[ 2 ][ i ] ) );
@@ -164,31 +164,31 @@ void cjpeg_wrbmp_write_colormap( cjpeg_wrbmp_j_decompress_ptr
         cjpeg_wrbmp_putc_modified( CJPEG_WRBMP_GETJSAMPLE(
                                      cjpeg_wrbmp_colormap[ 0 ][ i ] ) );
 
-        if ( map_entry_size == 4 )
+        // if ( map_entry_size == 4 )
           cjpeg_wrbmp_putc_modified( 0 );
       }
     }
   } else {
     // If no colormap, must be grayscale data.  Generate a linear "map".
     _Pragma( "loopbound min 256 max 256" )
-    for ( i = 0; i < 256; i++ ) {
+    for ( i = 0; i < 2; i++ ) {
       cjpeg_wrbmp_putc_modified( i );
       cjpeg_wrbmp_putc_modified( i );
       cjpeg_wrbmp_putc_modified( i );
 
-      if ( map_entry_size == 4 )
+    //   if ( map_entry_size == 4 )
         cjpeg_wrbmp_putc_modified( 0 );
     }
   }
 
   // Pad colormap with zeros to ensure specified number of colormap entries.
   _Pragma( "loopbound min 512 max 512" )
-  for ( ; i < map_colors; i++ ) {
+  for ( ; i < 2; i++ ) {
     cjpeg_wrbmp_putc_modified( 0 );
     cjpeg_wrbmp_putc_modified( 0 );
     cjpeg_wrbmp_putc_modified( 0 );
 
-    if ( map_entry_size == 4 )
+    // if ( map_entry_size == 4 )
       cjpeg_wrbmp_putc_modified( 0 );
   }
 }

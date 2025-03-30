@@ -47,7 +47,7 @@ int fib(int n) {
 
   Fnew = 1;
   Fold = 0;
-  for (i = 2; i <= 30 && i <= n; /* apsim_loop 1 0 */
+  for (i = 2; i <= 10 && i <= n; /* apsim_loop 1 0 */
        i++) {
     temp = Fnew;
     Fnew = Fnew + Fold;

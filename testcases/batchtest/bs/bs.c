@@ -40,6 +40,7 @@
 /*                                                                       */
 /*************************************************************************/
 
+#include <stdio.h>
 struct DATA {
   int key;
   int value;
@@ -62,33 +63,10 @@ int binary_search(int x) {
 
   low = 0;
   up = 14;
-  fvalue = -1 /* all data are positive */;
+  fvalue = 0 /* all data are positive */;
   while (low <= up) {
     mid = (low + up) >> 1;
-    if (data[mid].key == x) { /*  found  */
-      up = low - 1;
-      fvalue = data[mid].value;
-#ifdef DEBUG
-      printf("FOUND!!\n");
-#endif
-    } else /* not found */
-      if (data[mid].key > x) {
-        up = mid - 1;
-#ifdef DEBUG
-        printf("MID-1\n");
-#endif
-      } else {
-        low = mid + 1;
-#ifdef DEBUG
-        printf("MID+1\n");
-#endif
-      }
-#ifdef DEBUG
-    cnt1++;
-#endif
+    up = mid - 1;
   }
-#ifdef DEBUG
-  printf("Loop Count : %d\n", cnt1);
-#endif
   return fvalue;
 }

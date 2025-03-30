@@ -3,7 +3,15 @@
         "core": 0,
         "tasks": [
             {
-                "function": "rad2deg"
+                "function": "cover"
+            }
+        ]
+    },
+    {
+        "core": 1,
+        "tasks": [
+            {
+                "function": "fdct"
             }
         ]
     }

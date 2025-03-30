@@ -79,6 +79,7 @@ cl::opt<MultiCoreType> MulCType(
                clEnumValN(MultiCoreType::LiangY, "liangy",
                           "In paper:Timing analysis of concurrent programs "
                           "running on shared cache multi-cores"),
+               clEnumValN(MultiCoreType::INTR, "intr", "intr analysis"),
                clEnumValN(MultiCoreType::NONE, "none", "no analysis")),
     cl::cat(MultiCoreCat));
 extern llvm::cl::opt<bool> TimingAnomalyAnalysis(

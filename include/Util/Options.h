@@ -27,7 +27,7 @@
 #ifndef UTIL_OPTIONS_H
 #define UTIL_OPTIONS_H
 
-//#define CPLEXINSTALLED
+// #define CPLEXINSTALLED
 #define GUROBIINSTALLED
 
 #include "llvm/Support/CommandLine.h"
@@ -35,7 +35,7 @@
 // the following include would have closed
 // in include cycle.
 // Thus, we need a forward declaration.
-//#include "PathAnalysis/GetEdges.h"
+// #include "PathAnalysis/GetEdges.h"
 namespace TimingAnalysisPass {
 enum class GetEdges_method : char;
 }
@@ -44,9 +44,10 @@ using TimingAnalysisPass::GetEdges_method;
 enum class MultiCoreType {
   LiangY, // Timing analysis of concurrent programs running on shared cache
           // multi-cores
-  ZhangW,  // Precise and scalable shared cache contention analysis for WCET
+  ZhangW, // Precise and scalable shared cache contention analysis for WCET
           // estimation
-  NONE  // 不做并行任务的干扰分析
+  INTR,   // 只分析指令数目
+  NONE    // 不做并行任务的干扰分析
 };
 /**
  * The available analysis types
@@ -122,7 +123,7 @@ enum class CompositionalAnalysisType {
           /// cache. This Cache is not analysed.
   DCACHE, /// Timing Analysis uses an always hit cache for the data cache. This
           /// Cache is not analysed.
-// jjy: 层2cache
+          // jjy: 层2cache
   L2CACHE,
   DRAMREFRESH,      /// Timing Analysis should analyse DRAM refreshes in a
                     /// compositional way.
@@ -249,16 +250,15 @@ enum class ArrivalCurveIlpObjectiveType { VARIANT1, VARIANT2, COMBINED };
 
 // Global options
 
-//jjy:多核策略改动标记
+// jjy:多核策略改动标记
 extern llvm::cl::opt<unsigned> CoreNums;
 extern llvm::cl::opt<unsigned> CurrentCore;
 extern llvm::cl::opt<bool> SPersistenceA;
 extern llvm::cl::opt<bool> TimingAnomalyAnalysis;
-    /**
-     * File that record the running info.
-     */
-    extern llvm::cl::opt<std::string>
-        CoreInfo;
+/**
+ * File that record the running info.
+ */
+extern llvm::cl::opt<std::string> CoreInfo;
 extern llvm::cl::opt<bool> ParallelPrograms;
 /*
   Choose the calculation method of the L2 cache contention

@@ -30,7 +30,7 @@
 
 */
 
-#define N 16
+#define N 1
 
 
 /*

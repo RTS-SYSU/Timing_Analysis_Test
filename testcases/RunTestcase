@@ -14,8 +14,8 @@ if [ $# -lt 1 ]; then
 fi
 
 # # 加载依赖脚本
-# source "$SCRIPT_DIR/util_scripts/OptionHandler.sh"
-# source "$SCRIPT_DIR/util_scripts/llvmta_utils.sh"
+source "$SCRIPT_DIR/util_scripts/OptionHandler.sh"
+source "$SCRIPT_DIR/util_scripts/llvmta_utils.sh"
 
 # # 初始化选项
 # init_options "${@:2}"  # 跳过第一个参数（testcase/test）
@@ -24,8 +24,8 @@ fi
 # 处理测试目标
 process_testcase() {
 	# 加载依赖脚本
-	source "$SCRIPT_DIR/util_scripts/OptionHandler.sh"
-	source "$SCRIPT_DIR/util_scripts/llvmta_utils.sh"
+	# source "$SCRIPT_DIR/util_scripts/OptionHandler.sh"
+	# source "$SCRIPT_DIR/util_scripts/llvmta_utils.sh"
 
 	# 初始化选项
 	init_options "${@:2}"  # 跳过第一个参数（testcase/test）
@@ -36,9 +36,14 @@ process_testcase() {
 
     # 检查必要文件
     loopanno="${TESTCASE_DIR}/LoopAnnotations.csv"
-	# 修改核心信息文件匹配规则（示例）
-	coreinfo=$(find "$TESTCASE_DIR" -maxdepth 1 -name "test_*.json")
+	# 修改核心信息文件匹配规则
+    coreinfo=$(find "$TESTCASE_DIR" -maxdepth 1 -name "*.json")
 
+    # 如果没有匹配到json文件，跳过
+    if [ -z "$coreinfo" ]; then
+        echo "跳过：未找到 JSON 文件，$TESTCASE_DIR"
+        return
+    fi
 
     # 添加核心信息
     if [ -f "$coreinfo" ]; then
@@ -52,6 +57,7 @@ process_testcase() {
 
     # 设置固定参数
     add_option "--core-numbers=2"
+    add_option "--ta-multicore-type=intr"
     # add_option "--ta-icache-nsets=1"
     # add_option "--ta-icache-assoc=1"
     # add_option "--ta-dcache-linesize=64"
@@ -66,37 +72,37 @@ process_testcase() {
     echo "执行命令：${cmdline[@]}"
     "${cmdline[@]}"
 
-	input="${TESTCASE_DIR}/build/main/TotalBound.xml"
-	awk '/<bounds>/{c++} c==2' "$input" | sed -n '/<bounds>/,/<\/bounds>/p' >> "${TEST_DIR}/out.xml"
+	# input="${TESTCASE_DIR}/build/main/TotalBound.xml"
+	# awk '/<bounds>/{c++} c==2' "$input" | sed -n '/<bounds>/,/<\/bounds>/p' >> "${TEST_DIR}/out.xml"
 
-    input2="${TESTCASE_DIR}/build/main/instr_cnt.txt"
-    output="${TEST_DIR}/instr_cnt.txt"
+    input2="${TESTCASE_DIR}/build/main/Zhao_Output.txt"
+    output="${TEST_DIR}/Zhao_Output.txt"
     # 将 input2 的内容追加到 output 文件末尾
+    echo "${TESTCASE_DIR}" >> "$output"
     cat "$input2" >> "$output"
-
+    echo "--------------------------------------------------------------" >> "$output"
 }
+echo "参数 \$1 是：[$1]"
 
 # 主逻辑
 case "$1" in
     batchtest)
-        # 批量处理test目录下的所有test_*子目录
-        TEST_DIR="${BENCHMARK_DIR}/batchtest"
+        TEST_DIR="${BENCHMARK_DIR}/$1"
         if [ ! -d "$TEST_DIR" ]; then
             echo "错误：找不到test目录 $TEST_DIR" >&2
             exit 2
         fi
 		# 清空旧的输出文件
 		> "$TEST_DIR/out.txt"
-        > "$TEST_DIR/instr_cnt.txt"
+        > "$TEST_DIR/Zhao_Output.txt"
 
-        # 查找所有test_开头的子目录
-        find "$TEST_DIR" -maxdepth 1 -type d -name "test_*" | while read -r dir; do
-            # 跳过无效目录
-            [ -d "$dir" ] || continue
-            # 重置用户选项（重要！）
-            USEROPTS=()
-            # 处理每个测试用例
-            process_testcase "$dir"
+        for dir in "$TEST_DIR"/*; do
+            if [ -d "$dir" ]; then
+                # 重置用户选项（重要！）
+                USEROPTS=()
+                # 处理每个测试用例
+                process_testcase "$dir"
+            fi
         done
         ;;
     *)
@@ -106,6 +112,7 @@ case "$1" in
             -type d \
             -wholename "*/$TESTCASE" \
             ! -wholename "*/build/*")
+        TEST_DIR=$TESTCASE_DIR
 
         if [ ! -d "$TESTCASE_DIR" ]; then
             echo "无法找到测试用例: $TESTCASE" >&2

@@ -208,8 +208,9 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
   }
   std::map<std::string, unsigned> func2corenum; // 冗余但是先写着
   for (auto Clist : taskMap) {
-    outs() << "Timing Analysis for Core: " << Clist.first << "\n";
     CurrentCore = Clist.first;
+    outs() << "Timing Analysis for Core: " << Clist.first << "\n";
+
     for (string entry : Clist.second) {
       AnalysisEntryPoint = entry;
       func2corenum[entry] = CurrentCore;
@@ -267,7 +268,10 @@ bool TimingAnalysisMain::doFinalization(Module &M) {
       PersistenceScopeInfo::deletper();
     }
   }
-
+  if (MulCType == MultiCoreType::INTR) {
+    UrGraph urg(mcif.coreinfo);
+    urg.handsome_ceop_instr(); // 获取各CEOP的instr数
+  }
   if (MulCType == MultiCoreType::ZhangW) {
     assert((MuArchType == MicroArchitecturalType::INORDER ||
             MuArchType == MicroArchitecturalType::STRICTINORDER) &&
@@ -328,12 +332,13 @@ void TimingAnalysisMain::dispatchValueAnalysis() {
     CvAnaInfo->dump(Myfile);
     Myfile.close();
   }
-  if (MulCType == MultiCoreType::ZhangW) {
-    if (ALLLoopBoundInfo.count(AnalysisEntryPoint) == 0) {
-      ALLLoopBoundInfo[AnalysisEntryPoint] = new LoopBoundInfoPass();
-      ALLLoopBoundInfo[AnalysisEntryPoint]->copy(LoopBoundInfo);
-    }
-  }
+
+  // if (MulCType == MultiCoreType::INTR) {
+  //   if (ALLLoopBoundInfo.count(AnalysisEntryPoint) == 0) {
+  //     ALLLoopBoundInfo[AnalysisEntryPoint] = new LoopBoundInfoPass();
+  //     ALLLoopBoundInfo[AnalysisEntryPoint]->copy(LoopBoundInfo);
+  //   }
+  // }
 
   AddressInformationImpl<ConstantValueDomain<ISA>> AddrInfo(*CvAnaInfo);
 
@@ -370,7 +375,7 @@ void TimingAnalysisMain::dispatchValueAnalysis() {
 
   // WCET
   // Select the analysis to execute
-  if (1) {
+  if (MulCType != MultiCoreType::INTR) {
     dispatchAnalysisType(AddrInfo);
   }
 

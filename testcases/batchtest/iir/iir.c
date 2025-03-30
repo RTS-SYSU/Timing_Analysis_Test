@@ -55,7 +55,7 @@
 void iir_init( void );
 int iir_return( void );
 void iir_main( void );
-int main( void );
+int iir_start( void );
 
 
 /*
@@ -80,11 +80,11 @@ void iir_init( void )
 
 
   _Pragma( "loopbound min 20 max 20" )
-  for ( f = 0 ; f < 5 * 4; f++ )
+  for ( f = 0 ; f < 4; f++ )
     iir_coefficients[ f ] = 7;
 
   _Pragma( "loopbound min 8 max 8" )
-  for ( f = 0 ; f < 2 * 4; f++ )
+  for ( f = 0 ; f < 4; f++ )
     iir_wi[ f ] = 0;
 
   iir_x = ( float ) 1;
@@ -94,12 +94,12 @@ void iir_init( void )
   */
   p = ( unsigned char * ) &iir_coefficients[ 0 ];
   _Pragma( "loopbound min 80 max 80" )
-  for ( i = 0; i < sizeof( iir_coefficients ); ++i, ++p )
+  for ( i = 0; i < 4; ++i, ++p )
     *p ^= bitmask;
 
   p = ( unsigned char * ) &iir_wi[ 0 ];
   _Pragma( "loopbound min 32 max 32" )
-  for ( i = 0; i < sizeof( iir_wi ); ++i, ++p )
+  for ( i = 0; i < 4; ++i, ++p )
     *p ^= bitmask;
 }
 
@@ -111,7 +111,7 @@ int iir_return( void )
 
 
   _Pragma( "loopbound min 8 max 8" )
-  for ( f = 0 ; f < 2 * 4; f++ )
+  for ( f = 0 ; f < 4; f++ )
     checksum += iir_wi[ f ];
 
   return ( ( int ) checksum );

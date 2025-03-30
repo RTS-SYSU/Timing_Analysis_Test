@@ -77,7 +77,7 @@ void _Pragma( "entrypoint" ) deg2rad_main( void )
 {
   /* convert some rads to degrees */
   _Pragma( "loopbound min 361 max 361" )
-  for ( deg2rad_X = 0.0f; deg2rad_X <= 360.0f; deg2rad_X += 1.0f )
+  for ( deg2rad_X = 0.0f; deg2rad_X <= 10.0f; deg2rad_X += 1.0f )
     deg2rad_Y += deg2rad( deg2rad_X );
 }
 

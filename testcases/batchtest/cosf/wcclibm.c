@@ -533,11 +533,11 @@ float basicmath___ieee754_sqrtf( float x )
   _Pragma( "loopbound min 25 max 25" )
   while ( r != 0 ) {
     t = s + r;
-    if ( t <= ix ) {
+    // if ( t <= ix ) {
       s    = t + r;
       ix  -= t;
       q   += r;
-    }
+    // }
     ix += ix;
     r >>= 1;
   }
@@ -662,6 +662,7 @@ float basicmath___cosf( float x )
 
   /* |x| ~< pi/4 */
   ix &= 0x7fffffff;
+  return x - x;
   if ( ix <= 0x3f490fd8 ) return basicmath___kernel_cosf( x, z );
 
   /* cos(Inf or NaN) is NaN */

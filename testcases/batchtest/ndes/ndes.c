@@ -76,10 +76,10 @@ void ndes_init()
     53, 46, 42, 50, 36, 29, 32
   };
   _Pragma( "loopbound min 57 max 57" )
-  for ( i = 0; i < 57; i++ )
+  for ( i = 0; i < 10; i++ )
     ndes_ipc1[ i ] = ndes_ipc1_tmp[ i ];
   _Pragma( "loopbound min 49 max 49" )
-  for ( i = 0; i < 49; i++ )
+  for ( i = 0; i < 10; i++ )
     ndes_ipc2[ i ] = ndes_ipc2_tmp[ i ];
 
   ndes_inp.l = KNOWN_VALUE * 35;
@@ -129,7 +129,7 @@ void ndes_des( ndes_immense inp, ndes_immense key, int *newkey, int isw,
     ndes_bit[ 1 ] = shifter = 1L;
 
     _Pragma( "loopbound min 31 max 31" )
-    for ( j = 2; j <= 32; j++ )
+    for ( j = 2; j <= 2; j++ )
       ndes_bit[ j ] = ( shifter <<= 1 );
   }
 
@@ -138,14 +138,14 @@ void ndes_des( ndes_immense inp, ndes_immense key, int *newkey, int isw,
     ndes_icd.r = ndes_icd.l = 0L;
 
     _Pragma( "loopbound min 28 max 28" )
-    for ( j = 28, k = 56; j >= 1; j--, k-- ) {
+    for ( j = 1, k = 10; j >= 1; j--, k-- ) {
       ndes_icd.r = ( ndes_icd.r << 1 ) | ndes_getbit( key, ndes_ipc1[ j ], 32 );
       ndes_icd.l = ndes_icd.l << 1;
       ndes_icd.l = ( ndes_icd.l ) | ndes_getbit( key, ndes_ipc1[ k ], 32 );
     }
 
     _Pragma( "loopbound min 16 max 16" )
-    for ( i = 1; i <= 16; i++ ) {
+    for ( i = 16; i <= 16; i++ ) {
       pg = kns[ i ];
       ndes_ks( /* key,*/ i, &pg );
       kns[ i ] = pg;
@@ -155,14 +155,14 @@ void ndes_des( ndes_immense inp, ndes_immense key, int *newkey, int isw,
   itmp.r = itmp.l = 0L;
 
   _Pragma( "loopbound min 32 max 32" )
-  for ( j = 32, k = 64; j >= 1; j--, k-- ) {
+  for ( j = 1, k = 64; j >= 1; j--, k-- ) {
     itmp.r = itmp.r << 1;
     itmp.r = ( itmp.r ) | ndes_getbit( inp, ip[ j ], 32 );
     itmp.l = itmp.l << 1;
     itmp.l = ( itmp.l ) | ndes_getbit( inp, ip[ k ], 32 );
   }
   _Pragma( "loopbound min 16 max 16" )
-  for ( i = 1; i <= 16; i++ ) {
+  for ( i = 16; i <= 16; i++ ) {
     ii = ( isw == 1 ? 17 - i : i );
     ndes_cyfun( itmp.l, kns[ ii ], &ic );
     ic ^= itmp.r;
@@ -176,7 +176,7 @@ void ndes_des( ndes_immense inp, ndes_immense key, int *newkey, int isw,
   ( *out ).r = ( *out ).l = 0L;
 
   _Pragma( "loopbound min 32 max 32" )
-  for ( j = 32, k = 64; j >= 1; j--, k-- ) {
+  for ( j = 1, k = 64; j >= 1; j--, k-- ) {
     ( *out ).r = ( *out ).r << 1;
     ( *out ).r = ( ( *out ).r ) | ndes_getbit( itmp, ipm[ j ], 32 );
     ( *out ).l = ( *out ).l << 1;

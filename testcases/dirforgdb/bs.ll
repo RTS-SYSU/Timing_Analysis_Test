@@ -100,7 +100,7 @@ attributes #1 = { nobuiltin "no-builtins" }
 !llvm.module.flags = !{!2, !3, !4, !5, !6, !7, !8, !9, !10}
 !llvm.ident = !{!11}
 
-!0 = distinct !DICompileUnit(language: DW_LANG_C99, file: !1, producer: "clang version 14.0.6 (git@github.com:RTS-SYSU/LLVM-TA.git e41533821e0a477e7f77d0cd0a017517339cd052)", isOptimized: false, runtimeVersion: 0, emissionKind: LineTablesOnly, splitDebugInlining: false, nameTableKind: None)
+!0 = distinct !DICompileUnit(language: DW_LANG_C99, file: !1, producer: "clang version 14.0.6 (git@github.com:RTS-SYSU/LLVM-TA.git 433861ba697f56477d8849df0fa6165a1e09982d)", isOptimized: false, runtimeVersion: 0, emissionKind: LineTablesOnly, splitDebugInlining: false, nameTableKind: None)
 !1 = !DIFile(filename: "/workspaces/llvmta/testcases/test/bs.c", directory: "/workspaces/llvmta/testcases/dirforgdb", checksumkind: CSK_MD5, checksum: "bd8125837db9308c88c5ffb782c95b7d")
 !2 = !{i32 7, !"Dwarf Version", i32 5}
 !3 = !{i32 2, !"Debug Info Version", i32 3}
@@ -111,7 +111,7 @@ attributes #1 = { nobuiltin "no-builtins" }
 !8 = !{i32 1, !"sign-return-address-all", i32 0}
 !9 = !{i32 1, !"sign-return-address-with-bkey", i32 0}
 !10 = !{i32 7, !"frame-pointer", i32 2}
-!11 = !{!"clang version 14.0.6 (git@github.com:RTS-SYSU/LLVM-TA.git e41533821e0a477e7f77d0cd0a017517339cd052)"}
+!11 = !{!"clang version 14.0.6 (git@github.com:RTS-SYSU/LLVM-TA.git 433861ba697f56477d8849df0fa6165a1e09982d)"}
 !12 = distinct !DISubprogram(name: "bs", scope: !13, file: !13, line: 71, type: !14, scopeLine: 72, spFlags: DISPFlagDefinition, unit: !0, retainedNodes: !15)
 !13 = !DIFile(filename: "test/bs.c", directory: "/workspaces/llvmta/testcases", checksumkind: CSK_MD5, checksum: "bd8125837db9308c88c5ffb782c95b7d")
 !14 = !DISubroutineType(types: !15)

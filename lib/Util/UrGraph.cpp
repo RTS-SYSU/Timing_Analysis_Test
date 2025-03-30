@@ -4,7 +4,7 @@
 UrGraph::UrGraph(std::vector<std::vector<std::string>> &setc) {
   this->coreinfo = setc; // in base
   // 进行UR和CEOP的获取
-  for (unsigned i = 0; i < CoreNums; ++i) {
+  for (unsigned i = 0; i < coreinfo.size(); ++i) { 
     outs() << " -> UR Analysis for core: " << i;
 
     for (std::string &functionName : coreinfo[i]) {
@@ -17,28 +17,30 @@ UrGraph::UrGraph(std::vector<std::vector<std::string>> &setc) {
   // handsome_ceop_instr();
 }
 
-void UrGraph::handsome_ceop_instr(){
+void UrGraph::handsome_ceop_instr() {
   std::ofstream myfile;
   std::string fileName = "Zhao_Output.txt";
   myfile.open(fileName, std::ios_base::app);
-  for(auto &tmp_core:CEOPs){
+  for (auto &tmp_core : CEOPs) {
     unsigned core_num = tmp_core.first;
-    for(auto &tmp_task:tmp_core.second){
+    for (auto &tmp_task : tmp_core.second) {
       std::string enrty_name = tmp_task.first;
       unsigned num_ceop = 0;
-      for(CEOP &tmp_ceop:tmp_task.second){
+      unsigned max = 0;
+      for (CEOP &tmp_ceop : tmp_task.second) {
         num_ceop++;
         unsigned sum_of_instr = 0;
-        for(UnorderedRegion &tmp_ur:tmp_ceop.URs){
-          for(auto &tmp_pair:tmp_ur.mi2xclass){
+        for (UnorderedRegion &tmp_ur : tmp_ceop.URs) {
+          for (auto &tmp_pair : tmp_ur.mi2xclass) {
             CtxMI tmp_cm = tmp_pair.first;
-            sum_of_instr +=
-            ctxmi_miai[core_num][enrty_name][tmp_cm].x;
+            sum_of_instr += ctxmi_miai[core_num][enrty_name][tmp_cm].x;
           }
         }
-        myfile<< enrty_name << "_" << "_CEOP_" << num_ceop 
-          << " have " << sum_of_instr << " instructions\n";
+        myfile << enrty_name << "_" << "_CEOP_" << num_ceop << " have "
+               << sum_of_instr << " instructions" << std::endl;
+        max = max > sum_of_instr ? max : sum_of_instr;
       }
+      myfile << enrty_name << "_" << "MAX_CEOP_: " << max << std::endl;
     }
   }
   myfile.close();
@@ -334,7 +336,7 @@ unsigned UrGraph::bd_helper1(std::string entry,
                              const llvm::MachineBasicBlock *MBB,
                              const llvm::MachineLoop *Loop) {
   unsigned x_local = 1;
-  x_local *= ALLLoopBoundInfo[entry]->GgetUpperLoopBound(Loop);
+  x_local *= TimingAnalysisPass::LoopBoundInfo->GgetUpperLoopBound(Loop);
   for (auto *Subloop : Loop->getSubLoops()) {
     if (Subloop->getParentLoop() == Loop // 必须是直接儿子，不能是孙子等
         && Subloop->contains(MBB)) {
@@ -354,7 +356,7 @@ unsigned UrGraph::bd_helper2(std::string entry, const llvm::MachineLoop *Loop) {
   // } else {
   //   assert(0 && "why we have a loop but no LoopBound?");
   // }
-  scalar *= ALLLoopBoundInfo[entry]->GgetUpperLoopBound(Loop);
+  scalar *= TimingAnalysisPass::LoopBoundInfo->GgetUpperLoopBound(Loop);
   if (Loop->getParentLoop() == nullptr) { // 已经是最外层
     return scalar;
   } else {

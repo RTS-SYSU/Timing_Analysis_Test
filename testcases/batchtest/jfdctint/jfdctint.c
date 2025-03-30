@@ -57,7 +57,7 @@
    files.
 */
 
-#define DCTSIZE 8
+#define DCTSIZE 4
 #define DESCALE(x,n)  (((x) + (((int)1) << ((n)-1))) >> (n))
 
 /*
@@ -150,7 +150,7 @@ void jfdctint_init()
   seed = 1;
 
   _Pragma( "loopbound min 64 max 64" )
-  for ( i = 0; i < 64; i++ ) {
+  for ( i = 0; i < 16; i++ ) {
     seed = ( ( seed * 133 ) + 81 ) % 65535;
     jfdctint_data[ i ] = seed;
   }
@@ -163,7 +163,7 @@ int jfdctint_return()
   int checksum = 0;
   int i;
   _Pragma( "loopbound min 64 max 64" )
-  for ( i = 0; i < 64; ++i )
+  for ( i = 0; i < 16; ++i )
     checksum += jfdctint_data[ i ];
   return ( ( checksum == jfdctint_CHECKSUM ) ? 0 : -1 );
 }

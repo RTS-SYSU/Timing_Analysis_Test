@@ -52,7 +52,6 @@ void insertsort_initialize( unsigned int *array )
 {
 
   register volatile int i;
-  _Pragma( "loopbound min 11 max 11" )
   for ( i = 0; i < 11; i++ )
     insertsort_a[ i ] = array[ i ];
 
@@ -77,7 +76,6 @@ int insertsort_return()
 {
   int i, returnValue = 0;
 
-  _Pragma( "loopbound min 11 max 11" )
   for ( i = 0; i < 11; i++ )
     returnValue += insertsort_a[ i ];
 
@@ -90,50 +88,27 @@ int insertsort_return()
 */
 
 
-void _Pragma( "entrypoint" ) insertsort_main()
+void insertsort_main()
 {
   int  i, j, temp;
   i = 2;
 
   insertsort_iters_i = 0;
 
-  _Pragma( "loopbound min 9 max 9" )
-  while ( i <= 10 ) {
-
-    insertsort_iters_i++;
-
-    j = i;
-
-    insertsort_iters_a = 0;
-
-    _Pragma( "loopbound min 1 max 9" )
-    while ( insertsort_a[ j ] < insertsort_a[ j - 1 ] ) {
-      insertsort_iters_a++;
-
+  for(int i=1;i<=9;i++){
+    for(int j=1;j<=9;j++){
       temp = insertsort_a[ j ];
       insertsort_a[ j ] = insertsort_a[ j - 1 ];
       insertsort_a[ j - 1 ] = temp;
-      j--;
     }
-
-    if ( insertsort_iters_a < insertsort_min_a )
-      insertsort_min_a = insertsort_iters_a;
-    if ( insertsort_iters_a > insertsort_max_a )
-      insertsort_max_a = insertsort_iters_a;
-
-    i++;
   }
-
-  if ( insertsort_iters_i < insertsort_min_i )
-    insertsort_min_i = insertsort_iters_i;
-  if ( insertsort_iters_i > insertsort_max_i )
-    insertsort_max_i = insertsort_iters_i;
 }
 
 int main( void )
 {
   insertsort_init();
   insertsort_main();
-  return ( insertsort_return() );
+  // return ( insertsort_return() );
+  return 0;
 }
 
