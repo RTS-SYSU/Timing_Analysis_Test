@@ -59,9 +59,9 @@
   Macro definitions
 */
 
-#define X 1 /* first dimension of array A */
-#define Y 1 /* second dimension of array A, first dimension of array B */
-#define Z 1 /* second dimension of array B */
+#define X 2 /* first dimension of array A */
+#define Y 2 /* second dimension of array A, first dimension of array B */
+#define Z 2 /* second dimension of array B */
 
 /*
   Forward declaration of functions

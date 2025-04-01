@@ -66,7 +66,7 @@ int rad2deg_return(void) {
 
 void _Pragma("entrypoint") rad2deg_main(void) {
   _Pragma("loopbound min 360 max 360") for (rad2deg_X = 0.0f;
-                                            rad2deg_X <= PI / 180;
+                                            rad2deg_X <= PI / 90;
                                             rad2deg_X += (PI / 180))
       rad2deg_Y += rad2deg(rad2deg_X);
 }

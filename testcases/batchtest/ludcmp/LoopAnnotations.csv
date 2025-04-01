@@ -1,7 +1,7 @@
 # Type: Normal
 ludcmp_init|Loop in file ludcmpc near line 53|BB#3:for.cond1<header><exiting>_BB#4:for.body3_BB#5:if.then_BB#6:if.end_BB#7:if.then14_BB#8:if.end19_BB#9:for.inc<latch>|1
-ludcmp_init|Loop in file ludcmpc near line 50|BB#1:for.cond<header><exiting>_BB#2:for.body_BB#3:for.cond1_BB#4:for.body3_BB#5:if.then_BB#6:if.end_BB#7:if.then14_BB#8:if.end19_BB#9:for.inc_BB#10:for.end_BB#11:if.then22_BB#12:if.end26_BB#13:for.inc27<latch>|2
-ludcmp_return|Loop in file ludcmpc near line 76|BB#1:for.cond<header><exiting>_BB#2:for.body_BB#3:for.inc<latch>|2
+ludcmp_init|Loop in file ludcmpc near line 50|BB#1:for.cond<header><exiting>_BB#2:for.body_BB#3:for.cond1_BB#4:for.body3_BB#5:if.then_BB#6:if.end_BB#7:if.then14_BB#8:if.end19_BB#9:for.inc_BB#10:for.end_BB#11:if.then22_BB#12:if.end26_BB#13:for.inc27<latch>|1
+ludcmp_return|Loop in file ludcmpc near line 76|BB#1:for.cond<header><exiting>_BB#2:for.body_BB#3:for.inc<latch>|1
 ludcmp_test|Loop in file ludcmpc near line 155|BB#38:for.cond86<header><exiting>_BB#39:for.body88_BB#40:for.inc93<latch>|1
 ludcmp_test|Loop in file ludcmpc near line 151|BB#36:for.cond81<header><exiting>_BB#37:for.body83_BB#38:for.cond86_BB#39:for.body88_BB#40:for.inc93_BB#41:for.end95_BB#42:for.inc100<latch>|1
 ludcmp_test|Loop in file ludcmpc near line 142|BB#30:for.cond62<header><exiting>_BB#31:for.body64_BB#32:for.inc69<latch>|1

@@ -9,7 +9,7 @@ ndes_des|Loop in file ndes.c near line 127|BB#8:for.cond3<header><exiting>_BB#9:
 ndes_des|Loop in file ndes.c near line 119|BB#2:for.cond<header><exiting>_BB#3:for.body_BB#4:for.inc<latch>|1
 ndes_ks|Loop in file ndes.c near line 313|BB#11:for.cond20<header><exiting>_BB#12:for.body22_BB#13:for.inc53<latch>|16
 ndes_ks|Loop in file ndes.c near line 305|BB#6:for.cond<header><exiting>_BB#7:for.body_BB#8:for.inc<latch>|2
-ndes_cyfun|Loop in file ndes.c near line 286|BB#13:for.cond84<header><exiting>_BB#14:for.body87_BB#15:for.inc89<latch>|32
+ndes_cyfun|Loop in file ndes.c near line 286|BB#13:for.cond84<header><exiting>_BB#14:for.body87_BB#15:for.inc89<latch>|8
 ndes_cyfun|Loop in file ndes.c near line 275|BB#9:for.cond53<header><exiting>_BB#10:for.body56_BB#11:for.inc81<latch>|8
 ndes_cyfun|Loop in file ndes.c near line 266|BB#5:for.cond40<header><exiting>_BB#6:for.body42_BB#7:for.inc50<latch>|4
 ndes_cyfun|Loop in file ndes.c near line 254|BB#1:for.cond<header><exiting>_BB#2:for.body_BB#3:for.inc<latch>|16

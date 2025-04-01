@@ -6,4 +6,4 @@ cjpeg_wrbmp_write_colormap|Loop in file cjpeg_wrbmp.c near line 144|BB#3:for.con
 cjpeg_wrbmp_write_colormap|Loop in file cjpeg_wrbmp.c near line 158|BB#8:for.cond11<header><exiting>_BB#9:for.body14_BB#10:for.inc25<latch>|2
 cjpeg_wrbmp_initInput|Loop in file input.c near line 83|BB#3:for.cond1<header><exiting>_BB#4:for.body3_BB#5:for.inc<latch>|2
 cjpeg_wrbmp_initInput|Loop in file input.c near line 81|BB#1:for.cond<header><exiting>_BB#2:for.body_BB#3:for.cond1_BB#4:for.body3_BB#5:for.inc_BB#6:for.end_BB#7:for.inc7<latch>|2
-memcpy|Loop in file memory.c near line 8|BB#1:for.cond<header><exiting>_BB#2:for.body_BB#3:for.inc<latch>|768
+memcpy|Loop in file memory.c near line 8|BB#1:for.cond<header><exiting>_BB#2:for.body_BB#3:for.inc<latch>|500

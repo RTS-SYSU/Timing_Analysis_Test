@@ -57,12 +57,7 @@ process_testcase() {
 
     # 设置固定参数
     add_option "--core-numbers=2"
-<<<<<<< HEAD
     add_option "--ta-multicore-type=intr"
-=======
-    add_option "--ta-multicore-type=zhangw" 
-    add_option "--ta-zs-task=true" 
->>>>>>> origin/main
     # add_option "--ta-icache-nsets=1"
     # add_option "--ta-icache-assoc=1"
     # add_option "--ta-dcache-linesize=64"

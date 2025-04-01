@@ -67,7 +67,7 @@ entry:
 for.cond:                                         ; preds = %for.inc, %entry
   %storemerge = phi float [ 0.000000e+00, %entry ], [ %add1, %for.inc ], !dbg !156
   store float %storemerge, float* @rad2deg_X, align 4, !dbg !156
-  %cmp = fcmp ugt float %storemerge, 0x3F91DCF4E0000000, !dbg !157
+  %cmp = fcmp ugt float %storemerge, 0x3FA1DCF4E0000000, !dbg !157
   br i1 %cmp, label %for.end, label %for.body, !dbg !159
 
 for.body:                                         ; preds = %for.cond
