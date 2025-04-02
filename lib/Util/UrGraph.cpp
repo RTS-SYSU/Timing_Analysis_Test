@@ -36,6 +36,7 @@ void UrGraph::handsome_ceop_instr() {
             sum_of_instr += ctxmi_miai[core_num][enrty_name][tmp_cm].x;
           }
         }
+        sum_of_instr *= Latency; // assume all miss
         myfile << enrty_name << "_" << "_CEOP_" << num_ceop << " have "
                << sum_of_instr << " instructions" << std::endl;
         max = max > sum_of_instr ? max : sum_of_instr;

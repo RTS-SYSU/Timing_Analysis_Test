@@ -63,7 +63,7 @@ process_testcase() {
     # add_option "--ta-dcache-linesize=64"
     # add_option "--ta-dcache-nsets=1"
     # add_option "--ta-dcache-assoc=1"
-    # add_option "--ta-mem-latency=150"
+    add_option "--ta-mem-latency=113"
     # add_option "--ta-dcache-persistence=none"
     # add_option "--ta-icache-persistence=none"
 

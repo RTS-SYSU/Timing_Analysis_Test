@@ -1,0 +1,171 @@
+/workspaces/llvmta/testcases/batchtest/binarysearch
+main__CEOP_1 have 116616 instructions
+main_MAX_CEOP_: 116616
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/bs
+main__CEOP_1 have 1582 instructions
+main_MAX_CEOP_: 1582
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/bsort
+main__CEOP_1 have 17176 instructions
+main_MAX_CEOP_: 17176
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/cjpeg_wrbmp
+main__CEOP_1 have 969879 instructions
+main__CEOP_2 have 972365 instructions
+main__CEOP_3 have 972365 instructions
+main__CEOP_4 have 970444 instructions
+main__CEOP_5 have 972930 instructions
+main__CEOP_6 have 972930 instructions
+main__CEOP_7 have 972365 instructions
+main__CEOP_8 have 974851 instructions
+main__CEOP_9 have 974851 instructions
+main__CEOP_10 have 972930 instructions
+main__CEOP_11 have 975416 instructions
+main__CEOP_12 have 975416 instructions
+main__CEOP_13 have 972365 instructions
+main__CEOP_14 have 974851 instructions
+main__CEOP_15 have 974851 instructions
+main__CEOP_16 have 972930 instructions
+main__CEOP_17 have 975416 instructions
+main__CEOP_18 have 975416 instructions
+main__CEOP_19 have 970444 instructions
+main__CEOP_20 have 972930 instructions
+main__CEOP_21 have 972930 instructions
+main__CEOP_22 have 971009 instructions
+main__CEOP_23 have 973495 instructions
+main__CEOP_24 have 973495 instructions
+main__CEOP_25 have 972930 instructions
+main__CEOP_26 have 975416 instructions
+main__CEOP_27 have 975416 instructions
+main__CEOP_28 have 973495 instructions
+main__CEOP_29 have 975981 instructions
+main__CEOP_30 have 975981 instructions
+main__CEOP_31 have 972930 instructions
+main__CEOP_32 have 975416 instructions
+main__CEOP_33 have 975416 instructions
+main__CEOP_34 have 973495 instructions
+main__CEOP_35 have 975981 instructions
+main__CEOP_36 have 975981 instructions
+main_MAX_CEOP_: 975981
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/complex_updates
+main__CEOP_1 have 24973 instructions
+main_MAX_CEOP_: 24973
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/cosf
+main__CEOP_1 have 11300 instructions
+main__CEOP_2 have 11300 instructions
+main_MAX_CEOP_: 11300
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/countnegative
+main__CEOP_1 have 493697 instructions
+main_MAX_CEOP_: 493697
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/cover
+main__CEOP_1 have 14351 instructions
+main_MAX_CEOP_: 14351
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/deg2rad
+main__CEOP_1 have 32205 instructions
+main__CEOP_2 have 32205 instructions
+main_MAX_CEOP_: 32205
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/fdct
+main__CEOP_1 have 83281 instructions
+main_MAX_CEOP_: 83281
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/fibcall
+main__CEOP_1 have 20566 instructions
+main_MAX_CEOP_: 20566
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/fir2dim
+main__CEOP_1 have 945584 instructions
+main_MAX_CEOP_: 945584
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/g723_enc
+main__CEOP_1 have 74806 instructions
+main_MAX_CEOP_: 74806
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/h264_dec
+main__CEOP_1 have 94846663 instructions
+main__CEOP_2 have 94847115 instructions
+main__CEOP_3 have 94858076 instructions
+main__CEOP_4 have 94858528 instructions
+main__CEOP_5 have 94864404 instructions
+main__CEOP_6 have 94847115 instructions
+main__CEOP_7 have 94847567 instructions
+main__CEOP_8 have 94858528 instructions
+main__CEOP_9 have 94858980 instructions
+main__CEOP_10 have 94864856 instructions
+main__CEOP_11 have 94858076 instructions
+main__CEOP_12 have 94858528 instructions
+main__CEOP_13 have 94869489 instructions
+main__CEOP_14 have 94869941 instructions
+main__CEOP_15 have 94875817 instructions
+main__CEOP_16 have 94858528 instructions
+main__CEOP_17 have 94858980 instructions
+main__CEOP_18 have 94869941 instructions
+main__CEOP_19 have 94870393 instructions
+main__CEOP_20 have 94876269 instructions
+main__CEOP_21 have 94864404 instructions
+main__CEOP_22 have 94864856 instructions
+main__CEOP_23 have 94875817 instructions
+main__CEOP_24 have 94876269 instructions
+main__CEOP_25 have 94882145 instructions
+main_MAX_CEOP_: 94882145
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/iir
+main__CEOP_1 have 44070 instructions
+main_MAX_CEOP_: 44070
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/insertsort
+main__CEOP_1 have 184190 instructions
+main_MAX_CEOP_: 184190
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/jfdctint
+main__CEOP_1 have 186224 instructions
+main_MAX_CEOP_: 186224
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/ludcmp
+main__CEOP_1 have 20905 instructions
+main__CEOP_2 have 20001 instructions
+main__CEOP_3 have 51754 instructions
+main__CEOP_4 have 50850 instructions
+main__CEOP_5 have 37064 instructions
+main__CEOP_6 have 36160 instructions
+main__CEOP_7 have 21470 instructions
+main__CEOP_8 have 20566 instructions
+main_MAX_CEOP_: 51754
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/matrix1
+main__CEOP_1 have 44070 instructions
+main_MAX_CEOP_: 44070
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/ndes
+main__CEOP_1 have 247470 instructions
+main__CEOP_2 have 571441 instructions
+main__CEOP_3 have 250973 instructions
+main__CEOP_4 have 574944 instructions
+main_MAX_CEOP_: 574944
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/prime
+main__CEOP_1 have 19662 instructions
+main__CEOP_2 have 19323 instructions
+main__CEOP_3 have 18532 instructions
+main__CEOP_4 have 14238 instructions
+main__CEOP_5 have 19323 instructions
+main__CEOP_6 have 18984 instructions
+main__CEOP_7 have 18193 instructions
+main__CEOP_8 have 13899 instructions
+main__CEOP_9 have 18532 instructions
+main__CEOP_10 have 18193 instructions
+main__CEOP_11 have 17402 instructions
+main__CEOP_12 have 13108 instructions
+main_MAX_CEOP_: 19662
+--------------------------------------------------------------
+/workspaces/llvmta/testcases/batchtest/rad2deg
+main__CEOP_1 have 12430 instructions
+main__CEOP_2 have 12430 instructions
+main_MAX_CEOP_: 12430
+--------------------------------------------------------------
